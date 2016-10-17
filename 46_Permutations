@@ -1,0 +1,46 @@
+/**
+ * Return an array of arrays of size *returnSize.
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+void swap(int *a, int *b){
+    int tmp = *a;
+    *a = *b;
+    *b = tmp;
+}
+ 
+void helper(int* nums, int l, int r, int** ret, int* row){
+    // once we have it ready
+    if(l == r) {
+       // printf("bingo\n");
+        memcpy(ret[*row], nums, sizeof(int)*(r+1));
+        (*row)++;
+        return;
+    }
+    
+    //generate permutation recursively need swap! key
+  //  printf("l =%d r =%d *row=%d\n", l, r, *row);
+    for(int i =l; i<=r; i++){
+        swap(&nums[l], &nums[i]);
+        helper(nums, l+1, r, ret, row);
+        swap (&nums[i], &nums[l]);
+    }
+}
+
+int** permute(int* nums, int numsSize, int* returnSize) {
+        if (nums == NULL || numsSize == 0) return NULL;
+
+    (*returnSize) = 1;
+    int i;
+    for (i = 2; i <= numsSize; i++) {
+        (*returnSize) *= i;
+    }
+
+    int **ret = (int **)calloc(*returnSize, sizeof(int *));
+    for (i = 0; i < *returnSize; i++) {
+        ret[i] = (int *)calloc(numsSize, sizeof(int));
+    }
+    int row =0;
+    helper(nums, 0, numsSize-1,ret, &row );
+    return ret;
+    
+}
