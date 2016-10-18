@@ -1,0 +1,65 @@
+/**
+ * Return an array of arrays of size *returnSize.
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+void swap(int *a, int *b){
+    int tmp = *a;
+    *a = *b;
+    *b = tmp;
+}
+/*Smart!!*/
+/*Duplicate is ranging from "from" to "to" */
+ bool isNotDuplicate(int from, int to,int *nums ){
+		bool result = true;
+		for(int i=from;i<to;i++){
+			if(nums[to] == nums[i]){
+				result = false;
+				break;
+			}
+		}
+		return result;
+	}
+ 
+void helper(int* nums, int l, int r, int** ret, int* row, int *count){
+    // once we have it ready
+    if(l == r) {
+       // printf("bingo\n");
+        memcpy(ret[*row], nums, sizeof(int)*(r+1));
+        (*row)++;
+        (*count)++;
+        return;
+    }
+    
+    //generate permutation recursively need swap! key
+  //  printf("l =%d r =%d *row=%d\n", l, r, *row);
+    for(int i =l; i<=r; i++){
+        if(isNotDuplicate(l, i, nums)){ 
+        swap(&nums[l], &nums[i]);
+        helper(nums, l+1, r, ret, row, count);
+        swap (&nums[i], &nums[l]);
+        }
+        
+    }
+}
+
+int** permuteUnique(int* nums, int numsSize, int* returnSize) {
+        if (nums == NULL || numsSize == 0) return NULL;
+
+    (*returnSize) = 1;
+    int i;
+    for (i = 2; i <= numsSize; i++) {
+        (*returnSize) *= i;
+    }
+
+    int **ret = (int **)calloc(*returnSize, sizeof(int *));
+    for (i = 0; i < *returnSize; i++) {
+        ret[i] = (int *)calloc(numsSize, sizeof(int));
+    }
+    
+    int row =0;
+    int count =0;
+    helper(nums, 0, numsSize-1,ret, &row, &count );
+    *returnSize = count;
+    return ret;
+    
+}
