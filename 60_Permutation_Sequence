@@ -1,0 +1,49 @@
+int result(int n){
+    int total = 1;
+    for(int i =n; i>=1;i--){
+        total *= i;
+    } 
+    return total;
+}
+
+
+char* getPermutation(int n, int k) {
+    int total = 1;
+    char* final = (char *)malloc((n+1)*sizeof(char));
+    final[n] = '\0';
+    bool *used = (bool *)malloc(n*sizeof(bool));
+    
+    for(int i =n; i>=1;i--){
+        total *= i;
+    }
+    for(int i =0; i<n;i++){
+        used[i] = false;
+    }
+    
+    if(k>total || k ==0) return NULL;
+    
+    //from left to right
+    k = k -1;
+    int start = n-1;
+    int cur;
+    
+    //cur is the index,  and need to find the index with unused list
+    for (int i =0; i<n;i++){
+         cur = k/result(start);
+         for(int j =0; j<n; j++){
+             if(!used[j]){
+                 if(cur ==0){
+                    final[i] = (j+1) +'0';
+                    //printf("HHH %d %dth \n", j+1,i);
+                    used[j] = true;
+                    break;
+                 }else{
+                     cur--;
+                 }
+             }
+         }
+         k= k%result(start);
+         start --;
+    }
+    return final;
+}
