@@ -46,3 +46,53 @@ struct ListNode* sortList(struct ListNode* head) {
     struct ListNode* left = sortList(head);
     return merge(left, right);
 }
+
+
+/*2 刷*/
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+/*Merge two linkedlist into sorted order*/
+struct ListNode* merge(struct ListNode* left, struct ListNode* right){
+    struct ListNode* dummy = (struct ListNode*)malloc(sizeof(struct ListNode));
+    struct ListNode* cur = dummy;
+    while(left && right){
+        if(left->val <= right ->val){
+            cur->next = left;
+            left = left ->next;
+        }else {
+            cur->next = right;
+            right = right ->next;
+        }
+        cur = cur->next;
+    }
+    if(left) cur->next = left;
+    if(right) cur->next = right;
+    
+    return dummy ->next;
+}
+/*Similart to Merge sort, divde the list into first half and 2nd half*/
+struct ListNode* sortList(struct ListNode* head) {
+    /*Make sure it has at least 2 elements head and slow needs to do different.*/
+    if(!head || !(head->next)) return head;
+    
+    struct ListNode* fast =head;
+    struct ListNode* slow =head;
+    struct ListNode* prev =head;
+    
+    while(fast && fast->next){
+        prev = slow;
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    // remove the prev->slow
+    prev->next = NULL;
+    
+    struct ListNode* left = sortList(head);
+    struct ListNode* right = sortList(slow);
+    return merge(left, right);
+}
