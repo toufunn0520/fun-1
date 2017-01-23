@@ -29,3 +29,25 @@ struct ListNode* insertionSortList(struct ListNode* head) {
     }
     return dummy->next;
 }
+
+/*2nd */
+struct ListNode* insertionSortList(struct ListNode* head) {
+    if(!head) return head;
+    struct ListNode* dummy = (struct ListNode*)malloc(sizeof(struct ListNode));
+    dummy->next = NULL;
+    struct ListNode* cur  = head;
+    struct ListNode* prev = dummy;
+    while(cur){
+        struct ListNode* next = cur->next;
+        /*Find Insertion postion*/
+        while(prev && prev->next && (cur->val >= prev->next->val)){
+            prev = prev->next;
+        }
+        
+        cur->next = prev->next;
+        prev->next = cur;
+        prev = dummy;
+        cur = next;
+    }
+    return dummy->next;
+}
