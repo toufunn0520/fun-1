@@ -36,3 +36,38 @@ struct ListNode* rotateRight(struct ListNode* head, int k) {
     slow->next = NULL;
     return dummy->next;
 }
+
+/*2nd similar approach*/
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+struct ListNode* rotateRight(struct ListNode* head, int k) {
+    if(!head) return head;
+    int len = 0;
+    struct ListNode* cur = head;
+    while(cur){
+        cur = cur->next;
+        len ++;
+    }
+    struct ListNode* fast = head;
+    cur = head;
+    k = k%len;
+    if(!k) return head;
+    
+    while(k){
+        fast = fast->next;
+        k--;
+    }
+    while(fast && fast->next){
+        cur = cur->next;
+        fast = fast->next;
+    }
+    fast->next = head;
+    head = cur->next;
+    cur->next = NULL;
+    return head;
+}
