@@ -1,0 +1,44 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+ void swap (struct TreeNode* first, struct TreeNode* second){
+    if(!first || !second) return;
+    int tmp = first ->val;
+    first->val= second->val;
+    second->val = tmp;
+    return;
+ }
+ 
+void find(struct TreeNode* root, struct TreeNode** first, struct TreeNode** second, struct TreeNode** prev){
+     if(!root) return;
+     find(root->left, first, second, prev);
+     if (!(*first) && *prev && (*prev)->val >= root->val) {
+         *first = *prev;
+       //  printf("1st val =%d\n", (*first)->val);
+
+     }
+     if(*prev && *first!=NULL && (*prev)->val >= root->val ){
+        *second = root;
+      //  printf("2nd val =%d\n", (*second)->val);
+
+     }
+     *prev = root;
+     find(root->right, first, second, prev);
+     return;
+}
+/*In-order Travers and find 1st and 2nd swap their value*/
+void recoverTree(struct TreeNode* root) {
+    if(!root) return root;
+    struct TreeNode* first =NULL ;
+    struct TreeNode* second = NULL ;
+    struct TreeNode* tmp = malloc(sizeof(struct TreeNode));
+    tmp->val = INT_MIN;
+    find(root, &first, &second, &tmp);
+    swap(first, second);
+    return root;
+}
