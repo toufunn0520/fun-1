@@ -1,7 +1,7 @@
 
 char map[] = {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
 /*num are positive*/
-void internal(unsigned long long num, char *res, int* index){
+void internal(int num, char *res, int* index){
     if(!res) return;
     int cur = 0;
     while( num && (*index)){
