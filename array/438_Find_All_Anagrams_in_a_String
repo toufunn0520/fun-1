@@ -1,0 +1,41 @@
+/**
+ * Return an array of size *returnSize.
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+int* findAnagrams(char* s, char* p, int* returnSize) {
+    *returnSize = 0;
+    if (!s || !p ) return NULL;
+    int srclen =  strlen(s);
+    int plen = strlen(p);
+    int* res = malloc(sizeof(int)*srclen);
+    /*convert to simple hash*/
+    int hash[256] = {0};
+    for (int i = 0; i<plen; i++) {
+        hash[(int)p[i]]++;
+    }
+    int left = 0; 
+    int right = 0;
+    int count = plen;
+    while (right < srclen ){
+        /*hit*/
+        if (hash[(int)s[right]] >=1){
+            count--;
+        }
+        hash[(int)s[right]]--; // key
+        right++;
+        /*find*/
+        if (count == 0) {
+            res[*returnSize] = left;
+            (*returnSize)++;
+        }
+        //sliding window
+        if( (right-left) == plen ){
+            if(hash[(int)s[left]] >= 0){
+                count++;
+            }
+            hash[(int)s[left]]++; // key
+            left++;
+        }
+    }
+    return res;
+}
