@@ -6,7 +6,7 @@ public:
         int res = 0;
         int len = s.length();
         int j = -1;
-        
+        /*i is fast j is slow, j is always the nearest but not included item*/       
         for (int i = 0; i< len; i++) {
             map[s[i]]++;
             while(map.size()>k){ key
