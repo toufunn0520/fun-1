@@ -1,6 +1,10 @@
 /*Methods I:  Keep<msg, timestamp>*/
 /*Methods II: keep only 10s msg in the queue<time, msg> and unordered_set<msg> quicky check if a msg existed or not*/
 
+/*Follow up: what if timestamp comes ooo
+  std::map<char,int>::iterator itlow,itup;
+  keep map<int, unordered_set<msg>>
+*/
 class Logger {
 public:
     /** Initialize your data structure here. */
