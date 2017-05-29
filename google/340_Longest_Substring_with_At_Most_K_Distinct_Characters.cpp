@@ -1,3 +1,9 @@
+/*
+i faster pointer j slow pointer
+map size within K
+Once j is been decresed check if need to remove item from map completely
+*/
+
 class Solution {
 public:
     unordered_map<char, int> map;
