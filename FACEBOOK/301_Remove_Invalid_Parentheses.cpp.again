@@ -1,0 +1,108 @@
+// BFS 
+class Solution {
+public:
+    bool isValid(string s){
+        int count = 0;
+        for(auto it: s) {
+            if(it == '(') count ++;
+            if(it == ')' && count-- == 0)  return false;  // can never reach negative
+        }
+        return count == 0;
+    }
+    vector<string> removeInvalidParentheses(string s) {
+        //bfs
+        unordered_set<string> map;
+        vector<string> res;
+        queue<string> q;
+        
+        q.push(s);
+        bool flag = false;
+        while(!q.empty()) {
+            string cur = q.front();
+            q.pop();
+            //if found from queue no need to do deeper. Get all same level result
+            if(isValid(cur)){
+                res.push_back(cur);
+                flag = true;
+                continue;
+            }
+            if(flag) continue;  // key mark no more bfs
+            
+            for (int i = 0; i< cur.size(); i++) {
+                if (cur[i] !='(' && cur[i] != ')') {
+                    continue;
+                }
+                string next = cur.substr(0,i) + cur.substr(i+1);
+                if(map.find(next) == map.end()) {
+                    q.push(next);
+                    map.insert(next);
+                }
+            }
+        }
+        return res;
+    }
+};
+
+
+// method2
+
+
+
+
+
+
+
+
+
+
+class Solution {
+public:
+    vector<string> removeInvalidParentheses(string s) {
+        unordered_set<string> result;
+        int left_removed = 0;
+        int right_removed = 0;
+        for(auto c : s) {
+            if(c == '(') {
+                ++left_removed;
+            }
+            if(c == ')') {
+                if(left_removed != 0) {
+                    --left_removed;
+                }
+                else {
+                    ++right_removed;
+                }
+            }
+        }
+        helper(s, 0, left_removed, right_removed, 0, "", result);
+        return vector<string>(result.begin(), result.end());
+    }
+private:
+    void helper(string s, int index, int left_removed, int right_removed, int pair, string path, unordered_set<string>& result) {
+        if(index == s.size()) {
+            if(left_removed == 0 && right_removed == 0 && pair == 0) {
+                result.insert(path);
+            }
+            return;
+        }
+        if(s[index] != '(' && s[index] != ')') {
+            helper(s, index + 1, left_removed, right_removed, pair, path + s[index], result);
+        }
+        else {
+            if(s[index] == '(') {
+                if(left_removed > 0) {
+                    helper(s, index + 1, left_removed - 1, right_removed, pair, path, result);
+                }
+                helper(s, index + 1, left_removed, right_removed, pair + 1, path + s[index], result);
+            }
+            if(s[index] == ')') {
+                if(right_removed > 0) {  //not choice
+                    helper(s, index + 1, left_removed, right_removed - 1, pair, path, result);
+                }
+                if(pair > 0) {  // choice
+                    helper(s, index + 1, left_removed, right_removed, pair - 1, path + s[index], result);
+                }
+            }
+        }
+    }
+};
