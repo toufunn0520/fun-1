@@ -32,3 +32,36 @@ public:
         
     }
 };
+
+
+//2nd
+class Solution {
+public:
+    string minWindow(string s, string t) {
+        unordered_map<char, int> map;
+        int match = 0;
+        match = t.size();
+        
+        for (char c: t) map[c]++;  
+        int start = 0;
+        int end = 0;
+        int head  = 0;
+        int res = INT_MAX;
+        
+        while (end<s.size()) {
+            if (map[s[end++]]-- > 0) {
+                match--;
+            }
+            while (match == 0 && start <= end) {
+                if (res > end-start) {
+                    head = start;
+                    res = end-start;
+                }
+                if (map[s[start++]]++ == 0) {
+                    match++;
+                }
+            }
+        }
+        return res == INT_MAX? "":s.substr(head,res);
+    }
+};
