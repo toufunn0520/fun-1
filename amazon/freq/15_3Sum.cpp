@@ -34,3 +34,47 @@ public:
         return res;
     }
 };
+
+
+
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        vector<vector<int>> res;
+        res.clear();
+        int size = nums.size();
+        //sanity check
+        if (size <= 2) return res;
+        //sort
+        sort(nums.begin(), nums.end());
+        
+        for (int i = 0; i < size-2; i++){
+            int cur = nums[i];
+            int second = i+1;
+            int last = size -1;
+            while (second<last) {
+                bool forward = false;
+                bool backward = false;
+                if (nums[second] + nums[last] == -cur) {
+                    res.push_back({cur,nums[second],nums[last]});
+                    second++;
+                    last --;
+                    forward = true;
+                    backward = true;
+                }else if (nums[second] + nums[last] > -cur) {
+                    last --;
+                    backward = true;
+                }else if(nums[second] + nums[last] < -cur){
+                    second++;
+                    forward = true;
+                }
+                while(forward && nums[second-1] == nums[second] && second < last) second++;
+                while(backward && nums[last+1] == nums[last] && last > second) last--;
+            }
+            
+            //remove dumplicated
+            while(nums[i+1] == nums[i] && i < size-2) i++;
+        }
+        return res;
+    }
+};
