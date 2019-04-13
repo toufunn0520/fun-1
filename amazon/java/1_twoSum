@@ -1,0 +1,16 @@
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        //key is the nums value is the index;
+        HashMap<Integer, Integer>input = new HashMap<>();
+
+        for (int i = 0; i < nums.length; i++) {
+            int residual = target - nums[i];
+            if (input.containsKey(residual)) {
+                return new int[] {input.get(residual), i}; 
+            }
+            //if not found, add pair
+            input.put(nums[i], i);
+        }
+        throw new IllegalArgumentException("No solution");
+    }
+}
