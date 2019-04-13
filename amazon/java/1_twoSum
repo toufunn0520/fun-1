@@ -1,3 +1,4 @@
+1 Two Sum
 class Solution {
     public int[] twoSum(int[] nums, int target) {
         //key is the nums value is the index;
@@ -12,5 +13,27 @@ class Solution {
             input.put(nums[i], i);
         }
         throw new IllegalArgumentException("No solution");
+    }
+}
+
+167. Two Sum II - Input array is sorted 
+Two pointer
+class Solution {
+    public int[] twoSum(int[] numbers, int target) {
+        //two pointer
+        int first = 0;
+        int second = numbers.length - 1;
+        while(second > first) {
+            int sum = numbers[first] + numbers[second];
+            if (sum < target)  {
+                first ++;
+            } else if (sum > target) {
+                second --;
+            } else {
+                //matched
+                return new int[]{first+1, second+1};
+            }   
+        }
+        return null;
     }
 }
