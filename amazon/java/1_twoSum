@@ -37,3 +37,36 @@ class Solution {
         return null;
     }
 }
+
+15 3Sum
+class Solution {
+    public List<List<Integer>> threeSum(int[] nums) {
+        
+        //Sort Array
+        Arrays.sort(nums);
+        List<List<Integer>> res = new LinkedList<>();
+        //Two pointer till the 3rd last
+        for (int i = 0; i < nums.length -2; i++) {
+            if (i == 0 || (i > 0 && nums[i] != nums[i-1])) {
+                //skip dup
+                int target = 0 - nums[i];
+                int first = i+1;
+                int second = nums.length - 1;
+                while (second > first) {
+                    if (nums[first] + nums[second] == target) {
+                        res.add(Arrays.asList(nums[i], nums[first], nums[second]));
+                        first++;
+                        second--;
+                        while (first < second && nums[first] == nums[first + 1]) first++;
+                        while (first < second && nums[second] == nums[second - 1]) second--;
+                    } else if (nums[first] + nums[second] > target) {
+                        second--;
+                    } else {
+                        first++;
+                    }
+                }
+            }
+        }
+        return res;
+    }
+}
