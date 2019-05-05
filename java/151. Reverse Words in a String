@@ -1,0 +1,19 @@
+class Solution {
+    public String reverseWords(String s) {
+        String [] words = s.split(" ");
+        StringBuilder sb = new StringBuilder();
+        int length = words.length;
+        
+        for (int i = length -1 ; i>= 0; i--) {
+               if(words[i].equals("")) continue; //like "hello world! ", the last space
+               sb.append(words[i].trim());
+               sb.append(' ');
+        }
+        
+        if (sb.length() > 0) {
+            sb.setLength(sb.length() - 1); //remove the last space
+        } 
+        
+        return sb.toString();
+    }
+}
