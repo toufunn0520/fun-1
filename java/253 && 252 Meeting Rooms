@@ -1,0 +1,54 @@
+class Solution {
+    public int minMeetingRooms(int[][] interval) {
+        //sanity check
+        int length = interval.length;
+        if (length == 0) return 0;
+                
+        // pre-process the input, since we need to sort by start time
+        Interval[] intervals = new Interval[length];
+        for (int i = 0 ; i < length; i ++) {
+            intervals[i] = new Interval(interval[i][0],interval[i][1]);
+        }
+        
+        // sort by start time
+        Arrays.sort(intervals, new Comparator<Interval>() {
+            public int compare(Interval a , Interval b) {
+                return a.start - b.start;
+            }
+        });
+    
+        // min heap, with size length
+        PriorityQueue<Integer> allocator = new PriorityQueue<Integer>(
+                                    length, new Comparator<Integer>() {
+                                        public int compare (Integer a , Integer b) {
+                                            return a - b;
+                                        }
+                                    });
+        // push sorted intervals to the min heap
+        allocator.add(intervals[0].end);
+    
+        // if min heap , remember replace or add one at a time, can not keep poping
+        // Think it from the meeting room perspective
+        for (int i = 1; i < length; i ++) {
+            
+            if (intervals[i].start >= allocator.peek()) {
+                allocator.poll();
+            } 
+            allocator.add(intervals[i].end);
+            
+        }
+    
+        return allocator.size();
+
+    }
+    
+    public class Interval {
+        public int start;
+        public int end;
+        
+        Interval(final int start, final int end) {
+            this.start = start;
+            this.end = end;
+        }
+    }
+}
