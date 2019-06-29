@@ -1,0 +1,26 @@
+class Solution {
+    public int missingNumber(int[] nums) {
+        int length = nums.length;
+        if (length == 0) return 0;
+    
+        int expect = 0;
+        int real = 0;
+        
+        for (int i = 0; i < length; i++) {
+            real ^= nums[i];
+        }
+        
+        for (int i = 0 ; i < length + 1; i++) {
+            expect ^= i;
+        }
+        return (expect ^ real);
+    }
+}
+
+Time complexity : \mathcal{O}(n)O(n)
+
+Assuming that XOR is a constant-time operation, this algorithm does constant work on nn iterations, so the runtime is overall linear.
+
+Space complexity : \mathcal{O}(1)O(1)
+
+This algorithm allocates only constant additional space.
