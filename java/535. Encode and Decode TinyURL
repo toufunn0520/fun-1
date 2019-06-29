@@ -1,0 +1,61 @@
+public class Codec {
+    
+    String alphabet = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    HashMap<String, String> map = new HashMap<>();
+    final static String url = "http://tinyurl.com/";
+    Random rand  = new Random();
+
+    //6 length long String, and for each position generated randomized charater among 62 ones
+    private String getString() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i< 6; i++) {
+            sb.append(alphabet.charAt(rand.nextInt(62)));
+        }
+        return sb.toString();
+    }
+        
+    // Encodes a URL to a shortened URL.
+    public String encode(String longUrl) {
+        String key = getString();
+        while(map.containsKey(key)) { 
+            key = getString();
+        }
+        map.put(key, longUrl);
+        return url + key;
+    }
+
+    
+    // Decodes a shortened URL to its original URL.
+    public String decode(String shortUrl) {
+        return map.get(shortUrl.replace(url, ""));
+    }
+}
+
+// Your Codec object will be instantiated and called as such:
+// Codec codec = new Codec();
+// codec.decode(codec.encode(url));
+
+//method 1 keep an counter and use integer as the shortURl -> int limitation, risk to perdict next URL
+//method 2 keep an counter and use 62 characters as the shortURL -> int limitation, risk to perdict next, but maxmize short length.
+//method 3 Strings.hashCode on longUrl-> collision
+
+//method 4 generated Random number and if collide, try next till find the one with no conflict -> performance can be bad, when try to find available ones
+
+// all the aboved 4 can end up with longer TinyUrl than original URL
+
+//method 5 random + fixed -length
+
+/*Performance Analysis
+
+The number of URLs that can be encoded is quite large in this case, nearly of the order (10+26*2)^6(10+26∗2) 
+6
+ .
+
+The length of the encoded URLs is fixed to 6 units, which is a significant reduction for very large URLs.
+
+The performance of this scheme is quite good, due to a very less probability of repeated same codes generated.
+
+We can increase the number of encodings possible as well, by increasing the length of the encoded strings. Thus, there exists a tradeoff between the length of the code and the number of encodings possible.
+
+Predicting the encoding isn't possible in this scheme since random numbers are used.
+*/
