@@ -1,0 +1,30 @@
+
+class Solution {
+    public int leastInterval(char[] tasks, int n) {
+        // frequency
+        int length = tasks.length;
+        int[] res = new int[26];
+        int maxValue = 0;
+        int maxValueChars = 0;
+        
+        for (int i = 0; i < length; i++) {
+            int index = tasks[i] - 'A';
+            res[index] ++;
+            if (res[index] == maxValue) {
+               maxValueChars ++; 
+            } else if (res[index] > maxValue) {
+                maxValue = res[index];
+                maxValueChars = 1;
+            }
+        } 
+        //如果空位数要大于剩余的task数，那么则说明还需补充多余的空位，否则就直接返回task的总数即.
+        int lessThenMaxSlot = (n - maxValueChars + 1) * (maxValue - 1);
+        int remaining = length - maxValueChars * maxValue;
+        return  maxValueChars * maxValue + Math.max(remaining, lessThenMaxSlot);
+
+    }
+}
+
+Time complexity : O(n)O(n). We iterate over taskstasks array only once. (O(n)O(n)).Sorting taskstasks array of length nn takes O\big(26log(26)\big)= O(1)O(26log(26))=O(1) time. After this, only one iteration over 26 elements of mapmap is done(O(1)O(1).
+
+Space complexity : O(1)O(1). mapmap array of constant size(26) is used.
