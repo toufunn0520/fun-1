@@ -1,0 +1,20 @@
+
+// 236 vs 235, 235 can prun.
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        return internal(root, p, q);
+    }
+    
+    private TreeNode internal(TreeNode node, TreeNode p, TreeNode q) {
+        if (node == null || node == p || node == q) return node;
+      
+        if (node.val > p.val && node.val > q.val) {
+             return internal(node.left, p, q);
+        } else if(node.val < p.val && node.val < q.val) {
+             return internal(node.right, p, q);
+        } else {
+            return node;
+        }
+    
+    }
+}
