@@ -1,0 +1,26 @@
+class Solution {
+    public void moveZeroes(int[] nums) {
+        int length = nums.length;
+        int zero = 0;
+        for (int i = 0; i < length; i++) {
+            if (nums[i] != zero) {
+                while (nums[zero] != 0 && zero < i) {
+                    zero ++;
+                }
+            }
+            if (zero < i && nums[zero] == 0) {
+                nums[zero] = nums[i];
+                nums[i] = 0;
+            }
+
+        }
+    }
+    
+}
+
+/*
+
+You must do this in-place without making a copy of the array.
+Minimize the total number of operations.
+
+*/
