@@ -1,0 +1,29 @@
+
+
+class Solution {
+    public int maxProduct(int[] nums) {
+        // record min negative, max possible
+        
+        int length = nums.length;
+        if (length == 0) return 0;
+        
+        int min = nums[0];
+        int max = nums[0];
+        int res = nums[0];
+        
+        for (int i = 1; i < length; i++) {
+            int tmpMin = min; 
+            int tmpMax = max; 
+            if (nums[i] <= 0) {
+                min = Math.min(nums[i], nums[i] * tmpMax);
+                max = Math.max(nums[i], nums[i] * tmpMin);
+            } else {
+                min = Math.min(nums[i], nums[i] * tmpMin);
+                max = Math.max(nums[i], nums[i] * tmpMax);
+            }
+            res = Math.max(res, max);
+        }
+        return res;
+
+    }
+}
