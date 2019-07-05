@@ -1,0 +1,42 @@
+class Solution {
+    public int maxSubArray(int[] nums) {
+        int length = nums.length;
+        if (length == 0) return 0;
+        
+        int res = nums[0];
+        int fast = 1;
+        int slow = 0;
+        int rangeSum = nums[0];
+        while (fast < length)  {
+            // update slow to fast when fast is bigger than res
+            rangeSum += nums[fast];
+            if (nums[fast] >= rangeSum) {
+                slow = fast;
+                rangeSum = nums[fast];
+            }
+            res = Math.max(res, rangeSum);
+            fast ++;
+        }
+        return res;
+    }
+}
+
+class Solution {
+  public int maxSubArray(int[] nums) {
+    int n = nums.length;
+    int currSum = nums[0], maxSum = nums[0];
+
+    for(int i = 1; i < n; ++i) {
+      currSum = Math.max(nums[i], currSum + nums[i]);
+      maxSum = Math.max(maxSum, currSum);
+    }
+    return maxSum;
+  }
+}
+
+
+/*
+Time complexity : \mathcal{O}(N)O(N) since it's one pass along the array.
+
+Space complexity : \mathcal{O}(1)O(1), since it's a constant space solution. 
+*/
