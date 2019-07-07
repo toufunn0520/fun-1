@@ -1,0 +1,19 @@
+class Solution {
+    public int numUniqueEmails(String[] emails) {
+        //apply two filters
+        int length = emails.length;
+        Set<String> res = new HashSet<String>();
+        for (int i = 0; i < length; i++) {
+            String[] details = emails[i].split("@");
+            if (details.length !=2 ) continue; // check wrong inputs
+            int index = details[0].indexOf('+'); 
+            if (index != -1 ) { // check if '+' existed
+                details[0] = details[0] .substring(0, details[0].indexOf('+'));
+            }
+            String name = details[0].replace(".", ""); // sanitized '.'
+            res.add(name + "@" + details[1]);
+        }
+        return res.size();
+    }
+    
+}
