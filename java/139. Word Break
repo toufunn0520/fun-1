@@ -1,0 +1,24 @@
+class Solution {
+    public boolean wordBreak(String s, List<String> wordDict) {
+        //convert list of word dict to set
+        Set<String> wordDictSet = new HashSet(wordDict);
+        if (s == null) {
+            return true;
+        }
+        
+        int length = s.length();
+        boolean[] dp = new boolean[length+1];
+        dp[0] = true; // if s is null return true.
+
+        for (int i = 1; i< length + 1; i++) {
+            for (int j = 0; j < i; j++) {
+                // i is exclusive;
+                if(dp[j] && wordDictSet.contains(s.substring(j, i))) {
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+        return dp[length];
+    }
+}
