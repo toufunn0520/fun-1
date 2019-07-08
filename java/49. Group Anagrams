@@ -1,0 +1,32 @@
+// convert the problem to sort each word by alphabatic
+class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        int length = strs.length;
+        List<List<String>> res = new ArrayList<List<String>>();
+        Map<String, List<String>> map = new HashMap<String, List<String>>();
+
+        for (int i = 0; i< length; i++) {
+            char[] ca = strs[i].toCharArray();
+            Arrays.sort(ca);  // key of the problem
+            String key = String.valueOf(ca);
+        
+            if (map.containsKey(key)) {
+                map.get(key).add(strs[i]);
+            } else {
+                List<String> list = new ArrayList();
+                list.add(strs[i]);
+                map.put(key, list);
+            }
+        }
+        
+        // using for-each loop for iteration over Map.entrySet() 
+        /*for (Map.Entry<String,List<String>> entry : map.entrySet()){ 
+             res.add(entry.getValue()); 
+        }*/
+        return new ArrayList(map.values());
+        //return res;
+    }
+}
+
+
+
