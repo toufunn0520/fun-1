@@ -1,0 +1,28 @@
+class Solution {
+    public int countNodes(TreeNode root) {
+        int left = leftLength(root);
+        int right = rightLength(root);
+        if (left == right) return (int)Math.pow(2, left) - 1;
+        return countNodes(root.left) + countNodes(root.right) +1;
+    }
+    
+    
+    int leftLength(TreeNode root) {
+        if (root == null) return 0;
+        return leftLength(root.left) + 1;
+    }
+        
+    int rightLength(TreeNode root) {
+        if (root == null) return 0;
+        return rightLength(root.right) + 1;
+    }
+
+//  linear time one-liner which counts nodes recursively one by one.
+// Time complexity : \mathcal{O}(N)O(N).
+// Space complexity : \mathcal{O}(d) = \mathcal{O}(\log N)O(d)
+
+class Solution {
+  public int countNodes(TreeNode root) {
+    return root != null ? 1 + countNodes(root.right) + countNodes(root.left) : 0;
+  }
+}
