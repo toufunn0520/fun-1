@@ -1,0 +1,46 @@
+/**
+ * The read4 API is defined in the parent class Reader4.
+ *     int read4(char[] buf);
+ */
+public class Solution extends Reader4 {
+    /**
+     * @param buf Destination buffer
+     * @param n   Number of characters to read
+     * @return    The number of actual characters read
+     */
+    public int read(char[] buf, int n) {
+        int readNum = 0;
+        char[] buf4 = new char[4];
+        if (buf.length == 0) return readNum;
+        int offset = 0;
+        while(readNum <= n) {
+            int num = read4(buf4);
+            readNum += num;
+            
+            // nothing to read from
+            if (num == 0) {
+                break;
+            }
+            
+            // offset can not be bigger than n
+            for (int i = 0; i < num && offset < n; i ++) { 
+                buf[offset] = buf4[i];
+                offset ++;
+            }
+            
+            if (offset == n) {  //when read finished
+                break;
+            }
+        }
+        return offset; 
+        
+    }
+}
+
+/*
+Input: file = "abc", n = 4
+Output: 3
+Explanation: After calling your read method, buf should contain "abc". 
+We read a total of 3 characters from the file, so return 3. 
+Note that "abc" is the file's content, not buf. buf is the destination buffer that you will have to write the results to.
+*/
