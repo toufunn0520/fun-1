@@ -1,0 +1,28 @@
+// hit: keep insert each record to the queue by its timestamp
+// getHits: keep remove the record which exceed the 300 minutes time window
+// caveat: if hit rate is very hit, getHit performance will be very bad, because it needs to remove all out of dated record first.
+
+class HitCounter {
+
+    /** Initialize your data structure here. */
+    public HitCounter() {
+        record = new LinkedList();
+    }
+    
+    /** Record a hit.
+        @param timestamp - The current timestamp (in seconds granularity). */
+    public void hit(int timestamp) {
+        record.add(timestamp);
+    }
+    
+    /** Return the number of hits in the past 5 minutes.
+        @param timestamp - The current timestamp (in seconds granularity). */
+    public int getHits(int timestamp) {
+        while(record.size() > 0 && timestamp - record.peek() >= 300 ){
+            record.remove();
+        }
+        return record.size();
+        
+    }
+    Queue<Integer> record;
+}
