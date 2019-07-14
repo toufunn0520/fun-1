@@ -26,3 +26,49 @@ class HitCounter {
     }
     Queue<Integer> record;
 }
+
+/**
+ * Your HitCounter object will be instantiated and called as such:
+ * HitCounter obj = new HitCounter();
+ * obj.hit(timestamp);
+ * int param_2 = obj.getHits(timestamp);
+ */
+ 
+ 
+ 
+// method 2 when too many hits in a second
+ 
+ 
+ public class HitCounter {
+    int hits[];
+    int timestamps[];
+ 
+    /** Initialize your data structure here. */
+    public HitCounter() {
+        hits = new int[300];
+        timestamps = new int[300];
+    }
+ 
+
+    public void hit(int timestamp) {
+        int index = timestamp % 300;
+        if (timestamps[index] != timestamp) {
+            timestamps[index] = timestamp;
+            hits[index] = 1;
+        } else {
+            hits[index]++;
+        }
+    }
+ 
+   
+    public int getHits(int timestamp) {
+        int res = 0;
+        for (int i = 0; i < 300; i++) {
+            if(timestamp - timestamps[i] < 300) {
+                res += hits[i];
+            } 
+        }
+        return res;
+    }
+ }
+ 
