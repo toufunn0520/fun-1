@@ -1,0 +1,29 @@
+class Solution {
+    public String licenseKeyFormatting(String S, int K) {
+        String[] s = S.split("-");
+        int totalLen = 0;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < s.length; i++) {
+            totalLen += s[i].length();
+            sb.append(s[i].toUpperCase());
+        }
+        
+        int residual = totalLen % K;
+        int chunk = totalLen / K;
+        
+        if (chunk == 0) return sb.toString(); // if no need to add '-'
+        
+        if (residual != 0) {
+            sb.insert(residual, '-');    
+        }
+        
+        int start = residual == 0 ? K : K+residual+1; // whether insertion has happened
+        
+        for (int i = start; i< totalLen + (chunk-1); ) {
+            sb.insert(i, '-');
+            i+= K+1;
+        }
+        
+        return sb.toString();
+    }
+}
