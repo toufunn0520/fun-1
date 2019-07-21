@@ -1,0 +1,85 @@
+//method 1
+// Union Find , group the nodes with the same axiels together，using the lowest axiels. 
+
+class Solution {
+    public int removeStones(int[][] stones) {
+        
+        //Initialize 
+        plist= new ArrayList<>();
+        map = new HashMap<>();
+        for (int i = 0; i < stones.length; i++) {
+            Point p = new Point(stones[i][0], stones[i][1]);
+            map.put(p, p);
+            plist.add(p);
+        }
+        
+        //sort by x since the union root will use the lowest value 
+        Collections.sort(plist, new Comparator<Point>() {
+            @Override
+            public int compare(Point a , Point b){
+                return a.x - b.x;
+            }
+        });
+        
+        Point pre = null ;
+        for (Point p : plist) {
+            if (pre !=null && p.x == pre.x) {
+                Union(pre, p);
+            }
+            pre = p;
+        }
+        
+         //sort by y since the union root will use the lowest value 
+        Collections.sort(plist, new Comparator<Point>() {
+            @Override
+            public int compare(Point a , Point b){
+                return a.y - b.y;
+            }
+        });
+        
+        pre = null;
+        for (Point p : plist) {
+            if (pre !=null && p.y == pre.y) {
+                Union(pre, p);
+            }
+            pre = p;
+        }
+        return count;
+    }
+    
+
+    //find the root of union for that node
+    private Point find(final Point a) {
+        Point parent = map.get(a);
+        while(parent!= map.get(parent)) { //reached root
+            parent = map.get(parent);
+        }
+        return parent;
+    }
+    
+    //merge the a and b which share at least the same x, y
+    private void Union(Point a, Point b) {
+        Point parentA = find(a);
+        Point parentB = find(b);
+        if (parentA != parentB) {
+            count ++;
+            map.put(parentA,b);
+        }
+        return;
+    }
+    
+    Map<Point, Point>map ;// union map
+    List<Point> plist;
+    int count;
+    }
+
+    class Point {
+        public final int x;
+        public final int y;
+        Point(final int x, final int y){
+        this.x = x;
+        this.y = y;
+    }
+}
+
+
