@@ -1,0 +1,31 @@
+class Solution {
+    public boolean validTree(int n, int[][] edges) {
+        int len = edges.length;
+        if (n == 0 || len != n-1) return false; // verify all nodes been vistited
+        
+        int[] root = new int[n];
+        Arrays.fill(root, -1);
+        
+        for (int i = 0; i < len; i++) {
+            int first = findRoot(root, edges[i][0]);
+            int second = findRoot(root, edges[i][1]);
+            if (first != second) {
+                root[first] = second; // since it is non-directional graph, select one as root
+            }else {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    // non-visited node, return its value, 
+    // visited node return rootl
+    private int findRoot(int[] root, int index) { 
+        while (root[index] != -1 ) {
+            index = root[index];
+        }
+        return index;
+        
+   
+    }
+}
