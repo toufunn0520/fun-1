@@ -1,0 +1,35 @@
+// save order to a map
+// compare 2 words
+class Solution {
+    public boolean isAlienSorted(String[] words, String order) {
+        Map<Character, Integer>map = new HashMap<>();
+        int len = order.length();
+        for (int i = 0; i < len; i++) {
+            map.put(order.charAt(i), i+1);
+        }
+        
+        start: for (int i = 0; i < words.length-1; i++) {
+            String word1 = words[i];
+            String word2 = words[i+1];
+            int l = Math.min(word1.length(), word2.length());
+            
+            for (int j = 0; j < l ; j++) {
+                Character c1 = word1.charAt(j);
+                Character c2 = word2.charAt(j);
+                if (map.get(c1) < map.get(c2)) { // need to continue to next words
+                    continue start;
+                } else if (map.get(c1) == map.get(c2)){
+                    continue;
+                } else {
+                    return false;
+                }
+            }
+            
+            if (l < word1.length()) {
+                return false;
+            }
+            
+        }
+        return true;
+    }
+}
