@@ -1,0 +1,22 @@
+/*  Time complexity : O(n^2)
+
+    Space complexity : O(1)O(1). Constant space is used.
+*/
+
+// two pointer and enumerate all possibility
+class Solution {
+    public int subarraySum(int[] nums, int k) {
+        int count = 0;
+        int len = nums.length;
+        for (int start = 0; start < len; start ++) {
+            int sum = 0;
+            for (int end = start; end < len; end ++) {
+                sum += nums[end];
+                if (sum == k) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+}
