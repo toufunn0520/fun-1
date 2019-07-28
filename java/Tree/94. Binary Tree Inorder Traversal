@@ -1,0 +1,34 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        inorderTraversalInternal(root, res);
+        return res;
+    }
+    
+    public void inorderTraversalInternal(TreeNode root, List<Integer> list) {
+        if (root == null) return;
+        
+        inorderTraversalInternal(root.left, list);
+        list.add(root.val);
+        inorderTraversalInternal(root.right, list);  
+        return;
+    } 
+}
+
+/*
+
+Complexity Analysis
+
+Time complexity : O(n). The time complexity is O(n) because the recursive function is T(n) =2⋅T(n/2)+1.
+
+Space complexity : The worst case space required is O(n), and in the average case it's O(logn) where nn is number of nodes. 
+*/
