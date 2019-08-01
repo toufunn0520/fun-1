@@ -1,0 +1,65 @@
+class TicTacToe {
+    public int[][] board;
+    public int size;
+    /** Initialize your data structure here. */
+    public TicTacToe(int n) {
+        board = new int[n][n];
+        size = n;
+    }
+    
+    /** Player {player} makes a move at ({row}, {col}).
+        @param row The row of the board.
+        @param col The column of the board.
+        @param player The player, can be either 1 or 2.
+        @return The current winning condition, can be either:
+                0: No one wins.
+                1: Player 1 wins.
+                2: Player 2 wins. */
+    public int move(int row, int col, int player) {
+            //update board
+            board[row][col] = player;
+        
+            //check horizontal
+            int j;
+            for(j = 0; j < size; j++) { 
+                if(board[row][j] != player) break;
+            }
+          
+            if (j == size) {
+                return player;
+            }
+        
+            //check vertical   
+            int i;
+            for(i = 0; i < size; i++) {
+                if(board[i][col] != player) break;
+            }
+            if (i == size) {
+                return player;
+            }
+        
+            //check diagnoal
+            if (row == col) {
+                int k;
+                for (k = 0; k < size; k++) {
+                    if(board[k][k] != player) break;
+                }
+                if (k == size) {
+                    return player;
+                }
+            }
+                
+            //check reverse diagonal
+            if (row + col == size -1) {
+                int l;
+                for (l = 0; l < size; l++) {
+                    if (board[size-l-1][l] != player) break ;
+                }
+                if (l == size) {
+                    return player;
+                }
+            }
+        
+            return 0;
+    }
+}
