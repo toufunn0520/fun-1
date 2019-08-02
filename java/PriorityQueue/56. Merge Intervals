@@ -1,0 +1,52 @@
+class Solution {
+    public int[][] merge(int[][] intervals) {
+        if (intervals == null) return intervals;
+        
+        //sort input based on start time
+        PriorityQueue<Interval> input = new PriorityQueue<>(new Comparator<Interval>(){
+                @Override
+                public int compare(final Interval a, final Interval b) {
+                    return a.start - b.start;
+                }
+        });
+        
+        int size = intervals.length;
+        for (int i = 0; i < size; i++) {
+            input.offer(new Interval(intervals[i][0], intervals[i][1]));
+        }
+        
+        //Based on the sorted queue, see if we need to merge multiple items
+        Stack<Interval> res = new Stack<>();
+        int last = -1; // use non-exist one
+        for (int i = 0; i < size; i++) {
+            Interval cur = input.poll();
+            if (cur.start <= last) {
+                Interval lastNode = res.pop();
+                last = Math.max(cur.end, last);
+                res.push(new Interval(lastNode.start, last));
+            } else {
+                res.push(new Interval(cur.start, cur.end));
+                last = cur.end;
+            }
+        }
+        
+        //Covert list to answer
+        int newSize = res.size();
+        int[][] Result = new int [newSize][2];
+        for (int i = 0; i < newSize; i++) {
+            Result[i][0] = res.get(i).start;
+            Result[i][1] = res.get(i).end;
+        }
+        return Result;
+    }
+    
+    
+    class Interval {
+        final int start;
+        final int end;
+        Interval(int start, int end) {
+            this.start = start;
+            this.end = end;
+        }
+    }
+}
