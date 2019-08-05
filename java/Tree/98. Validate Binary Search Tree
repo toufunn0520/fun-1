@@ -1,0 +1,44 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+ 
+// record a global value, doing an pre-order traverse. value should be increasing, its value start from Integer.MIN_VALUE
+// special handling for intial value, need to add a first flag in case 1st value is Integer.MIN_VALUE
+
+// Complexity time O(N) Space O(N), since it is a BT not a BST
+
+class Solution {
+    int value = Integer.MIN_VALUE;
+    boolean first = true;
+    public boolean isValidBST(TreeNode root) {
+       return isValidBSTInternal(root);
+    }
+   
+    
+    private boolean isValidBSTInternal(TreeNode root) {
+        if(root == null) return true;
+        
+        if (!isValidBSTInternal(root.left)) {
+            return false;
+        }
+        if (value < root.val || first) {
+            first = false;
+            value = root.val;
+        } else {
+            return false;
+        }
+        
+        if (!isValidBSTInternal(root.right)) {
+            return false;
+        }
+        
+        return true;
+    }
+
+}
