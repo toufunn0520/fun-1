@@ -1,0 +1,36 @@
+class WordDistance {
+    Map<String, List<Integer>> map;
+    int size;
+    public WordDistance(String[] words) {
+        //
+        this.map = new HashMap<String, List<Integer>>();
+        int index = 0;
+        this.size = words.length;
+        
+        // generete <words, indexes> mapping, indexes are in increasing order
+        for (String word: words) {
+            List<Integer> indexes = this.map.getOrDefault(word, new ArrayList<Integer>());
+            indexes.add(index);
+            map.put(word, indexes); // don't forget to add it back
+            index++;
+        }
+    }
+    
+    public int shortest(String word1, String word2) {
+        List<Integer> l1 = this.map.get(word1);
+        List<Integer> l2 = this.map.get(word2);
+        // try to find the combination for minDistance
+        int index1 = 0;
+        int index2 = 0;
+        int min = size;
+        while(index1 < l1.size() && index2 < l2.size()) { // not a candidate for min 
+            min = Math.min(min, Math.abs(l1.get(index1) - l2.get(index2)));
+            if (l1.get(index1) < l2.get(index2)) {
+                index1 ++;
+            } else {
+                index2 ++;
+            }
+        }
+        return min;
+    }
+}
