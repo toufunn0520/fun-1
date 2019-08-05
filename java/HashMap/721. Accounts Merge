@@ -1,0 +1,70 @@
+// Decscription:
+// Draw an edge(key, value pair) between two emails if they occur in the same account. The problem comes down to finding connected components of this graph.
+// For each account, draw the edge (biodirectionally)from the first email to all other emails. 
+// Additionally, we'll remember a map from emails to names on the side. 
+// After finding each connected component using a depth-first search and a visited set to remove the duplication, we'll add that to our answer. 
+
+// complexity
+//where a_i  is the length of accounts[i]
+/*
+Time Complexity: O∑(a_i*log(a_i))
+this is the complexity to build the graph and search for each component. The log factor is for sorting each component at the end.
+Space Complexity: O(a_i)O(∑a_i), the space used by our graph and our search.
+*/
+
+
+class Solution {
+    public List<List<String>> accountsMerge(List<List<String>> accounts) {
+        
+        Map<String, List<String>> group = new HashMap<>();
+        Map<String, String> emailToName = new HashMap<>(); // record both logic accout.get(1) to X and X to accout.get(1).
+        
+        int size = accounts.size();
+        for (List<String> account : accounts) {
+            String name = "";
+            for (String email: account) {
+                if (name == "") {
+                    name = email; // smart =)
+                    continue;
+                }
+                emailToName.put(email, name);
+                // add enough information,  record both logic accout.get(1) to X and X to accout.get(1).
+                group.computeIfAbsent(email, x -> new ArrayList<>()).add(account.get(1));
+                group.computeIfAbsent(account.get(1), x-> new ArrayList<String>()).add(email);
+            }
+        }
+        
+        // iterate on all emails
+        Set<String> visited = new HashSet<>();
+        List<List<String>> res = new ArrayList<>();
+       
+        for (String email: group.keySet()) {
+            
+            if (!visited.contains(email)) {
+                // work on a specific `email`.
+                Stack<String> emailGroup = new Stack<>();
+                List<String> curres = new ArrayList<>();
+                emailGroup.push(email);
+                visited.add(email);
+                    
+                while (!emailGroup.isEmpty()) {
+                    String connectEmail = emailGroup.pop();// newly visited ones from previous depth
+                    curres.add(connectEmail);
+                    for (String interConnectedEmail: group.get(connectEmail)) {
+                        if (!visited.contains(interConnectedEmail)) {
+                            emailGroup.push(interConnectedEmail);
+                            visited.add(interConnectedEmail);
+                        }
+                    }
+                }
+                //sorted order
+                Collections.sort(curres);
+                // finished on an unvisited `email`
+                curres.add(0, emailToName.get(email));
+                res.add(curres);
+            }        
+        }
+        return res;
+    }
+}
+
