@@ -1,0 +1,20 @@
+// keep a map <value, index> and try to see if target - num[i] existed or not
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        // 
+        if (nums == null || nums.length < 2) return null;
+        Map<Integer, Integer> map= new HashMap<>();
+        int len = nums.length;
+        int []res = new int[2];
+        
+        for (int i = 0; i < len; i++) {
+            if(map.containsKey(target - nums[i])) {
+                res[0] = map.get(target - nums[i]);
+                res[1] = i;
+                break;
+            }
+            map.put(nums[i], i);
+        }
+        return res;
+    }
+}
