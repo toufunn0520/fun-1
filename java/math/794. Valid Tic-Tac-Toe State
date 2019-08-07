@@ -1,0 +1,61 @@
+        //collect two player counts
+        // 1st player must be 1 higher or equals to 2nd player
+        // if 1st player wins, 2nd player count needs to be less than 1
+        // if 2nd player winds, 2nd player = 1st player
+
+class Solution {
+    public boolean validTicTacToe(String[] board) {
+
+        int P1 = 0;
+        int P2 = 0;
+
+        for (String row: board) {
+            for (int i = 0; i < 3; i++) {
+                char node = row.charAt(i);
+                if (node == 'X') {
+                    P1++;
+                } else if (node == 'O') {
+                    P2++;
+                }
+            }  
+        }
+        if (P1 < P2 || P1 > P2+1 ) return false;
+        if (win(board, 1) && P1 != P2 + 1) return false;
+        if (win(board, 2) && P1 != P2) return false;
+        return true;
+    
+    }
+    
+    private boolean win(String[] borad, int player) {
+        char target = 'X';
+        if (player == 2) {
+            target = 'O';
+        }
+        // horizon 
+        for (String row: borad) {
+            if (row.charAt(0) == target && row.charAt(1) == target && row.charAt(2) == target) {
+                return true;
+            }
+        }
+        
+        // vertical
+        for (int i = 0; i < 3; i++) {
+            if (borad[0].charAt(i) == target && borad[1].charAt(i) == target && borad[2].charAt(i) == target) {
+                return true;
+            }
+        }
+        
+        // diagnoal
+        if (borad[0].charAt(0) == target && borad[1].charAt(1) == target && borad[2].charAt(2) == target) {
+            return true;
+        }
+                
+        // reverse diagnoal
+        if (borad[2].charAt(0) == target && borad[1].charAt(1) == target && borad[0].charAt(2) == target) {
+            return true;
+        }
+        
+        return false;
+        
+    }
+}
