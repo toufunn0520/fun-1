@@ -1,0 +1,66 @@
+class Solution {
+    public String alienOrder(String[] words) {
+        if (words == null || words.length == 0) return "";
+        StringBuilder res = new StringBuilder();
+        
+        // build a dependency graph, use set instead of List
+        Map<Character, Set<Character>> map = new HashMap<>();
+        // record all character and its in-degree count per character
+        Map<Character, Integer> degree = new HashMap<>();
+        // used for topology-sort BFS queue
+        Queue<Character> queue = new LinkedList<>();
+
+        int size = words.length;
+        
+        // initialize words
+        for (int i = 0; i < size; i++) {
+        char[] chars = words[i].toCharArray();
+            for (char c : chars) {
+                degree.put(c, 0);
+            }
+        }
+
+        // 
+        for (int i = 0; i < size -1; i++) {
+              int smallLength = Math.min(words[i].length(), words[i+1].length());             
+              // update the dependency graph map and counter
+              for (int j = 0 ; j < smallLength; j++) {
+                  if (words[i].charAt(j) != words[i+1].charAt(j)) {
+                        Set<Character> next = map.computeIfAbsent(words[i].charAt(j), k -> new HashSet<Character>());
+                        // increase the degree, only when new dependency happened!!!
+                        if (!next.contains(words[i+1].charAt(j))) {
+                          next.add(words[i+1].charAt(j));
+                          int current = degree.get(words[i+1].charAt(j));
+                          degree.put(words[i+1].charAt(j), current+1);
+                        }
+                        break;// important since later sequence is not a direct dependency graph
+                  }
+              }
+        }
+        
+        // find the charaters whose degree is 0
+        for (char c: degree.keySet()) {
+            if(degree.get(c) == 0){
+                queue.add(c);
+            }
+        }
+        
+        while(!queue.isEmpty()) {
+            char word = queue.remove();
+            res.append(word);
+            Set<Character> next = map.computeIfAbsent(word, k -> new HashSet<Character>());
+            for (Character nextWord : next) {
+                int value = degree.get(nextWord);
+                // keep decreasing, only enqueue those 0
+                degree.put(nextWord, value -1);
+                if (value == 1) {
+                    queue.add(nextWord);
+                }
+            }
+        }
+        
+        String resres = res.toString();
+        if (resres.length() != degree.size()) return "";
+        return resres;
+    }
+}
