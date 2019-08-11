@@ -1,0 +1,51 @@
+class Solution {
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        Map<Integer, List<Integer>> dependency = new HashMap<>(); //<course, list of course will be available after taken this one>
+        int[] courseStatus = new int[numCourses]; //number of prerequired courses for each course
+        Queue<Integer> finishedCourse = new LinkedList(); //courses can be marked as finished, 
+            
+        int len = prerequisites.length;
+        for (int i = 0; i < len; i++) {
+            if (!dependency.containsKey(prerequisites[i][1])) {
+                List<Integer> nextCourse = new ArrayList();
+                dependency.put(prerequisites[i][1], nextCourse);
+            }
+                                                   
+            List<Integer> nextCourse = dependency.get(prerequisites[i][1]);
+            nextCourse.add(prerequisites[i][0]);
+            courseStatus[prerequisites[i][0]] ++;
+        
+        }
+        
+        for (int i = 0; i < numCourses; i++) {
+            if (courseStatus[i] == 0) {
+                finishedCourse.add(i);
+            }
+        }
+        
+        while (!finishedCourse.isEmpty()) {
+            int currentFinishedCourseLen = finishedCourse.size();
+            for (int j = 0;j < currentFinishedCourseLen;j++) {
+                int course = finishedCourse.remove();
+                // not all course having next course dependent on it
+                 if(dependency.containsKey(course)) {
+                    List<Integer> nextList = dependency.get(course);
+                    for (int i = 0 ; i < nextList.size(); i ++ ) {
+                       int next = nextList.get(i);
+                        courseStatus[next]--;
+                        // enqueue only once when it just marked as 0
+                        if (courseStatus[next] == 0) {
+                           finishedCourse.add(next);
+                        }
+                    }
+                 }
+            }
+        }
+        // if all course finished 
+        for (int i = 0; i < numCourses; i++) {
+            if (courseStatus[i] > 0) return false;
+        }
+        
+        return true;
+    }
+}
