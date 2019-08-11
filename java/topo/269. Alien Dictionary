@@ -1,3 +1,11 @@
+(1) Topo sort + BFS
+(2) keep a dependency map, compare letter at the same position with the latter words, 
+    and update only one dependency regulation between two words, which basically is the first letter varies between two words
+(3) each letter keep a in-degree
+(4) enqueue those letter with in-degree 0 , keep update/decreasing degree map.
+(5) pay attention to those letter if their dependency map is empty
+
+
 class Solution {
     public String alienOrder(String[] words) {
         if (words == null || words.length == 0) return "";
