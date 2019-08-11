@@ -1,0 +1,58 @@
+(1) keep one level of  prerequisites nextAvailiable map
+(2) each node keep in-degree degree ap
+(3) use BFS to enqueue nodes with degree 0 , and update degree map
+(4) verify if all nodes has ever been enqueued.
+
+
+class Solution {
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        if(prerequisites == null ) return null; // !!! if prerequisites it is ok to return any order
+        
+        Map<Integer, Set<Integer>> nextAvailiable = new HashMap<>();
+        Map<Integer, Integer> degree  = new HashMap<>();
+        
+        for (int i = 0; i< numCourses; i ++) {
+            degree.put(i, 0);
+        }
+        
+        for (int i = 0 ; i < prerequisites.length; i++) {
+            Set<Integer> nextCourses = nextAvailiable.computeIfAbsent(prerequisites[i][1], k -> new HashSet<>());
+            // only update if it is a new relation
+            if (!nextCourses.contains(prerequisites[i][0])) {
+                    degree.put(prerequisites[i][0], degree.get(prerequisites[i][0]) + 1);
+                    nextCourses.add(prerequisites[i][0]);
+            }
+        }
+        
+        Queue<Integer> readyCourse = new LinkedList<>();
+        for (Integer num: degree.keySet()) {
+            if (degree.get(num) == 0) {
+                readyCourse.add(num);
+            }
+        }
+
+        
+        List<Integer> res = new ArrayList<>();
+        while (!readyCourse.isEmpty()) {
+            int course = readyCourse.remove();
+            res.add(course);
+            // not all nextAvailiable is initialize, skip those if they are missing nextAvailableCourse;
+            Set<Integer> nextAvailableCourses = nextAvailiable.get(course);
+            if (nextAvailableCourse == null) continue;
+            
+            for (int nextCourse: nextAvailableCourses) {
+                int value = degree.get(nextCourse);
+                if(value == 1) {
+                    readyCourse.add(nextCourse);
+                }
+                degree.put(nextCourse, value - 1);
+            }
+        }
+        
+        if(res.size() != numCourses){
+            return new int[0]; // not null 
+        }
+        
+        return res.stream().mapToInt(i->i).toArray();
+     }
+}
