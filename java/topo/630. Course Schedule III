@@ -1,0 +1,27 @@
+
+class Solution {
+    public int scheduleCourse(int[][] courses) {
+        // sort input by their end date
+        Arrays.sort(courses, (a,b) -> (a[1]- b[1]));
+        
+        //decreasing order duration
+        PriorityQueue<Integer> queue = new PriorityQueue<>((a,b) -> b-a); 
+        
+        int currentTime  = 0;
+        for (int[] c: courses){
+            if(currentTime + c[0] <= c[1]) {
+                queue.offer(c[0]);
+                currentTime += c[0];
+            } else if (!queue.isEmpty() &&
+                       queue.peek() > c[0]){
+                // replace
+                currentTime -= queue.peek();
+                currentTime += c[0];
+                queue.poll();
+                queue.offer(c[0]);
+            }
+        }
+        return queue.size();
+    }
+}
+//Time complexity  O(nlgn), Space O(n)
