@@ -1,0 +1,26 @@
+
+// PriorityQueue sort by alphabit by default
+// Use BFS keep a stack of next level of destination,
+class Solution {
+    public List<String> findItinerary(List<List<String>> tickets) {
+        Map<String, PriorityQueue<String>> destination = new HashMap<>();
+        
+        Stack<String> ready = new Stack<>();
+        List<String> res = new ArrayList<>();
+        
+        for (List<String> flight : tickets) {
+            destination.computeIfAbsent(
+                flight.get(0), k ->new PriorityQueue<>()).offer(flight.get(1));
+        }
+        
+        ready.push("JFK");
+        while(!ready.isEmpty()){
+            while(destination.containsKey(ready.peek()) && !destination.get(ready.peek()).isEmpty()) {
+                // keep push those who has next destination first over letter, since sometimes next stop maybe two, only one has next stop
+                ready.push(destination.get(ready.peek()).poll()); 
+            }
+            res.add(0, ready.pop());
+        }
+        return res;
+    }
+}
