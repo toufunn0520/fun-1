@@ -1,0 +1,48 @@
+//Time O(n) scan at most 2 times
+//Space O(1) in-place
+class Solution {
+    public ListNode reverseBetween(ListNode head, int m, int n) {
+        ListNode start = head;
+        ListNode end = null;
+        int i = 1;
+                
+        ListNode prev = null; 
+        while(i < m) {
+            prev = start;
+            start = start.next;
+            i++;
+        }
+        end = start;
+        while(i < n) {
+            end = end.next;
+            i++;
+        }
+        
+        // start=node2 and end=node4
+        ListNode revertedHead = reverseInternal(start, end, n - m +1);
+        
+        // we need to update previous node of start if necessary
+        if (prev != null) {
+            prev.next = revertedHead;
+            return head;
+        } else {            
+            return revertedHead;
+        }
+    }
+    
+    //206. Reverse Linked List
+    // it also finish update reverted list start pointing to original end.next
+    private ListNode reverseInternal(ListNode start, ListNode end, int maxCount) {
+        ListNode prev = end.next;
+        ListNode cur = start;
+        int count = 0;
+        while (count < maxCount) {
+            ListNode next = cur.next;
+            cur.next = prev;
+            prev = cur;
+            cur = next;
+            count++;
+        }
+        return prev;
+    }
+}
