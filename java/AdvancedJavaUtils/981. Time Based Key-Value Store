@@ -1,0 +1,96 @@
+// 三维的key value timestamp
+// Timestamp 要用 binarySearch 找 floorIndex 
+// Advanced Java class Pair, Collections.binarySearch, TreeMap, TreeMap.floorKey
+
+
+
+import javafx.util.Pair;
+
+class TimeMap {
+    Map<String, List<Pair<Integer, String>>> map;
+
+    public TimeMap() {
+        map = new HashMap<>();
+    }
+    
+    public void set(String key, String value, int timestamp) {
+        if (!map.containsKey(key)) {
+            map.put(key, new ArrayList<Pair<Integer, String>>());
+        }
+        List<Pair<Integer, String>> values = map.get(key);
+        values.add(new Pair(timestamp, value));
+    }
+    
+    
+    public String get(String key, int timestamp) {
+        if (!map.containsKey(key)) {
+            return "";
+        }
+        List<Pair<Integer, String>> valueSets = map.get(key);
+        int index = Collections.binarySearch(valueSets, 
+                                             new Pair<Integer, String>(timestamp, "}"),
+                                             (a, b) -> Integer.compare(a.getKey(), b.getKey()));
+    
+        // find the exact match
+        if (index >= 0) {
+            return valueSets.get(index).getValue();
+        } else if (index == -1) {
+            // no floor index, i,e timestamp is smaller than the smallest index
+            return "";
+        } else {
+            // find between floor index
+            return valueSets.get(-index-2).getValue();
+        }        
+    }
+}
+
+// example
+/*
+ public static void main(String[] args) 
+    { 
+        List al = new ArrayList(); 
+        al.add(1); 
+        al.add(2); 
+        al.add(3); 
+        al.add(10); 
+        al.add(20); 
+  
+        // 10 is present at index 3. 
+        int index = Collections.binarySearch(al, 10); 
+        System.out.println(index); 
+  
+        // 13 is not present. 13 would have been inserted 
+        // at position 4. So the function returns (-4-1)  
+        // which is -5. 
+        index = Collections.binarySearch(al, 13); 
+        System.out.println(index); 
+    } 
+
+
+*/
+
+
+
+/*
+class TimeMap {
+    Map<String, TreeMap<Integer, String>> M;
+
+    public TimeMap() {
+        M = new HashMap();
+    }
+
+    public void set(String key, String value, int timestamp) {
+        if (!M.containsKey(key))
+            M.put(key, new TreeMap());
+
+        M.get(key).put(timestamp, value);
+    }
+
+    public String get(String key, int timestamp) {
+        if (!M.containsKey(key)) return "";
+
+        TreeMap<Integer, String> tree = M.get(key);
+        Integer t = tree.floorKey(timestamp);
+        return t != null ? tree.get(t) : "";
+    }
+}*/
