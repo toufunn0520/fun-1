@@ -1,5 +1,7 @@
 // 三维的key value timestamp
 // Timestamp 要用 binarySearch 找 floorIndex 
+// Time Set = O(1) Get = O(logn) 
+// Space O(n)
 // Advanced Java class Pair, Collections.binarySearch, TreeMap, TreeMap.floorKey
 
 
