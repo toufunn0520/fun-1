@@ -1,0 +1,83 @@
+// Dijstra algorithm baiscally find the shortest path between two node in a weighted directed graph
+
+// Everytime mark only one visited  node which has the smallest path.
+// Hashmap <Integer, Integer> dist keep the protential shortest distance from start node towwards itself while doing Dijstra 
+// 
+// HashMap<Integer, List<int[]>> mapping saved edge informaiton including direction and weight
+// boolean visited keep track of the nodes been visited.
+
+// Lastly scan dist find the longest distance only if all nodes been visited if not return -1
+// we don't need a queue since every time we mark one node as visited
+
+
+class Solution {
+    public int networkDelayTime(int[][] times, int N, int K) {
+        
+        // initialization
+        HashMap<Integer, Integer> dis = new HashMap<>();
+        boolean[] visited = new boolean[N+1];
+        HashMap<Integer, List<int[]>> map = new HashMap<>();
+        
+        for (int i = 0; i < N ; i++) {
+            dis.put(i+1, Integer.MAX_VALUE);
+        }
+        
+        int length = times.length;
+        for (int i = 0; i < length; i++) {
+            if (!map.containsKey(times[i][0])) {
+                map.put(times[i][0], new ArrayList());
+            }
+            List<int[]> values = map.get(times[i][0]);
+            values.add(new int[]{times[i][1], times[i][2]});
+           // System.out.println("start " + times[i][0] + " end " + times[i][1] + " distance " + times[i][2]);
+        }
+        // K to K distance is 0
+        dis.put(K, 0);
+        
+        //mark every node as visited and update their shortest path
+        while (true) {
+            int curNode = -1;
+            int curDistance = Integer.MAX_VALUE;
+            for (int i = 0; i < N; i++) {
+                int newDistance = dis.get(i+1);
+                // find the node to be visited
+                if ( !visited[i+1] && newDistance < curDistance) {
+                    curNode = i + 1;
+                    curDistance = newDistance;
+                }
+            }
+            // means all nodes has been visited, exit
+            if (curNode == -1) break;
+            
+            visited[curNode] = true;
+            
+           
+            //update other node distance in the dis 
+            if (map.containsKey(curNode)) {
+                List<int[]> next = map.get(curNode);
+                for (int[] nextNodeDistance : next) {
+                    // avoid visited nodes
+                    if (!visited[nextNodeDistance[0]] ) {
+                        // need to update
+                        dis.put(nextNodeDistance[0], Math.min(dis.get(nextNodeDistance[0]), 
+                                                                 curDistance + nextNodeDistance[1]));
+
+                    }
+                }
+            }
+            
+        } 
+        
+        // need to check if all nodeds been visited and findout the max value.
+        int res = -1;
+        for (int i = 0; i < N ; i++) {
+                if (visited[i+1]) {
+                    res = Math.max(res, dis.get(i + 1));
+                } else {
+                    res = -1; 
+                    break;
+                }
+        }
+        return res ;
+    }
+}
