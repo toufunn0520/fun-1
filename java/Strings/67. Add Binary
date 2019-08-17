@@ -1,0 +1,70 @@
+class Solution {
+    public String addBinary(String a, String b) {
+        int lena = a.length();
+        int lenb = b.length();
+        StringBuilder sb = new StringBuilder();
+        int i = lena -1;
+        int j = lenb -1;
+        int carry = 0;
+        
+        while (i >=0  && j>= 0) {
+            int aa = a.charAt(i) - '0';
+            int bb = b.charAt(j) - '0';
+            //System.out.println(aa + "and" + bb + "and" + carry);
+            if ((aa + bb + carry) % 2 == 1) {
+                sb.insert(0, '1');
+            } else {
+                sb.insert(0, '0');
+            }
+            
+            if (aa + bb + carry >= 2) {
+                carry = 1;
+            } else {
+                carry = 0;
+            }
+            i--;
+            j--;
+            
+        }
+        
+        while(i >= 0) {
+            int aa = a.charAt(i) - '0';
+            if ((aa + carry) %2 == 1) {
+                sb.insert(0, '1');
+            } else {
+                sb.insert(0, '0');
+            }
+            
+            if (aa + carry >= 2) {
+                carry = 1;
+            } else {
+                carry = 0;
+            }
+            i--;
+        }
+        
+        while(j >=0) {
+            int bb = b.charAt(j) - '0';
+            if ((bb + carry) %2 == 1) {
+                sb.insert(0, '1');
+            } else {
+                sb.insert(0, '0');
+            }
+            
+            if (bb + carry >= 2) {
+                carry = 1;
+            } else {
+                carry = 0;
+            }
+            j--;
+        }
+        
+
+        if (carry == 1) {
+            sb.insert(0, '1');
+        } 
+        
+        return sb.toString();
+        
+    }
+}
