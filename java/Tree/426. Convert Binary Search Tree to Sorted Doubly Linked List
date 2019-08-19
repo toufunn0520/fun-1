@@ -1,0 +1,59 @@
+/*
+// Definition for a Node.
+class Node {
+    public int val;
+    public Node left;
+    public Node right;
+
+    public Node() {}
+
+    public Node(int _val,Node _left,Node _right) {
+        val = _val;
+        left = _left;
+        right = _right;
+    }
+};
+*/
+
+// Keep two global
+// In-Order-Traverse, DFS 
+// keep Update last  
+// Time O(n)
+// Space O(n) worst unbalanced tree
+
+class Solution {
+    // keep two global 
+    Node first = null;
+    Node last = null;
+        
+    public Node treeToDoublyList(Node root) {
+        if (root == null) return root;
+        internal(root);
+        first.left = last;
+        last.right = first;
+        return first;
+    }
+    
+    // keeep updating left and right
+    void internal(Node node) {
+      if (node != null) {
+      // left
+      internal(node.left);
+      // node 
+      if (last != null) {
+        // link the previous node (last)
+        // with the current one (node)
+        last.right = node;
+        node.left = last;
+      } else {
+        // keep the smallest node
+        // to close DLL later on
+        first = node;
+      }
+      last = node;
+      // right
+      internal(node.right);
+    }
+    }
+}
+
