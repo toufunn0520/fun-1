@@ -1,0 +1,46 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class BSTIterator {
+    
+    private Stack <TreeNode> stack;
+    
+    public BSTIterator(TreeNode root) {
+        stack = new Stack<>();
+        enqueLeft(root);
+    }
+    // insert all its left nodes
+    private void enqueLeft(TreeNode node) {
+        while(node != null) {
+            stack.push(node);
+            node = node.left;
+        }
+    }
+        
+    /** @return the next smallest number */
+    public int next() {
+        TreeNode next = stack.pop();
+        if (next.right != null) {
+            enqueLeft(next.right);
+        }
+        return next.val;
+    }
+    
+    /** @return whether we have a next smallest number */
+    public boolean hasNext() {
+        return stack.size() > 0 ? true: false;
+    }
+}
+
+/**
+ * Your BSTIterator object will be instantiated and called as such:
+ * BSTIterator obj = new BSTIterator(root);
+ * int param_1 = obj.next();
+ * boolean param_2 = obj.hasNext();
+ */
