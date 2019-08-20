@@ -1,0 +1,24 @@
+class Solution {
+    public int numJewelsInStones(String J, String S) {
+        Set<Character> jewels = new HashSet<>();
+        HashMap<Character, Integer> potentialJewels = new HashMap<>();
+        int res = 0;
+        for (char c: J.toCharArray()) {
+            jewels.add(c);
+        }
+        for (char c : S.toCharArray()) {
+             if (potentialJewels.containsKey(c)) {
+                 int i = potentialJewels.get(c);
+                 potentialJewels.put(c, i+1);
+             } else {
+                potentialJewels.put(c, 1);
+             }
+        }
+        for (char c : J.toCharArray()) {
+            if (potentialJewels.containsKey(c)){
+                res += potentialJewels.get(c);
+            }
+        }
+        return res;
+    }
+}
