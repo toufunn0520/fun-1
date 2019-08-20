@@ -1,0 +1,35 @@
+// Brute force
+// Time O(n*n)
+// Space O(n)
+// keep a cloned original version
+// keep a list and gradually random select decreasing items 
+
+class Solution {
+    int[] original;
+    int[] map;
+    private Random rand = new Random();
+    
+    public Solution(int[] nums) {
+        original = nums.clone(); // IDK
+        map = nums;
+    }
+    
+    /** Resets the array to its original configuration and return it. */
+    public int[] reset() {
+        map = original;
+        original = original.clone();
+        return map;
+    }
+    
+    /** Returns a random shuffling of the array. */
+    public int[] shuffle() {
+        List<Integer> list =  Arrays.stream(original).boxed().collect(Collectors.toList());
+        int len = original.length;
+        for (int i = 0; i < len; i++) {
+            int removeIdx = rand.nextInt(list.size());
+            map[i]  = list.get(removeIdx);
+            list.remove(removeIdx);
+        }
+        return map;
+    }
+}
