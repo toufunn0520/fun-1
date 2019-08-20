@@ -1,0 +1,52 @@
+// String , delimer, # mark empty nodes
+// pre-order traversal
+
+
+public class Codec {
+  public StringBuilder preorder(TreeNode root, StringBuilder sb) {
+    if (root == null) {
+        sb.append('#');
+        sb.append(',');
+    } else {
+        sb.append(root.val);
+        sb.append(',');
+        preorder(root.left, sb);
+        preorder(root.right, sb);
+    }
+    return sb;
+  }
+
+  // Encodes a tree to a single string.
+  public String serialize(TreeNode root) {
+    StringBuilder sb = preorder(root, new StringBuilder());
+    
+    //delete the last delimer
+    sb.deleteCharAt(sb.length() - 1);
+    return sb.toString();
+  }
+
+  public TreeNode helper(ArrayDeque<String> nums) {
+    if (nums.isEmpty()) return null;
+    String val = nums.getFirst();
+    nums.removeFirst();
+    if (val.equals("#")) {
+        return null;
+    }
+    int valval = Integer.valueOf(val);
+      
+    TreeNode root = new TreeNode(valval);
+    root.left = helper(nums);
+    root.right = helper(nums);
+    return root;
+  }
+
+  // Decodes your encoded data to tree.
+  public TreeNode deserialize(String data) {
+    if (data.isEmpty()) return null;
+    ArrayDeque<String> nums = new ArrayDeque<String>();
+    for (String s : data.split(",")){
+        nums.add(s);
+  }
+    return helper(nums);
+  }
+}
