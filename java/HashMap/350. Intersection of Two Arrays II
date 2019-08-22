@@ -1,0 +1,33 @@
+// Space O(n)
+// Time o()n
+// keep a map for integer and frequency for any array
+// keep deduting the frequency if matched.
+// don't forget to count each individual number though they are the same number
+class Solution {
+    public int[] intersect(int[] nums1, int[] nums2) {
+        List<Integer> res = new ArrayList<>();
+        Map<Integer, Integer> map = new HashMap<>();
+        
+        for (int i = 0 ; i < nums1.length; i++) {
+            if (map.containsKey(nums1[i])) {
+                map.put(nums1[i], map.get(nums1[i]) + 1);
+            } else{
+                map.put(nums1[i], 1);
+            }
+        } 
+        for (int i = 0; i < nums2.length; i++) {
+            if (map.containsKey(nums2[i])) {
+                int value = map.get(nums2[i]);
+                if (value > 0){  // multiple same digit overlap
+                    res.add(nums2[i]);
+                }
+                map.put(nums2[i], value -1);
+            } else {
+                continue;
+            }
+        }
+        
+        return res.stream().mapToInt(i->i).toArray();
+        
+    }
+}
