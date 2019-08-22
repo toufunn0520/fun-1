@@ -1,0 +1,32 @@
+// use TreeMap floorEntry find biggestSmall value
+// keep <Time, winer> inside TreeMap map
+// keep figure out timeT who is the winner, we need to keep track of maxPersionNum and maxPersionValue
+
+class TopVotedCandidate {
+    TreeMap<Integer, Integer> map;
+    int[]count;
+    int[]person;
+    public TopVotedCandidate(int[] persons, int[] times) {
+        int timeLength = times.length;
+        count = new int[timeLength];
+        person = new int[persons.length];
+        int maxPersionValue = 0;
+        int maxPersionNum = 0;
+        map = new TreeMap<>();
+        
+        for (int i = 0; i< timeLength;i ++) {
+            person[persons[i]]++;
+            int j =  person[persons[i]];
+            if (maxPersionValue <= j) {
+                maxPersionNum = persons[i];
+                maxPersionValue = j;
+            }
+            count[i] = maxPersionNum;
+            //System.out.println("Time=" + times[i] + ",value=" + count[i]);
+            map.put(times[i], count[i]);
+        }
+    
+        public int q(int t) {
+        return map.floorEntry(t).getValue();        
+    }
+}
