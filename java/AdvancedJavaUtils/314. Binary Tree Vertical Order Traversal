@@ -1,0 +1,47 @@
+// TreeMap keep a level and list of value
+// BFS and based on direct parent level, calculate the level of its left and right child
+// res will take treemap values
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    TreeMap<Integer, List<Integer>> map;    
+    public List<List<Integer>> verticalOrder(TreeNode root) {
+        List<List<Integer>> res = new ArrayList<>();
+        if(root == null) return res;
+        
+        map = new TreeMap<>(); 
+        Queue<Order> queue = new LinkedList<>();
+        queue.add(new Order(root, 0));
+        while (!queue.isEmpty()) {
+            Order order = queue.remove();
+            map.computeIfAbsent(order.level, k -> new ArrayList<Integer>()).add(order.node.val);
+            
+            if (order.node.left != null) {
+                queue.add(new Order(order.node.left, order.level - 1));
+            }
+            if (order.node.right != null) {
+                queue.add(new Order(order.node.right, order.level + 1));
+            }
+            
+        }
+        res.addAll(map.values());
+        return res;
+    }
+    
+   class Order {
+       TreeNode node;
+       int level;
+       Order(final TreeNode node, final int level) {
+           this.node = node;
+           this.level = level;
+       }
+   }
+}
