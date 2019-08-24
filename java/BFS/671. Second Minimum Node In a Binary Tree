@@ -1,0 +1,36 @@
+//Time O(n) travese each node at most once
+//Space O(n) Queue save BFS 
+//Optimize only enqueue possible candidate.
+//Trick need to use Long as initial value incase Integer.MAX_VALUE is a valid tree node and became ans
+
+class Solution {
+    public int findSecondMinimumValue(TreeNode root) {
+        if (root == null) return -1;
+        
+        // important the root is the smallest value 
+        int smallest = root.val;
+        // if Integer.MAX is in the tree <bug>
+        long res = Long.MAX_VALUE; 
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+       
+        while (!queue.isEmpty()) {
+            TreeNode node = queue.poll();
+            //candidate
+            if (node.val > smallest && node.val < res) {
+                res = node.val;
+            }
+            // node is always the smallest ones for its subtree. 
+            // Prune those none candidate
+            // this is better than my first edition`if (node.val > res ) continue;`
+
+            if (node.val == smallest) {
+                if (node.left != null)queue.add(node.left);
+                if (node.right != null)queue.add(node.right);
+            }
+            
+
+        }
+        return res == Long.MAX_VALUE ? -1 : (int)res;
+    }
+}
