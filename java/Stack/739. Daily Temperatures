@@ -1,0 +1,22 @@
+// Reverse stack
+// Time O(n)
+// Space O(n)
+// Remove all tem smaller than current. 
+// Keep index inside Stack not the value
+
+class Solution {
+    public int[] dailyTemperatures(int[] T) {
+        int len = T.length;
+        int[] res = new int[len];
+        Stack<Integer> stack = new Stack<>();
+        
+        for (int i = len -1 ; i >=0; i--) {
+            while(!stack.isEmpty() && T[i] >= T[stack.peek()]) stack.pop();
+            res[i] = stack.isEmpty()? 0 : stack.peek() - i;
+            stack.push(i);
+            
+        }
+        return res;
+    }
+     
+}
