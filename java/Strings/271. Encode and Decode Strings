@@ -1,0 +1,48 @@
+// idea 1 use a special delimer like (char)257 and handle special case for empty strings
+// idea 2 prefix fixed length size 4 character for size
+
+public class Codec {
+
+    // Encodes a list of strings to a single string.
+    public String encode(List<String> strs) {
+        if (strs.size() == 0) return Character.toString((char)258);
+        StringBuilder sb = new StringBuilder();
+        String delimer = Character.toString((char)257);
+        for (String s : strs) {
+            sb.append(s);
+            sb.append(delimer);
+        }
+        sb.deleteCharAt(sb.length() - 1);
+        return sb.toString();
+    }
+
+    // Decodes a single string to a list of strings.
+    public List<String> decode(String s) {
+        String empty = Character.toString((char)258);
+        List<String> res = new ArrayList<>();
+        if (s.equals(empty)) {
+            return res;
+        }
+        String delimer = Character.toString((char)257);
+        return Arrays.asList(s.split(delimer, -1));
+    }
+}
+
+/*
+Parameters:
+regex - a delimiting regular expression
+Limit - the result threshold
+limit > 0 : If this is the case then the pattern will be
+            applied at most limit-1 times, the resulting 
+            array’s length will not be more than n, and 
+            the resulting array’s last entry will contain
+            all input beyond the last matched pattern.
+limit < 0 : In this case, the pattern will be applied as
+            many times as possible, and the resulting 
+            array can be of any size.
+limit = 0 : In this case, the pattern will be applied as 
+            many times as possible, the resulting array can 
+            be of any size, and trailing empty strings will
+            be discarded.
+
+*/
