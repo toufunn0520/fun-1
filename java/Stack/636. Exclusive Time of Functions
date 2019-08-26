@@ -1,0 +1,36 @@
+// Time O(n), Space O(n)
+// 
+
+class Solution {
+    public int[] exclusiveTime(int n, List<String> logs) {
+        // id stack
+        Stack<Integer> stack = new Stack<>();
+        int[] res  = new int[n];
+        // id:start:time
+        String[] s = logs.get(0).split(":");
+        stack.push(Integer.parseInt(s[0]));
+        int index = 1;
+        int prev = Integer.parseInt(s[2]);
+        //logs = ["0:start:0","1:start:2","1:end:5","0:end:6"]
+
+        while (index < logs.size())  {
+            String[] details = logs.get(index).split(":");
+            if (details[1].equals("start")) {
+                if (!stack.isEmpty()) {
+                    res[stack.peek()] += Integer.parseInt(details[2]) - prev;
+                }
+                prev = Integer.parseInt(details[2]);
+                stack.push(Integer.parseInt(details[0]));
+            } else {
+                //end
+                res[stack.peek()] += Integer.parseInt(details[2]) - prev + 1;
+                stack.pop();
+                // important to calculate exclude the intersaction 
+                prev = Integer.parseInt(details[2]) + 1;
+            }
+            index ++;
+        }
+        return res;
+    }
+}
+
