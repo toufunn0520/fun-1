@@ -1,5 +1,5 @@
 // Time O(n), Space O(n)
-// 
+// Keep a stack of ids and keep updating previous start time or after one id poped out of the stack use its endTime -1
 
 class Solution {
     public int[] exclusiveTime(int n, List<String> logs) {
