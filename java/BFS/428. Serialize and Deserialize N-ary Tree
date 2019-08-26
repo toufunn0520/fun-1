@@ -1,0 +1,56 @@
+/*
+// Definition for a Node.
+class Node {
+    public int val;
+    public List<Node> children;
+
+    public Node() {}
+
+    public Node(int _val,List<Node> _children) {
+        val = _val;
+        children = _children;
+    }
+};
+*/
+
+
+// use DFS indicate node value and numOfChild.
+class Codec {
+
+    // Encodes a tree to a single string.
+    public String serialize(Node root) {
+        if (root == null) return null;
+        List<String> res = new ArrayList<>();
+        serializeInternal(root, res);
+        return String.join(",", res);
+        
+    }
+    private void serializeInternal(final Node node, final List<String> res) {
+        if (node == null) return;
+        res.add(String.valueOf(node.val));
+        res.add(String.valueOf(node.children.size()));
+        for (Node child: node.children) {
+            serializeInternal(child, res);
+        }
+    }
+
+    // Decodes your encoded data to tree.
+    public Node deserialize(String data) {
+        if (data == null || data.length() == 0) return null;
+        String[] res = data.split(",");
+        Queue<String> queue = new LinkedList<>(Arrays.asList(res));
+        return deserializeInternal(queue);
+    }
+    
+    private Node deserializeInternal(Queue<String> queue) {
+        // since it won't be extra null node to be processed, it is safe to directly get node value and its child count
+        int val = Integer.parseInt(queue.poll());
+        int numOfChild = Integer.parseInt(queue.poll());
+        List<Node> child = new ArrayList<>(numOfChild);
+        Node node = new Node(val,child);
+        for (int i = 0; i < numOfChild; i++) {
+            child.add(deserializeInternal(queue));
+        }
+        return node;
+    }
+}
