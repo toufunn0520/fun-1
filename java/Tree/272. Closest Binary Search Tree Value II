@@ -1,0 +1,33 @@
+//In Order Traverse
+//Keep linkedList as K size and keep swapping with FristItem, since FirstItem is the big gap
+//Optimization: Early termination
+//Time O(n)
+//Space O(n)
+
+class Solution {
+    public List<Integer> closestKValues(TreeNode root, double target, int k) {
+        LinkedList<Integer> res = new LinkedList<>();
+        //in-order-travers
+        internal(root, target, k , res);
+        return res;
+    }
+    
+    void internal(TreeNode node, double target, int k, LinkedList<Integer>res) {
+        if (node == null) return;
+        internal(node.left, target, k , res);
+        if (res.size() == k) {
+            int first = res.get(0);
+            if (Math.abs(first - target) > Math.abs(node.val - target)) {
+                res.removeFirst();
+                res.add(node.val);
+            } else {
+                // early return no need to do in-order
+                return;
+            }
+        } else {
+            res.add(node.val);
+        }
+        
+        internal(node.right, target, k , res);
+    }
+}
