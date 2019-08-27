@@ -1,0 +1,26 @@
+// same length, checking next i+1 till end are exactly the same. like replace
+// different length, alway swap to (min, max) for max[i+1, end] and compare with min [i,end]
+// !! making sure diff should be 1 in case if first lens character are exaclty the same.
+// TimeO(n) and Space O(1)
+
+class Solution {
+    public boolean isOneEditDistance(String s, String t) {
+        int lens = s.length();
+        int lent = t.length();
+        
+        if (lens > lent) return isOneEditDistance (t, s);
+        for (int i = 0; i < lens; i ++) {
+            if (s.charAt(i) != t.charAt(i)) {
+                if (lens == lent) {
+                    // replace
+                    return s.substring(i+1).equals(t.substring(i+1));
+                } else {
+                    // remove or insert 
+                    return s.substring(i).equals(t.substring(i+1));
+                }
+            }
+        }
+        // first lens character are exaclty the same.
+        return lens + 1 == lent;
+    }
+}
