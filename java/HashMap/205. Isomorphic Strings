@@ -1,0 +1,47 @@
+// Easy
+// keep a character mapping and reverse mapping from s to t
+// keep t character and frequence
+
+
+class Solution {
+    public boolean isIsomorphic(String s, String t) {
+        if (s.length() == 0  && t.length() == 0) return true;
+        
+        Map<Character, Integer> map2 = new HashMap<>();
+        Map<Character, Character> mapping = new HashMap<>();
+        Map<Character, Character> reverse = new HashMap<>();
+
+        for (int j = 0; j < t.length(); j++) {
+            char c = t.charAt(j);
+            int count = 0;
+            if (map2.containsKey(c)) {
+                count = map2.get(c);
+            }
+            map2.put(c, count + 1);
+        }
+        
+        for (int index = 0; index < t.length(); index++) {
+            char c = s.charAt(index);
+            char z = t.charAt(index);
+            if (mapping.containsKey(c)) {
+                char cc = mapping.get(c);
+                if (cc != z) return false;
+                if (map2.get(cc) >=1 ) {
+                    map2.put(cc, map2.get(cc) - 1);
+                } else {
+                    return false;
+                }
+            } else {
+                if (reverse.containsKey(z)) return false;
+                mapping.put(c,z);
+                reverse.put(z,c);
+                if (map2.get(z) >= 1) {
+                    map2.put(z, map2.get(z) - 1);
+                } else {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+}
