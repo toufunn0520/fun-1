@@ -1,0 +1,55 @@
+// 
+// each euqation genereate 4 mapping
+// - direct one keep map <String[1], Map<String[2], value>>
+// - reversed one  <String[2], Map<String[1], 1/value>>
+// - two self value =1
+
+// BFS find the 1st answer and keep a visited map to aviod loop.
+// corner case check if either of them are never seen
+
+
+class Solution {
+    private Map<String, HashMap<String, Double>> map;
+    public double[] calcEquation(List<List<String>> equations, double[] values, List<List<String>> queries) {
+        int len = queries.size();
+        double[] res = new double[len];
+        map = new HashMap<>();
+        int i = 0;
+        for (List<String> source: equations) {
+            map.computeIfAbsent(source.get(0), 
+                                l -> new HashMap<String, Double>()).put(source.get(1), values[i]);
+            map.computeIfAbsent(source.get(1), 
+                                l -> new HashMap<String, Double>()).put(source.get(0), 1/values[i]);
+            map.computeIfAbsent(source.get(1), 
+                                l -> new HashMap<String, Double>()).put(source.get(1), Double.valueOf(1));
+            map.computeIfAbsent(source.get(0), 
+                                l -> new HashMap<String, Double>()).put(source.get(0), Double.valueOf(1));
+            i++;
+        }
+        
+        i = 0;
+        for (List<String> request: queries) {
+            Set<String> visited = new HashSet<>();
+            if (!map.containsKey(request.get(0)) || !map.containsKey(request.get(1))){
+                res[i] = Double.valueOf(-1);
+            } else {
+                res[i] = helper(request.get(0), request.get(1), visited);
+            }
+            i++;
+        }
+        return res;
+    }
+    
+    private double helper(String start, String end, Set<String> visited) {        
+        
+        Map<String, Double> nextMap = map.get(start);
+        if (nextMap.containsKey(end)) return nextMap.get(end);
+        for (String next : nextMap.keySet()) {
+            if (visited.contains(next)) continue;
+            visited.add(next);
+            double t = helper(next, end, visited);
+            if (t > 0.0) return t * nextMap.get(next);
+        }
+        return -1.0;
+    }
+}
