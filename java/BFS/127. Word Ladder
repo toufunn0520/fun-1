@@ -1,0 +1,51 @@
+// BFS
+// Pre-Process words share intermediate state into hashmap
+
+import javafx.util.Pair;
+class Solution {
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        // edge case checking
+        if (beginWord == null || endWord == null || wordList.size() == 0) return 0;
+        // preprocessing a hashmap
+        // key will be the reg-express with * ,  value will be all word one hop away from each other
+        HashMap<String, ArrayList<String>> map = new HashMap<>();
+        int L = wordList.get(0).length();
+        for (String word: wordList) {
+            for (int i = 0 ; i < L ; i++) {
+                String modified = word.substring(0,i) + "*" + word.substring(i+1, L);
+                ArrayList list = map.getOrDefault(modified, new ArrayList<String>());
+                list.add(word);
+                map.put(modified, list);
+            }
+        }
+
+
+        // Don't forget to keep a visited record
+        Set<String> visited = new HashSet<>();
+        // Use BFS to see the number of min hop reaching toward to endWord
+        // Queue will enqueue one hop distance words and its level
+        Queue<Pair<String, Integer>> queue = new LinkedList<>();
+        // first item 
+        queue.add(new Pair<>(beginWord, 1));
+        while (!queue.isEmpty()) {
+            Pair<String, Integer> currentWord = queue.remove();
+            String word = currentWord.getKey();
+            int level = currentWord.getValue();
+            if (word.equals(endWord)) {
+                return level;
+            }
+            for (int i = 0 ; i < L ; i++) {
+                String modified = word.substring(0,i) + "*" + word.substring(i+1, L);
+                ArrayList<String> list = map.getOrDefault(modified, new ArrayList<String>());
+                for (String next: list) {
+                    if (visited.contains(next)) {
+                        continue;
+                    }
+                    queue.add(new Pair<>(next, level + 1));
+                    visited.add(next);
+                }
+             }
+        }
+        return 0;
+    }
+}
