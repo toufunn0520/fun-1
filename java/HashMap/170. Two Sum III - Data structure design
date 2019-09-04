@@ -1,0 +1,41 @@
+// keep the frequency and number in a hashmap
+// find will iterate throw map hashkey and 
+// differentiate from same value with 2 occurance and different value with at least one occurance 
+
+class TwoSum {
+    Map<Integer, Integer> res;
+    Set<Integer> numbers;
+    /** Initialize your data structure here. */
+    public TwoSum() {
+        res = new HashMap<>();
+    }
+    
+    /** Add the number to an internal data structure.. */
+    public void add(int number) {
+        if (res.containsKey(number)) {
+            res.put(number, 2);
+        } else{
+            res.put(number, 1);
+        }
+    }
+    
+    /** Find if there exists any pair of numbers which sum is equal to the value. */
+    public boolean find(int value) {
+        for(Map.Entry<Integer, Integer>entry: res.entrySet()){
+            int first = entry.getKey();
+            int second = value - first;
+            if ((first == second && res.containsKey(first) && res.get(first) == 2 )
+                ||  (first != second && res.containsKey(first) && res.containsKey(second))) {
+                return true;
+            } 
+        }
+        return false;
+    }
+}
+
+/**
+ * Your TwoSum object will be instantiated and called as such:
+ * TwoSum obj = new TwoSum();
+ * obj.add(number);
+ * boolean param_2 = obj.find(value);
+ */
