@@ -1,0 +1,82 @@
+//BFS - generate neighbor/distance(minimal distance from startNode to this node)
+//DFS - same path only do deeper not loop.
+
+import javafx.util.Pair;
+class Solution {
+    public List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
+        // pre-processing
+        Set<String>dict = new HashSet<>(wordList);
+        Map<String, List<String>> neighbor = new HashMap<>();
+        Map<String, Integer>distance = new HashMap<>();
+        List<List<String>>res = new ArrayList<>();
+        List<String> path = new LinkedList<>();
+        
+        Queue<Pair<String, Integer>> queue = new LinkedList<>();
+        queue.add(new Pair<>(beginWord, 0));
+        bfs(beginWord, endWord, dict, queue, distance, neighbor);
+        path.add(beginWord);
+        dfs(beginWord, endWord, dict, distance, neighbor, path, res);
+        return res;
+    }
+    
+    List<String> getNeighbor(String word, Set<String> dict) {
+        List<String> res = new ArrayList<>();
+        char[] character = word.toCharArray();
+        int len = word.length();
+        for (int index = 0 ; index < len; index++) {
+            char i; 
+            for (i = 'a'; i <= 'z' ; i++) {
+                String newWord = word.substring(0, index) + i + word.substring(index + 1, len);
+                if (newWord.equals(word)){
+                    continue;
+                }
+                if (dict.contains(newWord)) {
+                    res.add(newWord);
+                }
+            }
+        }
+        return res;
+    }
+   
+    // populate distance
+    // populate neighbor
+    private void bfs(String beginWord, String endWord, Set<String> dict, 
+                Queue<Pair<String,Integer>>queue, Map<String, Integer> distance, 
+                Map<String, List<String>>neighbor) {
+        Set<String> visited = new HashSet<>();
+        while(!queue.isEmpty()) {
+            Pair<String, Integer> cur = queue.remove();
+            String currentWord = cur.getKey();
+            int currentLevel = cur.getValue();
+            if (!visited.contains(currentWord)) {
+                // neigborlist
+                List<String> directNeighbor = getNeighbor(currentWord, dict);
+                neighbor.put(currentWord, directNeighbor);
+                visited.add(currentWord);
+                distance.put(currentWord, currentLevel+1);
+                for (String nextWord: directNeighbor) {
+                    queue.add(new Pair<>(nextWord, currentLevel+1));
+                }
+            }
+        }
+    }
+    
+     private void dfs(String beginWord, String endWord, Set<String> dict, 
+                Map<String, Integer> distance, 
+                Map<String, List<String>>neighbor, List<String> path, List<List<String>>res) {
+         
+         if (beginWord.equals(endWord)){
+             res.add(new ArrayList(path));
+             return;
+         }
+         int currentlevel = distance.get(beginWord);
+         List<String> listOfNeighbor = neighbor.get(beginWord);
+         for (String nextWord: listOfNeighbor) {
+              if (distance.get(nextWord) == currentlevel + 1) { //nice , it prevent going into loop. and path will be same depth
+                  path.add(nextWord);
+                  dfs(nextWord, endWord, dict, distance, neighbor, path, res);
+                  path.remove(path.size()-1);
+              }
+         }
+     }
+}
