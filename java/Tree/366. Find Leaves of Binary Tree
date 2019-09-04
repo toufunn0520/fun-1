@@ -1,0 +1,29 @@
+// post-order-traverse
+// find max level for left and max and + 1
+// check if we need to allocated new list by size 
+
+class Solution {
+    public List<List<Integer>> findLeaves(TreeNode root) {
+        List<List<Integer>> res = new ArrayList<>();
+        internal(root, res);
+        return res;
+    }
+    
+    // level
+    private int internal(TreeNode root, List<List<Integer>>res) {
+        if(root == null) return -1;
+        
+        int left = internal(root.left, res);
+        int right = internal(root.right, res);
+        int level = Math.max(left, right) + 1;
+        List<Integer> current;
+        if (level == res.size()) {
+            current = new ArrayList<>();
+            res.add(level, current);
+        } else {
+            current = res.get(level);
+        }
+        current.add(root.val);
+        return level;
+    }
+}
