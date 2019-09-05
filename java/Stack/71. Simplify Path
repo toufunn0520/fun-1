@@ -1,0 +1,46 @@
+// stack 
+// split by /
+// .. pop
+// . noop
+// empty skip
+// remaining push
+// glue all elements inside the stack 
+// if stack is empty specially handling adding prefix / like "/../", when .. stack is empty
+
+class Solution {
+    public String simplifyPath(String path) {
+        Stack<String>stack = new Stack<>();
+        StringBuilder sb = new StringBuilder();
+        int len = path.length();
+        String[] split = path.split("/");
+        String back = "..";
+        String noop = ".";
+        for (int i = 0; i < split.length; i++) {
+            //System.out.println("working on " + split[i]);
+            if (split[i].equals(back)) {
+                 //System.out.println("about to pop ");
+                if (!stack.isEmpty()) {
+                    //System.out.println("pop " + stack.peek());
+                    stack.pop();
+                    continue;
+                }
+            } else if (split[i].equals(noop)) {
+                continue;
+            } else if (split[i].equals("")) {
+                continue;
+            } else {
+               //System.out.println("pushing " + split[i]);
+                stack.push(split[i]);
+            }
+        }
+        
+        int l = stack.size();
+        if (l == 0) sb.append("/");
+        for (int j = 0 ; j < l; j++) {
+            sb.insert(0, "/");
+            sb.insert(1, stack.pop());
+        }
+        
+        return sb.toString();
+    }
+}
