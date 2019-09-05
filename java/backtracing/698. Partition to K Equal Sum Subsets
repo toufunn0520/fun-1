@@ -1,0 +1,48 @@
+// optimize zhengchu, sorted, single items
+// try and if work keep trying  
+// not work backtrack
+
+class Solution {
+    public boolean canPartitionKSubsets(int[] nums, int k) {
+        int sum = 0;
+        for (int i : nums) {
+            sum += i;
+        }
+        // sanity check 
+        // have to be divided by k
+        if ((sum % k) != 0) return false;
+        int target = sum / k;        
+        // size is less than k
+        if (nums.length < k) return false;
+        
+        // gready sort , the biggest item is larger than target
+        Arrays.sort(nums);
+        int index = nums.length -1;
+        if (nums[index] > target) return false;
+        
+        //single elements
+        while(index >= 0 && nums[index] == target) {
+            k--;
+            index --;
+        }
+        
+        return internal(new int[k], nums, target, index, k);
+    }
+    
+    private boolean internal(int[] res, int[] nums, int target, int index, int k) {
+        if(index < 0) {
+            return true;
+        }
+        
+        for (int i = 0; i< k; i++) {
+            if(res[i] + nums[index] <= target) {
+                res[i] += nums[index];
+                if (internal(res, nums, target, index - 1, k)) {
+                    return true;
+                }
+                res[i] -= nums[index];
+            }
+        }
+        return false;
+    }
+}
