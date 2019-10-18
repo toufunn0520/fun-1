@@ -1,0 +1,64 @@
+//Given a non-empty array of integers, return the k most frequent elements.
+
+//Method 1 Priority queue / max heap
+//Time complexity: O(n) + O(nlogk)
+//Space complexity: O(n)
+
+//trick: the order don't matter as long as return top K elements
+//API: getOrDefault, Override comparator for priority queue
+
+class Solution {
+    public List<Integer> topKFrequent(int[] nums, int k) {
+        List<Integer> res = new ArrayList<>();
+        Map<Integer, Integer> map = new HashMap<>();
+        int len = nums.length;
+        for (int i = 0; i < len; i++) {
+            map.put(nums[i], map.getOrDefault(nums[i], 0) + 1);
+        }
+        PriorityQueue<int[]> queue = new PriorityQueue<>((x, y) -> x[1] - y[1]);
+        for (int num : map.keySet()) {
+            queue.offer(new int[]{num, map.get(num)});
+            if (queue.size() > k) {
+                queue.poll();
+            }
+        }
+        for (int i = 0; i < k; i++) {
+            int[] item = queue.poll();
+            res.add(item[0]);
+        }
+        return res;
+    }
+}
+
+//Method 2 bucket sort 
+//Time complexity: O(n)
+//Space complexity: O(n)
+//Max length for the bucket is the size of the input
+
+class Solution {
+    public List<Integer> topKFrequent(int[] nums, int k) {
+        List<Integer> res = new ArrayList<>();
+        Map<Integer, Integer> map = new HashMap<>();
+        int len = nums.length;
+        for (int i = 0; i < len; i++) {
+            map.put(nums[i], map.getOrDefault(nums[i], 0) + 1);
+        }
+        // the max length will be nums.length
+        List[] bucket = new List[nums.length + 1];
+        
+        for (int num : map.keySet()) {
+            int count = map.get(num);
+            if (bucket[count] == null){
+                bucket[count] = new ArrayList<Integer>();
+            }
+            bucket[count].add(num);
+        }
+        
+        for (int i = len; i >= 0 && res.size() < k; i--) {
+            if (bucket[i] != null) { 
+                res.addAll(bucket[i]);
+            }
+        }
+        return res;
+    }
+}
