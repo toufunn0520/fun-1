@@ -1,0 +1,34 @@
+// 692. Top K Frequent Words
+//Time O(Nlogk)
+//Space O(N)
+
+class Solution {
+    public List<String> topKFrequent(String[] words, int k) {
+        Map<String, Integer> map = new HashMap<>();
+        int len = words.length;
+        for (int i = 0; i < len; i++) {
+            map.put(words[i], map.getOrDefault(words[i], 0) + 1);
+        }
+        
+        /*List<String> candidates = new ArrayList(map.keySet());
+
+        Collections.sort(candidates, (w1, w2) -> map.get(w1).equals(map.get(w2)) ?
+                w1.compareTo(w2) : map.get(w2) - map.get(w1));
+
+        return candidates.subList(0, k); */
+        
+         PriorityQueue<String> heap = new PriorityQueue<String>(
+                (w1, w2) -> map.get(w1).equals(map.get(w2)) ?
+                w2.compareTo(w1) : map.get(w1) - map.get(w2) );
+
+        for (String word: map.keySet()) {
+            heap.offer(word);
+            if (heap.size() > k) heap.poll();
+        }
+
+        List<String> ans = new ArrayList();
+        while (!heap.isEmpty()) ans.add(heap.poll());
+        Collections.reverse(ans);
+        return ans;
+    }
+}
