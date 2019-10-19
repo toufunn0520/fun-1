@@ -1,0 +1,24 @@
+// chose bottom left  because
+// if bigger go right 
+// if smaller go up
+// Time O(n+m)
+// Space O(1)
+
+class Solution {
+    public boolean searchMatrix(int[][] matrix, int target) {
+        int width = matrix.length;
+        int length = width == 0 ? 0 : matrix[0].length; // null case
+        int i = width -1;
+        int j = 0;
+        while (i >= 0 && j < length) {
+            if (matrix[i][j] == target) {
+                return true;
+            } else if (matrix[i][j] > target) { // go up
+                i--;
+            } else {
+                j++;
+            }
+        }
+        return false;
+    }
+}
