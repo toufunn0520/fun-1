@@ -1,0 +1,41 @@
+// hashmap
+/*
+Input: 
+["9001 discuss.leetcode.com"]
+Output: 
+["9001 discuss.leetcode.com", "9001 leetcode.com", "9001 com"]
+*/
+//Time Complexity and Space: O(N), 
+class Solution {
+    public List<String> subdomainVisits(String[] cpdomains) {
+        List<String> res = new ArrayList<>();
+        Map<String, Integer> map = new HashMap<>();
+        for (String s : cpdomains) {
+            String[] pair = s.split(" ");
+            int count = Integer.parseInt(pair[0]);
+            map.put(pair[1],  map.getOrDefault(pair[1], 0) + count);
+            
+            // handle subdomains
+            int i = 0;
+            int length = pair[1].length();
+            while (i < length && i >=0) {
+                i = pair[1].indexOf(".", i + 1);
+                if (i != -1) {
+                    String domain = pair[1].substring(i+1, length);
+                    //System.out.println(domain);
+                    map.put(domain, map.getOrDefault(domain, 0) + count);
+                }
+            }
+        }
+        // iterate and construct each record
+        for (String key: map.keySet()) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(map.get(key));
+            sb.append(" ");
+            sb.append(key);
+            res.add(sb.toString());
+        }
+        // convert map to list
+        return res;
+    }
+}
