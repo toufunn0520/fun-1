@@ -1,0 +1,39 @@
+// 3 parts, helper function to generate missing range with res, start, end argument
+// corner cases nums is null or lenght is 0
+// nums[0] -1 or nums[i] +1 nums[i+1] - 1 or nums[length -1] + 1 exceeded the Integer boundarise
+// covert original number to long and then add or decrease the value
+
+// Time O(n) Space O(n)
+class Solution {
+    public List<String> findMissingRanges(int[] nums, int lower, int upper) {
+        List<String> res = new ArrayList<>();
+        // corner case
+        if (nums == null || nums.length == 0) {
+            addRanges(res, lower, upper);
+            return res;
+        }
+        // start with nums[0] - 1 
+        addRanges(res, lower, (long)nums[0] -1);
+       
+        int len = nums.length;
+        for (int i = 0; i < len - 1; i++) {
+            addRanges(res, (long)nums[i] + 1, (long)nums[i+1] - 1);
+        }
+        
+        //end with the nums[len -1] + 1 
+        addRanges(res, (long)nums[len -1] + 1, upper);
+        return res;
+    }
+     
+    
+    private void addRanges(List<String> res, long start, long end) {
+        if (start > end) {
+            return;
+        } else if (start == end) {
+            res.add(start + "");
+        } else  {
+            res.add(start + "->" + end);
+        }
+    }
+    
+}
