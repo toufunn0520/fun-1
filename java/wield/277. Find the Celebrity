@@ -1,0 +1,28 @@
+// evertime knows(a,b) can help to exclude one item from the final answer
+// e.g knows(a, b) is true means a is not the celebrity
+//     knows(a, b) is false means b is not the celebrity
+// Time O(n)
+// Space O(1)
+public class Solution extends Relation {
+    public int findCelebrity(int n) {
+        int res = 0;
+        for (int i = 1; i < n ; i++) {
+            // brute force, to exclude people if they ever knows others 
+            // since we can only have one celebrity, 
+            // if valid celebrity appears after res, current res would known it.
+            if (knows(res,i)) {
+                res = i;
+            }
+        }
+        
+        for (int i = 0; i < n; i++) {
+            if (res != i  && !knows(i, res)) {
+                return -1;
+            }
+            if (res != i  && knows(res, i)) {
+                return -1;
+            }
+        }
+        return res;
+    }
+}
