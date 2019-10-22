@@ -1,0 +1,30 @@
+// convert the problemt to how to use 1,2,4,8,16 add up to n
+// Time 0(Logn), SpaceO(1)
+// Special case for Integer.MIN_VALUE, neg it still is a neg value.
+
+class Solution {
+    public double myPow(double x, int n) {
+        // special case for n can not covert to positive number
+        boolean special = false;
+        if (n == Integer.MIN_VALUE) {
+            n = n + 1;
+            special = true;
+        }
+        // nagtive
+        if (n < 0) {
+            n = 0 - n;
+            x = 1/x;
+        }
+        double res = 1;
+        double tmp = x; // x^1, x^2, x^4
+        while(n != 0) {
+            if (n %2 == 1) {
+                res *= tmp;
+            }
+            tmp *= tmp;
+            n /= 2;
+        }
+        
+        return special ? res * x : res;
+    }
+}
