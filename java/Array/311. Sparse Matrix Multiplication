@@ -1,0 +1,32 @@
+// Sparse the goal is to optimize the constant complexity
+// (1) Move K up to j in case A[i][K] is 0 no need to continue
+// (2) Use extra Space saving null 0 index from B 
+
+class Solution {
+    public int[][] multiply(int[][] A, int[][] B) {
+        int len = A.length;
+        int col = B[0].length;
+        int internal = A[0].length;
+        int[][] res = new int[len][col];
+        List<List<Integer>> sum = new ArrayList<>();
+        
+        for (int k = 0; k < internal; k++) {
+            sum.add(new ArrayList<>());
+            for (int j = 0; j < col; j++) {
+                if (B[k][j] != 0){
+                    sum.get(k).add(j);
+                }
+            }
+        }
+        
+        for (int i = 0 ; i < len ; i++) {
+            for (int k = 0; k < internal ; k++) {
+                if (A[i][k] == 0) continue;
+                for (int index : sum.get(k)) {
+                    res[i][index] += A[i][k] * B[k][index];
+                }
+            }
+        }
+        return res;
+    }
+}
