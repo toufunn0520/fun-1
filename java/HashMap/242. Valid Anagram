@@ -1,0 +1,25 @@
+class Solution {
+    public boolean isAnagram(String s, String t) {
+        int[] map = new int[256];
+        char[] sc = s.toCharArray();
+        char[] tc = t.toCharArray();
+        // corner case ab and a
+        if (sc.length != tc.length) return false;
+        
+        for (int i = 0; i < sc.length; i++) {
+            int index = (int) sc[i];
+            map[index] ++;
+        }
+        for (int j = 0; j < tc.length; j++) {
+            int index = (int) tc[j];
+            if (map[index] > 0) {
+                map[index]--;
+            } else {
+                return false;
+            }
+        }
+        
+        return true;
+        
+    }
+}
