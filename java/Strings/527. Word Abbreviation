@@ -1,0 +1,46 @@
+// Time O(C^2) where CC is the number of characters
+// Spacee O(C)
+
+
+class Solution {
+    public List<String> wordsAbbreviation(List<String> dict) {
+        if (dict == null) return null;
+        
+        List<String> res = new ArrayList<>(dict.size());
+        int level = 1;
+        Map<String, Integer> map = new HashMap<>();
+        
+        // first round
+        for (int i = 0; i < dict.size(); i++) {
+            res.add(i, adjust(dict.get(i), level, map));
+        }
+        while (true) {
+            boolean done = true;
+            level++;
+            for (int i = 0; i < dict.size(); i++) {
+                if (map.get(res.get(i)) > 1) {
+                    res.set(i, adjust(dict.get(i), level, map)); // API use set not add.
+                    done = false;
+                }
+            }
+            if (done) {
+                break;
+            }
+        }
+        return res; 
+    }
+    
+    // apply rule 1 and 3
+    private String adjust(String origin, int level, Map<String, Integer> map) {
+        int len = origin.length();
+        
+        if (origin.length() <= level + 2 ) {
+            map.put(origin, map.getOrDefault(origin, 0) + 1);
+            return origin;
+        } 
+        // update to abbreviation
+        String res = origin.substring(0, level) + (len - level - 1) + origin.charAt(len - 1);
+        map.put(res, map.getOrDefault(res, 0) + 1);
+        return res;
+    }
+}
