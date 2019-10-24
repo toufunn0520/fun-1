@@ -1,0 +1,32 @@
+// two map one for abbr one for origin
+// compare the occurance of each word
+class ValidWordAbbr {
+    Map<String, Integer> map = new HashMap<>();
+    Map<String, Integer> abbr = new HashMap<>();
+    public ValidWordAbbr(String[] dictionary) {
+        for (String s: dictionary) {
+            map.put(s, map.getOrDefault(s, 0) + 1);
+            String abr = getAbbr(s);
+            abbr.put(abr, abbr.getOrDefault(abr, 0) + 1); // type
+        }
+    }
+    
+    private String getAbbr(final String origin) {
+        int len = origin.length();
+        if (len <= 2) {
+            return origin;
+        }
+        String res = "" + origin.charAt(0) + (len - 2) + (origin.charAt(len-1)); // rem
+        return res;
+    }
+        
+    public boolean isUnique(String word) {
+        return map.getOrDefault(word, 0) == abbr.getOrDefault(getAbbr(word), 0);
+    }
+}
+
+/**
+ * Your ValidWordAbbr object will be instantiated and called as such:
+ * ValidWordAbbr obj = new ValidWordAbbr(dictionary);
+ * boolean param_1 = obj.isUnique(word);
+ */
