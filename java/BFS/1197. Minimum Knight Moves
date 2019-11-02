@@ -1,0 +1,42 @@
+//BTS + pruning otherwise ETF
+import javafx.util.Pair;
+class Solution {
+    public int minKnightMoves(int x, int y) {
+       // simplify by only doing positive
+        x = Math.abs(x);
+        y = Math.abs(y);
+        int[] deltax = {-1, 1, 2, 2, 1, -1, -2, -2};
+        int[] deltay = {-2,-2,-1, 1, 2, 2, 1,-1};
+        //corner case
+        if (y == 0 && x == 0) return 0;
+
+        Queue<Pair<Integer, Integer>> queue = new LinkedList<>();
+        Set<Pair<Integer, Integer>> visited = new HashSet<>();
+        queue.offer(new Pair <Integer, Integer>(0, 0));
+        visited.add(new Pair <Integer, Integer>(0, 0));
+        
+        int res = 0;
+        while(!queue.isEmpty()) {
+            res++;
+            int size = queue.size();
+            for (int count = 0 ; count < size; count++) { 
+                Pair<Integer, Integer> start = queue.poll();
+                for (int i = 0; i < 8; i++) {
+                    int nextx = start.getKey() + deltax[i];
+                    int nexty = start.getValue() + deltay[i];
+                    if (nextx == x && nexty == y) return res;
+                    // prune but with trick move the edge larger incase some nodes needs to entered from negative number
+                    if (nextx < -10 || nexty < -10 || nextx >= 310 || nexty >= 310) {
+                        continue;
+                    }
+                    Pair<Integer, Integer> next = new Pair<Integer, Integer>(nextx, nexty);
+                    if (!visited.contains(next)) {
+                        visited.add(next);
+                        queue.offer(next);
+                    }
+                }          
+            }
+        }
+        return -1;
+    }
+}
