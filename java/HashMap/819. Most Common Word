@@ -1,0 +1,47 @@
+// Since it is try to find the most freq word no need a priority queue
+// Time Complexity: O(P + B)O(P+B), where PP is the size of paragraph and BB is the size of banned.
+// Space Complexity: O(P + B)O(P+B), to store the count and the banned set.
+// Corner case is if the paragraph ends in  a word no simbles need to add an ending checking
+class Solution {
+    public String mostCommonWord(String paragraph, String[] banned) {
+        Set<String> ban = new HashSet<>();
+        
+        for (String s: banned) {
+            ban.add(s);
+        }
+        
+        Map<String, Integer> map = new HashMap<>();
+        String ans = "";
+        int maxFreq = 0;
+        StringBuilder sb = new StringBuilder();
+        for (char c : paragraph.toCharArray()) { 
+            if (Character.isLetter(c)) {
+                sb.append(Character.toLowerCase(c));
+            } else if (sb.length() > 0 ) {
+                final String word = sb.toString();
+                if (!ban.contains(word)) {
+                    map.put(word, map.getOrDefault(word, 0) + 1);
+                    if (map.get(word) > maxFreq) {
+                        maxFreq = map.get(word);
+                        ans = word;
+                    }
+                }
+                sb = new StringBuilder();
+            }
+        }
+        // the last word and the para ends in a valid word, need to consider that word too
+        // e.g "Bob" []
+        if (sb.length() > 0) {
+            final String word = sb.toString();
+            if (!ban.contains(word)) {
+                map.put(word, map.getOrDefault(word, 0) + 1);
+                if (map.get(word) > maxFreq) {
+                    maxFreq = map.get(word);
+                    ans = word;
+                }
+            }
+        }
+        
+        return ans;
+    }
+}
