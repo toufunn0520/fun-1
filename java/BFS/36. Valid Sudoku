@@ -1,0 +1,45 @@
+class Solution {
+    public boolean isValidSudoku(char[][] board) {
+        // map for each row, col, box
+        // record the occurrance of the number
+        if (board == null) return false;
+        int row = board.length;
+        int col = board.length == 0 ? 0 : board[0].length;
+        //box_index = (row / 3) * 3 + col / 3;
+        ArrayList<Set<Integer>> rows = new ArrayList<>(row);
+        ArrayList<Set<Integer>> cols = new ArrayList<>(col);
+        ArrayList<Set<Integer>> boxes = new ArrayList<>(9);
+        for (int i = 0; i < 9; i++) {
+          cols.add(new HashSet<Integer>());
+          rows.add(new HashSet<Integer>());
+          boxes.add(new HashSet<Integer>());
+        }
+        
+        for (int i =  0;  i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                if (board[i][j] == '.') continue;
+                // cols
+                Set<Integer> tmpcol = cols.get(j);
+                if (tmpcol.contains(Character.getNumericValue(board[i][j]))){
+                    return false;
+                }
+                tmpcol.add(Character.getNumericValue(board[i][j]));
+                // rows
+                Set<Integer> tmprow = rows.get(i);
+                if (tmprow.contains(Character.getNumericValue(board[i][j]))){
+                    return false;
+                }
+                tmprow.add(Character.getNumericValue(board[i][j]));
+                // boxes
+                int boxIndex =  (i / 3) * 3 + j / 3;
+                Set<Integer> tmpbox = boxes.get(boxIndex);
+                if (tmpbox.contains(Character.getNumericValue(board[i][j]))) {
+                    return false;
+                }
+                tmpbox.add(Character.getNumericValue(board[i][j]));
+            }
+        }
+        return true;
+    }
+} 
+
