@@ -1,0 +1,48 @@
+
+// BFS 
+// numbers are the dot 
+// lines are the next step
+
+class Solution {
+    public int openLock(String[] deadends, String target) {
+        String start = "0000";
+  
+        Set<String> dead = new HashSet<>();
+        for (String s: deadends) {
+            dead.add(s);
+        }
+        // corner case
+        if (dead.contains(start)) return -1;
+        if (start.equals(target)) return 0;
+        
+        Queue<String> queue = new LinkedList<>();
+        Set<String> visited = new HashSet<>();
+        queue.offer(start);
+        int dist = 0;
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            dist++;
+            for (int i = 0; i < size; i++) {
+                String begin = queue.poll();
+                for (int index = 0; index < 4; index++) {
+                    // 9 - 9,  0 - 10
+                    String next = begin.substring(0, index) + (begin.charAt(index) - '0' -1 + 10) %10 + begin.substring(index+1);
+                    if (next.equals(target)) return dist;
+
+                    if (!visited.contains(next) && !dead.contains(next)) {
+                        visited.add(next);
+                        queue.offer(next);
+                    }
+                    next = begin.substring(0, index) + (begin.charAt(index) - '0' + 1 + 10) %10 + begin.substring(index+1);
+                    if (next.equals(target)) return dist;
+                    if (!visited.contains(next) && !dead.contains(next)) {
+                        visited.add(next);
+                        queue.offer(next);
+                    }
+                }
+                
+            }
+        }
+        return -1;
+    }
+}
