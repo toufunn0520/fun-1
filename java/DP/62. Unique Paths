@@ -1,0 +1,21 @@
+// res[i][j] = res[i-1][j] + res[i][j -1]
+// start 
+// res[0][0] = 1 and  res[0][j] = 1, res[i][0] =1 res[m-1][n-1] is the answer
+// Time and space are both O(N*M)
+class Solution {
+    public int uniquePaths(int m, int n) {
+        int[][] res = new int[m][n];
+        // the order is line by line
+        res[0][0] = 1;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                 if (i == 0 || j == 0) {
+                     res[i][j] = 1 ;
+                 } else {
+                     res[i][j] = res[i-1][j] + res[i][j-1];
+                 }
+            }
+        }
+        return res[m -1][n -1];
+    }
+}
