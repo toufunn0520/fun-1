@@ -1,0 +1,68 @@
+// time O(NM)
+// space O(1)
+// think the negative, from the four edge find the connected part and remaining part will be all X
+// use "W" to specify the node has been visted
+
+class Solution {
+    public void solve(char[][] board) {
+        // corner case
+        if (board == null || board.length == 0 || board[0].length == 0 ) return;
+        
+        int row = board.length;
+        int col = board[0].length;
+        for (int i = 0; i < row; i++) {
+            bfs(board, i, 0);
+            bfs(board, i, col -1);
+        }
+        for (int j = 0; j < col ; j++) {
+            bfs(board, 0, j);
+            bfs(board, row - 1, j);
+        }
+        
+        
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col ; j++) {
+                if (board[i][j] == 'W') {
+                    //connected with edge 0
+                    board[i][j] = 'O';
+                } else {
+                    board[i][j] = 'X';
+                }
+            }
+        }
+        
+    }
+    private void bfs(char[][] board , int x, int y) {
+        if (board[x][y] != 'O') {
+            return;
+        }
+        // 4 direaction
+        int[] deltax = {0, 0, 1, -1};
+        int[] deltay = {1, -1, 0, 0};
+        Queue<Integer> queuex = new LinkedList<>();
+        Queue<Integer> queuey = new LinkedList<>();
+        
+        // enqueue and mark as visited
+        queuex.offer(x);
+        queuey.offer(y);
+        board[x][y] = 'W';
+        
+        while(!queuex.isEmpty()) {
+            int i = queuex.poll();
+            int j = queuey.poll();
+            for (int index = 0; index < 4; index++) {
+                int newi = i + deltax[index];
+                int newj = j + deltay[index];
+                // enque next level, and mark as visited
+                if (newi >= 0 && newi < board.length && newj >= 0 && newj < board[0].length && board[newi][newj] == 'O') {
+                        queuex.offer(newi);
+                        queuey.offer(newj);
+                        board[newi][newj] = 'W';
+
+                }
+            
+            }
+        }
+    }
+}
+
