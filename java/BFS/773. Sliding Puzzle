@@ -1,0 +1,71 @@
+//BFS 
+// Dot is puzzles state use a string to represent
+// Line is pulllzes to puzzles
+//SpaceO(n)TimeO(n) 3*2
+
+class Solution {
+    public int slidingPuzzle(int[][] board) {
+        String target = "123450";
+        
+        Queue<String> queue = new LinkedList<>();
+        Set<String> visited = new HashSet<>();
+        String startString = convert(board);
+        queue.offer(startString);
+        int dist = -1;
+        visited.add(startString);
+        
+        while(!queue.isEmpty()) {
+            dist++;
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                String s = queue.poll();
+                if (s.equals(target)){
+                    return dist;
+                }
+                for (String n: getNext(s)) {
+                    if (!visited.contains(n)) {
+                          queue.offer(n);
+                          visited.add(n);
+                    }
+                }
+            }
+            
+        }
+        return -1;
+    }
+    
+    private String convert(int[][] board) {
+        StringBuilder sb = new StringBuilder();
+        for (int  i = 0 ; i < 2; i++) {
+            for (int j = 0 ; j < 3; j++) {
+                sb.append(""+board[i][j]);
+            }
+        }
+        return sb.toString();
+        
+    }
+    private List<String> getNext(String start) {
+        List<String> res = new ArrayList<>();
+        int[] deltax = {-1 , 1, 0, 0};
+        int[] deltay = {0 , 0, -1, 1};
+        
+        List<String> next = new ArrayList<>();
+        int zero = start.indexOf('0');
+        int x = zero / 3;
+        int y = zero % 3;
+        
+        for (int i = 0 ; i < 4; i ++) {
+            int nextx = x + deltax[i];
+            int nexty = y + deltay[i];
+            if (nextx >= 0 && nextx < 2 && nexty >= 0 && nexty < 3) {
+                char[] array = start.toCharArray();
+                char c = array[nextx * 3 + nexty];
+                array[zero] = c;
+                array[nextx * 3 + nexty] = '0';
+                res.add(String.valueOf(array));
+            }
+        }
+        return res;
+    }
+}
+
