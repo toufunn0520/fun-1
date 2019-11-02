@@ -1,0 +1,27 @@
+// start from each number, and incre/dec gradually to find consecutive 
+// use right - left  as the boundary 
+
+class Solution {
+    public int longestConsecutive(int[] nums) {
+        // corner case
+        if (nums == null || nums.length == 0) return 0;
+        // initializa 
+        Set<Integer> internal = new HashSet<>();
+        for (int num : nums) {
+            internal.add(num);
+        }
+        int count =  1;
+        for (int num : nums) {
+            int left = num;
+            int right = num;
+            while (internal.contains(left)) {
+                left--;
+            }
+            while (internal.contains(right)) {
+                right++;
+            }
+            count = Math.max(count, right - left - 1);
+        }
+        return count;
+    }
+}
