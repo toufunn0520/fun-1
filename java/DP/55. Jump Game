@@ -1,0 +1,23 @@
+// f[j] = OR(when 0<=i <j) f[i] is True And i + nums[i] >= j
+// Start f[0] = true, End f[n-1], populate value from small to big
+// Time O(n) = n*n
+// Space O(n) = n
+class Solution {
+    public boolean canJump(int[] nums) {
+        int len = nums.length;
+        boolean[] res = new boolean[len];
+        // init
+        res[0] = true;
+        for (int j = 1 ; j < len; j ++) {
+            // init each res as false
+            res[j] = false;
+            for (int i = 0; i < j; i++) {
+                if (res[i] == true && nums[i] + i >= j) {
+                    res[j] = true;
+                    break;
+                }
+            }
+        }
+        return res[len -1];
+    }
+}
