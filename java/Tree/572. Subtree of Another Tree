@@ -1,3 +1,6 @@
+//* Time complexity : O(m*n)  In worst case(skewed tree) traverse function takes O(m*n)  O(m∗n) time. 
+//* Space complexity : O(n)*O(n). The depth of the recursion tree can go upto n  n. n  n refers to the number of nodes in s
+
 class Solution {
     public boolean isSubtree(TreeNode s, TreeNode t) {
         return traverse(s,t);
