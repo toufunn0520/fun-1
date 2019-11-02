@@ -1,0 +1,22 @@
+//Time and Space O(n)
+class Solution {
+    public List<String> findRepeatedDnaSequences(String s) {
+        Map<String, Integer> map = new HashMap<>();
+        int len = s.length();
+        List<String> res = new ArrayList<>();
+        
+        for (int i = 0 ; i <= len - 10; i ++) {
+            String tmp = s.substring(i, i + 10);
+            if (map.containsKey(tmp) && map.get(tmp) == 1) {
+                res.add(tmp);
+            }
+            map.put(tmp, map.getOrDefault(tmp, 0) + 1);
+        }
+        
+        return res;
+    }
+    
+    // bug input "AAAAAAAAAAAA"
+    // ["AAAAAAAAAA"] instead of ["AAAAAAAAAA","AAAAAAAAAA"]
+    
+}
