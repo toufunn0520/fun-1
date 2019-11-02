@@ -1,0 +1,43 @@
+// Time O(NM)
+// Space O(NM)
+// scan from all 0 nodes but which ever comes first stays
+class Solution {
+    public void wallsAndGates(int[][] rooms) {
+        // corner case
+        if (rooms == null || rooms.length == 0) {
+            return;
+        }
+        
+        Queue<Integer> queuex = new LinkedList<>();
+        Queue<Integer> queuey = new LinkedList<>();
+        
+        int rol = rooms.length;
+        int col = rooms[0].length;
+        for (int i = 0; i < rol; i++) {
+            for (int j = 0; j < col; j++) {
+                if (rooms[i][j] == 0)  {
+                    queuex.offer(i);
+                    queuey.offer(j);
+                }  
+            }
+        }
+        int[] deltax = {0, 0, 1, -1};
+        int[] deltay = {1, -1, 0, 0};
+
+        while(!queuex.isEmpty()) {
+            int x = queuex.poll();
+            int y = queuey.poll();
+            // for direction
+            for (int i = 0 ; i < 4; i++) {
+                int newx = x + deltax[i];
+                int newy = y + deltay[i];
+                if (newx >= 0 && newy >=0 && newx < rol && newy < col && rooms[newx][newy] == Integer.MAX_VALUE) {
+                    rooms[newx][newy] = rooms[x][y] + 1;
+                    queuex.offer(newx);
+                    queuey.offer(newy);
+                }
+            }
+        }
+        
+    }
+}
