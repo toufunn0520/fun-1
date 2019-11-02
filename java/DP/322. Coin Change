@@ -1,0 +1,32 @@
+// dp[i] = Min(dp[i-coins[0]] + 1, dp[i-coins[1] +1, ...)
+// dp[0] = 0
+// dp[Y] when Y is not able to be achieved will be Integer.MAX_VALUE
+// skip d[Y] when d[Y] is Integer.MAX_VALUE
+// Trick:
+// (1)Before exit check if d[Y] is Integer.MAX_VALUE convert it to -1
+// (2)sorted the coins, since we reply on dp[smaller]  to get dp[result] we might missing min answer without sorting coins at frist
+// Time O(coins * amount)
+// Space O(amount)
+class Solution {
+    public int coinChange(int[] coins, int amount) {
+        int len = coins.length;
+        int[] dp = new int[amount + 1];
+        // need to sorted the coins since we rely on previous results
+        Arrays.sort(coins);
+        // start 0 is 0 steps
+        dp[0] = 0;
+        for (int i = 1; i <= amount; i++) {
+            dp[i] = Integer.MAX_VALUE;
+            for (int j = 0; j < len; j++) {
+                int start = i - coins[j];
+                if (start >= 0 && dp[start] != Integer.MAX_VALUE) {
+                    // typo add 1 only for dp[start]
+                    dp[i] = Math.min(dp[i], dp[start] + 1) ;
+                }
+            }
+            
+        }
+        // corner case if can not find convert it to -1
+        return dp[amount] ==  Integer.MAX_VALUE ? -1 : dp[amount];
+    }
+}
