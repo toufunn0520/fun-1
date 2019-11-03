@@ -1,0 +1,46 @@
+// formula: dp[i][j] = min(dp[i-1][k1, when k1 !=j] + costs[i-1][k1], dp[i-1][k2, when k2 != j] + cost[i-1][k2])
+// start:   form dp[0][j] = cost[0][j]
+// each:    dp start from Integer.MAX_VALUE;
+// end:     min(dp[n-1][k1]...dp[n-1][kn])
+//  Time and Space O(M*K)
+// Optimize 但是在找不同颜色的最小值不是遍历所有不同颜色，而是用min1和min2来记录之前房子的最小和第二小的花费的颜色，如果当前房子颜色和min1相同，那么我们用min2对应的值计算，反之我们用min1对应的值，这种解法实际上也包含了求次小值的方法，感觉也是一种很棒的解题思路，参见代码如下：
+//https://www.cnblogs.com/grandyang/p/5322870.html
+class Solution {
+    public int minCostII(int[][] costs) {
+        if (costs == null || costs.length == 0) return 0;
+        int n = costs.length;
+        int k = costs[0].length;
+        // n building
+        int[][] dp = new int[n + 1][k];
+        
+        for (int i = 0 ; i <= n ; i ++) {
+            for (int j = 0; j < k; j++) {
+                
+                dp[i][j] = Integer.MAX_VALUE; 
+                
+                if (i == 0) {
+                   dp[i][j] = 0;
+                    continue;
+                }
+                
+                // special case for one color the first building
+                if (k == 1 && i == 1) {
+                    dp[i][j] = costs[i-1][j];
+                }
+                
+                for (int jj = 0; jj < k ; jj++) {
+                   if (jj != j) {
+                       dp[i][j] = Math.min(dp[i-1][jj] + costs[i-1][jj], dp[i][j]);
+                   }
+                }
+            }
+        }
+        
+        
+        int res = Integer.MAX_VALUE;
+        for (int j = 0; j < k; j++) {
+            res = Math.min(res, dp[n][j]);
+        }
+        return res;
+    }
+}
