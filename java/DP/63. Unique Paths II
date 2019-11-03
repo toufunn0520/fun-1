@@ -1,0 +1,52 @@
+//same as unique path i
+// if obstacleGrid[i][j] == 0, f[i][j] = 0
+// tricky left and top if any previous node is 0, itself became 0 instead of 1
+// the remaining nodes f[i][j] = f[i-1][j] + f[i][j-1]  
+class Solution {
+    public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+        if (obstacleGrid == null) return 0;
+        int row = obstacleGrid.length;
+        if (row == 0) return 0;
+        int col = obstacleGrid[0].length;
+        
+        int[][] res = new int[row][col];
+        res[0][0] = 1;
+        for (int i = 0 ; i < row ; i++) {
+            for (int j = 0; j < col ; j++) {
+                // obstacle
+                if (obstacleGrid[i][j] == 1) {
+                    res[i][j] =0;
+                    continue;
+                }
+                // top
+                if (i == 0 && j > 0) {
+                    if (res[i][j-1] == 0) {
+                        res[i][j] = 0;
+                        continue;
+                    }else {
+                        res[i][j] = 1;
+                        continue;
+                    }
+                }
+                
+                 // left
+                if (j == 0 && i > 0) {
+                    if (res[i-1][j] == 0) {
+                        res[i][j] = 0;
+                        continue;
+                    }else {
+                        res[i][j] = 1;
+                        continue;
+                    }
+                }
+                
+                //the remaining grid
+                if (i > 0 && j > 0 ) {
+                    res[i][j] = res[i-1][j] + res[i][j-1];
+                }
+                
+            }
+        }
+        return res [row - 1][col -1];
+    }
+}
