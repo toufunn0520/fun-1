@@ -1,0 +1,18 @@
+// dp[i] = Max(dp[i-2]+ nums[i-1], dp[i-1])
+// Time and Space O(N)
+// Optimize: SpaceO(1) only save the last and second last value
+class Solution {
+    public int rob(int[] nums) {
+        if (nums == null || nums.length==0) return 0;
+        int[] dp = new int [nums.length + 1];
+        dp[0] = 0;
+        for (int i = 1; i <= nums.length; i++) {
+            dp[i] = nums[i-1];
+            if (i >= 2) {
+                dp[i] = Math.max(dp[i-2]+nums[i-1], dp[i-1]);
+            }
+        }
+        
+        return dp[nums.length];
+    }
+}
