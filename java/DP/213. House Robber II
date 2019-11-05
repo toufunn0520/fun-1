@@ -1,0 +1,43 @@
+// 破圈 简化成简单题
+// 不要头 dp[n-1] 
+// 不要尾巴 dp[n-2]
+// 这两种情况包括了都不要
+class Solution {
+    public int rob(int[] nums) {
+        if (nums == null || nums.length == 0) return 0;
+        int n = nums.length;
+        if (n == 1) {
+            return nums[0];
+        }
+        int[] input = new int[n];
+        int res = Integer.MIN_VALUE;
+        // 不要尾巴 
+        for (int i = 0; i < n -1; i++) {
+            input[i] = nums[i];
+        }
+        res = Math.max(res, internalrob(input));
+        // 不要头
+        for (int i = 0; i < n -1 ; i++) {
+            input[i] = nums[i+1];
+        }
+        res = Math.max(res, internalrob(input));
+        
+        
+        return res;
+    }
+    
+    // house robber I
+    private int internalrob(int[] nums) {
+        if (nums == null || nums.length==0) return 0;
+        int[] dp = new int [nums.length + 1];
+        dp[0] = 0;
+        for (int i = 1; i <= nums.length; i++) {
+            dp[i] = nums[i-1];
+            if (i >= 2) {
+                dp[i] = Math.max(dp[i-2]+nums[i-1], dp[i-1]);
+            }
+        }
+        
+        return dp[nums.length];
+    }
+}
