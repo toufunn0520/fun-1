@@ -1,0 +1,44 @@
+// 5 stages
+// 1st stage no invest
+// 2nd in the middle of 1st invest
+// 3rd finished 1st invest and yet started 2nd invest
+// 4th start the 2nd invest
+// 5th finished the 2nd invest
+//f[i][j] means the max profit for the i-1 day if stays in the jth stage
+
+class Solution {
+    public int maxProfit(int[] prices) {
+        int n = prices.length;
+        if (n == 0) {
+            return 0;
+        }
+        int[][] f = new int[n+1][5+1];
+        int i, j;
+        f[0][1] = 0;
+        // impossible
+        for (j = 2; j <= 5; j++) {
+            f[0][j] = Integer.MIN_VALUE;
+        }
+        
+        for (i = 1; i <= n; i++) {
+            // phase 1,3,5
+            for (j = 1; j <=5; j+=2) {
+                f[i][j] = f[i-1][j];
+                //f[i][j] = max(f[i-1][j], f[i-1][j-1] + P[i-1] - P[i-2])
+                if (j>=2 && i >=2 && f[i-1][j-1] != Integer.MIN_VALUE) {
+                    f[i][j] = Math.max(f[i][j], f[i-1][j-1] + prices[i-1] - prices[i-2]);
+                }
+            }
+            
+            for (j = 2; j <=5 ; j += 2) {
+                //phase 2,4
+                f[i][j] = f[i-1][j-1];
+                // f[i][j] = max(f[i-1][j] + P[i-1] - P[i-2], f[i-1][j-1])
+                if ( i >= 2 && f[i-1][j] != Integer.MIN_VALUE) {
+                    f[i][j] = Math.max(f[i][j], f[i-1][j] + prices[i-1] - prices[i-2]);
+                }
+            }
+        }
+        return Math.max(f[n][1], Math.max(f[n][3], f[n][5]));
+    }
+}
