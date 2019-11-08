@@ -69,3 +69,88 @@ class Solution {
         return res;
     }
 }
+
+
+2nd
+// 2k+1 stages
+// 1st stage no invest
+// 2nd in the middle of 1st invest
+// 3rd finished 1st invest and yet started 2nd invest
+// 4th start the 2nd invest
+// 5th finished the 2nd invest
+//f[i][j] means the max profit for the i-1 day if stays in the jth stage
+// 
+// since if you buy and sold at the same time is useless, the most frequent case will be buy and sell every other day
+// so special case if k >= prices.length/2 the question became buy and sell anytimes
+
+// j < 2 or i < 2 not considered use MIN value
+
+//Time O(NK), Space O(NK)
+
+//optimize 滚动数组
+// (1) keep old , cur two pointer
+// (2) f[2][2*K+2]
+// (3) swap all f[i-1] to f[old] f[i] to f[cur]
+
+class Solution {
+    public int maxProfit(int k, int[] prices) {
+
+        int n = prices.length;
+        if (n == 0) {
+            return 0;
+        }
+        
+        if (k > n/2) {
+            return unlimited(prices);
+        }        
+        
+        int[][] f = new int[2][2*k+2];
+        int i, j;
+        int old = 0;
+        int cur = 0;
+        f[cur][1] = 0;
+        // impossible
+        for (j = 2; j <= 2* k + 1; j++) {
+            f[cur][j] = Integer.MIN_VALUE;
+        }
+        
+        for (i = 1; i <= n; i++) {
+            old = cur;
+            cur = 1 - old;
+            // phase 1,3,5
+            for (j = 1; j <= 2*k + 1; j+=2) {
+                f[cur][j] = f[old][j];
+                //f[i][j] = max(f[i-1][j], f[i-1][j-1] + P[i-1] - P[i-2])
+                if (j>=2 && i >=2 && f[old][j-1] != Integer.MIN_VALUE) {
+                    f[cur][j] = Math.max(f[cur][j], f[old][j-1] + prices[i-1] - prices[i-2]);
+                }
+            }
+            
+            for (j = 2; j <= 2*k + 1; j += 2) {
+                //phase 2,4
+                f[cur][j] = f[old][j-1];
+                // f[i][j] = max(f[i-1][j] + P[i-1] - P[i-2], f[i-1][j-1])
+                if ( i >= 2 && f[old][j] != Integer.MIN_VALUE) {
+                    f[cur][j] = Math.max(f[cur][j], f[old][j] + prices[i-1] - prices[i-2]);
+                }
+            }
+        }
+        int res = Integer.MIN_VALUE;
+        for (j = 1 ; j <= 2*k + 1; j += 2) {
+            res = Math.max(res, f[cur][j]);
+        }
+        return res;
+    }
+    
+    private int unlimited(int[] prices) {
+        if (prices.length == 0) return 0;
+        int res = 0;
+        for (int i = 1; i < prices.length; i++) {
+             if (prices[i] - prices[i-1] > 0) {
+                 res += prices[i] - prices[i-1];
+             }
+        }
+        return res;
+    }
+}
+
