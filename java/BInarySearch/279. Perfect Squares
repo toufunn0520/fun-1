@@ -1,0 +1,31 @@
+// Binary Search
+// For num > 2, the square root a is always less than num/2 and greater than 1.
+// Set the left boundary to 2, and the right boundary to num / 2.
+// special case for 1
+// the usual BS flow mid is a guess and move left or right pointers accordingly
+// Space O(1). Time O(logN)
+class Solution {
+    public boolean isPerfectSquare(int num) {
+        // special case for 1
+        if (num < 2) return true; 
+        long left = 2, right = num/2;
+        long mid; // needs to be long , otherwise res is negative 
+        long res;
+        
+        while(left <= right) {
+            mid = left + (right - left)/2;
+            res = mid * mid;
+            //System.out.println("mid=" + mid + ",res=" + res);
+            if (res == num) {
+                System.out.println();
+                return true;
+            } else if (res > num) {
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+        }
+        
+        return false;
+    }
+}
