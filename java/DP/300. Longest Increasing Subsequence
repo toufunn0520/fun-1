@@ -21,3 +21,42 @@ class Solution {
         return res;
     }
 }
+
+// follow -up print path
+// pi record next step
+// need extra p mark the end of LIS.
+class Solution {
+    public int lengthOfLIS(int[] nums) {
+        if (nums == null) return 0;
+        int len = nums.length;
+        int res = 0;
+    
+        int[] dp = new int[len];
+        // pi 
+        int[] pi = new int[len];
+        int p = 0;
+        for (int i = 0; i < len; i++) {
+            dp[i] = 1;
+            // self
+            pi[i] = -1;
+            for (int j = 0; j < i; j++) {
+                if (nums[j] < nums[i]) {
+                     dp[i] = Math.max(dp[i], dp[j]+1);
+                     pi[i] = j;
+                }
+            }
+            res = Math.max(res, dp[i]);
+            if (res == dp[i]) {
+                p = i;
+            }
+        }
+        
+        // total len should be res;
+        int[] dump = new int[res];
+        for (int i = res -1; i >=0; i--) {
+            dump[i] = nums[p];
+            p = pi[p];
+        }
+        return res;
+    }
+}
