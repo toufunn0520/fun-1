@@ -42,10 +42,14 @@ class Solution {
             for (int j = 0; j < i; j++) {
                 if (nums[j] < nums[i]) {
                      dp[i] = Math.max(dp[i], dp[j]+1);
-                     pi[i] = j;
+                     // only record previous index if dp[i] has been updated
+                     if (dp[i] == dp[j]+1) {
+                        pi[i] = j;
+                     }
                 }
             }
             res = Math.max(res, dp[i]);
+            // only record end index if res is been updated
             if (res == dp[i]) {
                 p = i;
             }
