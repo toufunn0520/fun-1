@@ -1,0 +1,59 @@
+// dp[i] means from 0 to i-1 the count of  minimal palindrome partitions
+// dp[i] = Math.min(f[j] + 1) for all j >=0 and j <= i-1
+// helper function isPalindro TimeO(n * n) [最多有2N+1的分割 每次最多 N/2个compare] given start and end index see if the sequence is palindrome
+//  divide into even combination and odd combination， preprocess isP boolean array
+// start with dp[0] = 0;
+// ans: dp[s.length] -1 since question is the cuts not the occurance
+// Time O(N * N) Space O(N*N)
+
+class Solution {
+    public int minCut(String s) {
+        char[] input = s.toCharArray();
+        if (input == null || input.length == 0) return 0;
+        int len = input.length;
+        
+        // inclusively 
+        boolean[][] isP = isPalind(s);
+        
+        //dp array
+        int[] dp = new int[len+1];
+        dp[0] = 0;
+        for (int i = 1; i <= len ; i++) {
+            dp[i] = Integer.MAX_VALUE;
+            for (int j = 0; j < i ; j++) {
+                if (isP[j][i-1]) {
+                    dp[i] = Math.min(dp[j] + 1, dp[i]);
+                }
+            }
+        }
+        return dp[len] -1;
+    }
+    
+    private boolean[][] isPalind(String s) {
+        int len = s.length();
+        boolean[][] isP = new boolean[len][len];
+        
+        // odd length combinations
+        for (int c = 0; c < len; c ++) {
+            int i = c;
+            int j = c;
+            while( i >=0 && j < len && s.charAt(i) == s.charAt(j)) {
+                isP[i][j] = true;
+                i--;
+                j++;
+            }
+        }
+        
+        // even length combinations
+        for (int c = 0; c < len; c ++) {
+            int i = c;
+            int j = c + 1;
+            while( i >=0 && j < len && s.charAt(i) == s.charAt(j)) {
+                isP[i][j] = true;
+                i--;
+                j++;
+            }
+        }
+        return isP;
+    }
+}
