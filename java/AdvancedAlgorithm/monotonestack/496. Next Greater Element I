@@ -1,0 +1,26 @@
+//利用进出 stack 只有一次
+//increasing monotone stack 出栈时，让你出栈的就是 the 1st greater number to its right
+//default res to -1;
+class Solution {
+    
+    public int[] nextGreaterElement(int[] nums1, int[] nums2) {
+        // corner case
+        
+        if (nums1 == null || nums2 == null) return null;
+        
+        int[] res = new int[nums1.length];
+        
+        Stack<Integer> increasing = new Stack<Integer>();
+        // table key is the num, value is The 1st right element bigger than the value
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < nums2.length; i++) {
+            while(!increasing.isEmpty() && increasing.peek() < nums2[i]) {
+                map.put(increasing.peek(), nums2[i]);
+                increasing.pop();
+            }
+            increasing.push(nums2[i]);
+        }
+        return Arrays.stream(nums1).map(num -> map.getOrDefault(num, -1)).toArray();
+        
+    }
+}
