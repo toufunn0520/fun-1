@@ -1,0 +1,18 @@
+// fucking smart , brute force
+// [0, X] the max value is i the position, which means the upperbound and count meets the requirement
+//We can check whether k+1 elements chosen from [0, 1, ..., n-1] are [0, 1, ..., k] by checking whether the maximum of that choice is k
+// Space 0(1) TimeO(N)
+class Solution {
+    public int maxChunksToSorted(int[] arr) {
+        if (arr == null || arr.length == 0) return 0;
+        int res = 0;
+        int max = 0;
+        for (int i = 0; i < arr.length; i++) {
+            max = Math.max(max, arr[i]);
+            if (max  == i) {
+                res ++;
+            }
+        }
+        return res;
+    }
+}
