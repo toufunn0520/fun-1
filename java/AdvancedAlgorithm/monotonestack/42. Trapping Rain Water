@@ -1,0 +1,33 @@
+// 单调递减栈， 每次能注水 需要三个点 密闭空间
+// current 现在index
+// （1）current stack 如果存在向左有比他小的， 只看栈头，因为递减， 先以这个高度为底， 找到向左比高度第一个高的的 next， 
+// （2）rectange = [min(height[next], height[current]) - height[low]] * distance
+// （3）distance = current - next - 1; 因为两边本身有宽度
+//  (4) remove low 元素
+// （1）到（4）循环 till current 在 stack 找到自己的位置
+
+class Solution {
+    public int trap(int[] height) {
+        // corner case
+        if (height == null && height.length < 3) {
+            return 0;
+        }
+        Stack<Integer> decreasing = new Stack();
+        int res = 0;
+        
+        for (int i = 0; i < height.length; i++) {
+            while(!decreasing.isEmpty() && height[decreasing.peek()] < height[i]) {
+                int low = decreasing.pop();
+                // more than 3 个点
+                if (!decreasing.isEmpty()) {
+                    int diffhight = Math.min(height[decreasing.peek()], height[i]) - height[low];
+                    int distance = i - decreasing.peek() -1;
+                    res += diffhight * distance;
+                }
+            }
+            // find i positiosn
+            decreasing.push(i);
+        }
+        return res;
+    }
+}
