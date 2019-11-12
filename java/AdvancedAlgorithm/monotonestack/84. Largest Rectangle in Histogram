@@ -1,0 +1,25 @@
+// Increasing monotone stack
+// the decreasing element trigger the calculation
+//
+// 虽然是递增或递减栈，但里面实际存的数字并不一定是递增或递减的，因为我们可以存坐标，而这些坐标带入数组中才会得到递增或递减的数。
+// 
+class Solution {
+    public int largestRectangleArea(int[] heights) {
+        if (heights == null ||  heights.length == 0) return 0;
+        int res = 0;
+        
+        // trick inorder to include the last height, add a psudo 0 at the end
+        heights = Arrays.copyOf(heights, heights.length + 1);
+        Stack<Integer> increasing = new Stack();
+        for (int i = 0; i < heights.length; i++) {
+            while (!increasing.isEmpty() && heights[i] < heights[increasing.peek()]) {
+                int index = increasing.pop();
+                int width = increasing.isEmpty() ? i : i - increasing.peek() - 1; // very tricky
+                res = Math.max(res, width * heights[index]);
+            }
+            increasing.add(i);
+        }
+        
+        return res;
+    }
+}
