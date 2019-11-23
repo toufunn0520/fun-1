@@ -1,0 +1,56 @@
+
+// dp[s1.length() + 1][s2.length()+1] 
+// dp[0][0] = ture
+// dp[i][0] == dp[i][0] && s3[i-1] == s1[i-1];
+// dp[0][j] == dp[0][j] && s3[j-1] == s2[j-1];
+// dp[i][j] == dp[i-1][j] && s3[i + j -1] == s1[i-1] || dp[i-1][j] && s3[i + j-1] == s2[j-1];
+
+class Solution {
+    public boolean isInterleave(String s1, String s2, String s3) {
+        if (s1.length() + s2.length() != s3.length() ) return false;
+        boolean[][]dp = new boolean[s1.length() + 1][s2.length() + 1];
+        for (int i = 0; i <= s1.length() ; i++) {
+            for (int j = 0; j <= s2.length(); j++) {
+                if (i == 0 && j == 0) {
+                    dp[i][j] = true;
+                    continue;
+                }
+                if (i == 0) {
+                    dp[i][j] = dp[i][j-1] && (s3.charAt(j-1) == s2.charAt(j-1));
+                    continue;
+                }
+                if (j == 0) {
+                    dp[i][j] = dp[i-1][j] && (s3.charAt(i-1) == s1.charAt(i-1));
+                    continue;
+                }
+                dp[i][j] = (dp[i-1][j] && (s3.charAt(i + j -1) == s1.charAt(i-1)) 
+                            || dp[i][j - 1] && (s3.charAt(i + j -1) == s2.charAt(j-1)));
+            }
+        }
+        return dp[s1.length()][s2.length()];
+    }
+}
+Time complexity : O(m \cdot n)O(m⋅n). dp array of size m*nm∗n is filled.
+
+Space complexity : O(m \cdot n)O(m⋅n). 2D dp of size (m+1)*(n+1)(m+1)∗(n+1) 
+
+// recursive
+/*class Solution {
+    public boolean isInterleave(String s1, String s2, String s3) {
+         return internal(s1, 0, s2, 0, s3, "");
+    }
+    private boolean internal(String s1, int indexs1, String s2, 
+                             int indexs2, String s3, String res) {
+        if(res.equals(s3) && indexs1 == s1.length() && indexs2 == s2.length()) {
+            return true;
+        }
+        boolean ans = false;
+        if (indexs1 < s1.length()) {
+            ans |= internal(s1, indexs1 + 1, s2, indexs2, s3, res + s1.charAt(indexs1));
+        }
+         if (indexs2 < s2.length()) {
+           ans |= internal(s1, indexs1, s2, indexs2 + 1, s3, res + s2.charAt(indexs2));
+        }
+        return ans;
+        }
+}*/
