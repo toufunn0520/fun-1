@@ -1,0 +1,70 @@
+class RandomizedCollection {
+    Random rand;
+    List<Entry> curList ;
+    HashMap<Integer, List<Integer>> map;
+    
+    class Entry {
+    public int value;
+    public int index;
+    public Entry(int val, int idx) {
+      value = val;
+      index = idx;
+    }
+  }
+    /** Initialize your data structure here. */
+    public RandomizedCollection() {
+        map = new HashMap<>();
+        curList = new ArrayList<>();
+        rand = new Random();
+    }
+    
+    /** Inserts a value to the collection. Returns true if the collection did not already contain the specified element. */
+    public boolean insert(int val) {
+        boolean res = false;
+        if (!map.containsKey(val)) {
+            map.put(val, new ArrayList<>());
+            res = true;
+        }
+        List<Integer> indexes = map.get(val);
+        indexes.add(curList.size());
+        map.put(val, indexes);
+        // add the index from the map not the absolute index from the curlist
+        curList.add(new Entry(val, indexes.size() - 1));
+        return res;
+    }
+    
+    /** Removes a value from the collection. Returns true if the collection contained the specified element. */
+    public boolean remove(int val) {
+        if (!map.containsKey(val)) {
+            return false;
+        }
+    
+        // fetch the item and index to be removed
+        List<Integer> indexesToRemove = map.get(val);
+        int indexToRemove = indexesToRemove.get(indexesToRemove.size() - 1);
+
+
+        // update curList and lastItem map
+        Entry lastItem = curList.get(curList.size() - 1);
+        map.get(lastItem.value).set(lastItem.index, indexToRemove);        
+        
+        curList.set(indexToRemove, lastItem);
+        // can not remove seperately need to remove together.
+        curList.remove(curList.size() - 1);
+        indexesToRemove.remove(indexesToRemove.size() - 1);
+
+        
+        // bug: need to remove the list if the size is zero
+        if (indexesToRemove.size() == 0) {
+            map.remove(val);
+        }
+        return true;
+    }
+    
+    /** Get a random element from the collection. */
+    public int getRandom() {
+        int val = curList.get(rand.nextInt(curList.size())).value;   
+        System.out.println("Random " + val);
+        return val;
+    }
+}
