@@ -1,0 +1,58 @@
+ // special case for "-2147483647" 
+
+class Solution {
+    public int myAtoi(String str) {
+        if (str == null || str.length() == 0) return 0;
+        long res = 0;
+        boolean neg = false;
+        char[] input = str.toCharArray();
+        int index = 0;
+        
+        // check the boundary
+        while (index < str.length() && input[index] == ' ' ){
+            index ++;
+        }
+        
+        // rule 1 get the sign
+        if (index < str.length() && (input[index] == '-' || input[index] == '+')) {
+            if (input[index] == '-') {
+                neg = true;
+            }
+            index++;
+        }
+        
+        //rule 2 white space or numberic character otherwise return 0
+        if (index == str.length() || ctoi(input[index]) == -1 ) {
+            return 0;
+        }
+
+        // rule 3 convert the str to int
+        while(index < str.length()) {
+            //System.out.println("the " + index + ", " + input[index]);
+
+            if (ctoi(input[index]) != -1) {
+                res = res * 10 + ctoi(input[index]);
+                // special case for "-2147483647" 
+                if (neg == false && res >= Integer.MAX_VALUE) {
+                    return neg? Integer.MIN_VALUE : Integer.MAX_VALUE;
+                }
+                if (neg == true && res >= (long)Integer.MAX_VALUE + 1 ) {
+                    return neg? Integer.MIN_VALUE : Integer.MAX_VALUE;
+                }
+            } else {
+                // last rule, discard nonnumberic character after the numberic number
+                return neg ? (int) (res * -1) : (int)res;
+            }
+            index ++;
+        }
+        return neg ? (int) (res * -1) : (int)res;
+    }
+    
+    // return -1 means not
+    private int ctoi(char c) {
+        if (c >= '0' && c <= '9' ){
+            return  c - '0';
+        }
+        return -1;
+    }
+}
