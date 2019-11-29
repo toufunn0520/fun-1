@@ -1,0 +1,21 @@
+// Time O(n), Space O(1)
+// Create Color and count array, in-place modify the input num array
+class Solution {
+    public void sortColors(int[] nums) {
+        if (nums == null || nums.length == 0) return;
+        int[] summary = new int[3];
+        for (int i = 0; i < nums.length ; i++) {
+            summary[nums[i]] ++;
+        }
+        int index = 0;
+        for (int colorType = 0 ; colorType < summary.length; colorType ++) {
+            for (int colorCount = 0; colorCount < summary[colorType]; colorCount++ ) {
+                nums[index] = colorType;
+                index ++;
+            }
+        }
+                
+        return;
+                
+    }
+}
