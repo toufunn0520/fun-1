@@ -1,0 +1,17 @@
+// 2,147,483,647 is the eighth Mersenne prime, equal to 2^31 − 1
+class Solution {
+    public boolean isPowerOfTwo(int n) {
+        int res = 0;
+        int index = 30;
+        if (n == 0) return false;
+        
+        while (index >= 0) {
+            if (n == (1 << index)) {
+               return true;
+            } 
+            index--;
+        }
+        
+        return false;
+    }
+}
