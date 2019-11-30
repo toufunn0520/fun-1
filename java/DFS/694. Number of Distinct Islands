@@ -1,0 +1,38 @@
+class Solution {
+    boolean[][] visited;
+    ArrayList<Integer> shape;
+    
+    public int numDistinctIslands(int[][] grid) {
+        if (grid == null || grid.length == 0) return 0;
+        int row = grid.length;
+        int col = grid[0].length;
+        visited = new boolean[row][col];
+        Set shapes = new HashSet<ArrayList<Integer>>();           
+        for (int i = 0 ; i < row ; i++) {
+            for (int j = 0; j < col ; j++) {
+                shape = new ArrayList<Integer>();
+                explore(grid, i, j, 0);
+                if (!shape.isEmpty()) {
+                    shapes.add(shape);
+                }
+            }
+        }
+        return shapes.size();
+        
+    }
+    
+    // generate path
+    public void explore(int[][] grid, int r, int c, int di) {
+        if (0 <= r && r < grid.length && 0 <= c && c < grid[0].length &&
+                grid[r][c] == 1 && !visited[r][c]) {
+            visited[r][c] = true;
+            shape.add(di);
+            explore(grid, r+1, c, 1);
+            explore(grid, r-1, c, 2);
+            explore(grid, r, c+1, 3);
+            explore(grid, r, c-1, 4);
+            shape.add(0);
+        }
+    }
+    
+}
