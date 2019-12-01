@@ -1,0 +1,39 @@
+// dp[i][j][k] the probabilty reaching (i, j) after K steps from the origin
+// optimize remove the last dimension, doing K iteration 
+//  8 next step : dp[i_next][j_next] += d[i_prev][j_prev]/8
+// dp[origin][origin] = 1;
+//  after K iteration finished, res = the sum of all cells from dp 
+
+class Solution {
+    public double knightProbability(int N, int K, int r, int c) {
+        double[][] dp = new double[N][N];
+        int[] nextr = {2, 2, 1, 1, -1, -1, -2, -2};
+        int[] nextc = {1, -1, 2, -2, 2, -2, 1, -1};
+        
+        dp[r][c] = 1;
+        while (K > 0) {
+            double[][] dp2 = new double[N][N];
+            for (int i = 0 ; i < N; i++) {
+                for (int j = 0; j < N; j++) {
+                    for (int n = 0 ; n < 8 ; n++) {
+                        int newr = i + nextr[n];
+                        int newc = j + nextc[n];
+                        if (newr >= 0 && newr < N && newc >= 0 && newc < N) {
+                            dp2[newr][newc] += dp[i][j] / 8;
+                        }
+                    }
+                }
+            }
+            dp = dp2;
+            K--;
+        }
+    double res = 0.0;
+    for (double[] row: dp) {
+        for (double x: row) {
+            res += x;
+        }
+    }
+        return res;
+    }
+    
+}
