@@ -1,0 +1,37 @@
+// four direction
+// change direction whenever reached the wall or reached visited node
+// TimeO(n), SpaceO(n) 
+class Solution {
+    public List<Integer> spiralOrder(int[][] matrix) {
+        List<Integer> res = new LinkedList<>();
+        if (matrix == null || matrix.length == 0) return res;
+
+        int row = matrix.length;
+        int col = matrix[0].length;
+        boolean[][] visited = new boolean[row][col];
+        
+        int[] directionr = {0, 1, 0, -1};
+        int[] directionc = {1, 0, -1, 0};
+        
+        int r = 0;
+        int c = 0;
+        int di = 0;
+        for (int i = 0; i < row * col; i++) {
+            res.add(matrix[r][c]);
+            visited[r][c] = true; // bug need to updated it for every node been visited
+            int nextc = c + directionc[di];
+            int nextr = r + directionr[di];
+            if (nextc >= 0 && nextc < col && nextr >=0 && nextr < row 
+                && !visited[nextr][nextc]) {
+                r = nextr;
+                c = nextc;
+            } else { 
+                di = (di + 1) % 4;
+                r += directionr[di];
+                c += directionc[di];
+            }
+
+        }   
+        return res;
+    }
+}
