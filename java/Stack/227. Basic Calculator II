@@ -1,0 +1,42 @@
+// Time O(n), Space O(n)
+// simplified since there is no '(' or ')'
+// get number and save previous operator 
+// push number to stack for '+' and '-'(changing the sign)
+// pop the top number and finish calculation then push the result to the queue
+// clear the stack at the end with '+'
+class Solution {
+    public int calculate(String s) {
+        if(s == null || s.length() == 0) return 0;
+        int res = 0;
+        char[] input = s.toCharArray();
+        int num = 0;
+        char op = '+';
+        Stack<Integer> stack = new Stack<>();
+        
+        for (int  i = 0 ; i < input.length; i++) {
+
+            // get the number
+            if (input[i] >= '0' && input[i] <= '9') {
+                num = num * 10 + input[i] - '0';
+            }
+            
+            if ((input[i] < '0' && input[i] != ' ') || i == input.length - 1) {
+                if (op == '+') {
+                    stack.push(num);
+                } else if (op == '-') {
+                    stack.push(-num);
+                } else if (op == '*') {
+                    stack.push(stack.pop() * num);
+                } else if (op == '/') {
+                    stack.push(stack.pop() / num);
+                }
+                num = 0;
+                op = input[i];
+            }            
+        }
+        while(!stack.isEmpty()) {
+            res += stack.pop();
+        }
+        return res;
+    }
+}
