@@ -1,0 +1,44 @@
+/*For example:
+input: 1 7 3 4 5 8 2 6
+
+1 2 3 4
+smaller: 4 is the top
+-8 -7 -6 -5
+larger: -5 is the top*/
+
+// Time O(logn)
+// Space O(n)
+class MedianFinder {
+    PriorityQueue<Integer> first; 
+    PriorityQueue<Integer> second;
+
+    /** initialize your data structure here. */
+    public MedianFinder() {
+        first = new PriorityQueue<>();
+        second = new PriorityQueue<>();
+    }
+    
+    public void addNum(int num) {
+        first.add(num);       
+        second.add(-first.peek());
+        first.poll();
+        if (first.size() < second.size()) {
+            first.add(-second.peek());
+            second.poll();
+        }
+    }
+    
+    public double findMedian() {
+        if (first.size() > second.size() ) {
+            return (double)first.peek();
+        }
+        return ((double)first.peek() - (double)second.peek())/2;
+    }
+}
+
+/**
+ * Your MedianFinder object will be instantiated and called as such:
+ * MedianFinder obj = new MedianFinder();
+ * obj.addNum(num);
+ * double param_2 = obj.findMedian();
+ */
