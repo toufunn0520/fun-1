@@ -1,0 +1,40 @@
+/*
+// Definition for a Node.
+class Node {
+    public int val;
+    public Node prev;
+    public Node next;
+    public Node child;
+};
+*/
+
+// convert it to a binary Tree  question
+// next = right, child is left, the problem became pre-order traversal
+// clear all child pointer since there is no child within the flattened list 
+class Solution {
+    public Node flatten(Node head) {
+        if (head == null) return head;
+         Node pseudoHead = new Node(0, null, head, null);
+
+         internal(pseudoHead, head);
+
+          // detach the pseudo head from the real head
+         pseudoHead.next.prev = null;
+         return pseudoHead.next;
+    }
+    
+    public Node internal(Node prev, Node cur) {
+        if (cur == null ) return prev;
+        // update child.pre and prev.next hooked up the list
+        cur.prev = prev;
+        prev.next = cur;
+        
+        Node tmp = cur.next;
+        Node tail = internal(cur, cur.child);
+        
+        //clear all child pointer
+        cur.child = null;
+        
+        return internal(tail, tmp);
+    }
+}
