@@ -1,0 +1,37 @@
+//Time O(n*logm)
+//Space O(M)
+
+class Solution {
+    public int shortestWay(String source, String target) {
+        if (source == null || target == null) return -1;
+        // generate all index occurance for all characters from source
+        HashMap<Character, TreeSet<Integer>> map = new HashMap<>();
+        char[] s = source.toCharArray();
+        for (int i = 0 ; i < s.length; i++) {
+            TreeSet occurance = map.getOrDefault(s[i], new TreeSet<Integer>());
+            occurance.add(i);
+            map.put(s[i], occurance); // forget
+        }
+        char[] t = target.toCharArray();
+        int res = 1; // init with 1 , when targe == source.
+        int prev = -1;
+        for (char c: t) {
+            if (!map.containsKey(c)) {
+                return -1;   // source didn't contain character c, return immediately
+            }
+            TreeSet<Integer> cur = map.get(c);
+            Integer sameAsPrevious = cur.higher(prev);
+            if (sameAsPrevious != null) {
+                // found index higher than prev , means we just reused the prev res, without increasing the res.
+                prev = sameAsPrevious;
+            } else {
+                // not found index higher than prev, it means we are using cur as itself, since no way to extent prev.
+                // and reset prev to the 1st cur, to optimize later result
+                res ++;
+                prev = cur.first();
+            }
+        }
+        
+        return res;
+    }
+}
