@@ -1,0 +1,46 @@
+// Space O(N)
+// Time O(N)
+// when reached the end of input S, then convert sb, the intermediate container for results to String.
+// find the group of characters, and go forward with 1 depth 
+// but adjust the next index starting from the end of the group index '}'
+// clear the end of each iteration and start the next iteration
+
+class Solution {
+    public String[] expand(String S) {
+        
+        if (S.length() == 0 || S == null) {
+            return new String[0];
+        }
+        
+        List<String> list = new ArrayList<>();
+        internal(S, 0 , new StringBuilder(), list);
+        Collections.sort(list);
+        return list.toArray(new String[0]);
+    }
+    private void internal (String S, int index, StringBuilder sb, List<String> res) {
+        // done
+        if (index >= S.length()) {
+            res.add(sb.toString());
+            return;
+        }
+        //
+        if(S.charAt(index) == '{') {
+            int start = index + 1;
+            while(start < S.length() && S.charAt(start) != '}') {
+                start ++;
+            }
+            String[] group = S.substring(index + 1, start).split(",");
+            for (String c: group) {
+                sb.append(c);
+                internal(S, start + 1, sb, res); // smart use start + 1
+                sb.deleteCharAt(sb.length()-1);
+            }
+        } else {
+            sb.append(S.charAt(index));
+            internal(S, index + 1, sb, res);
+            sb.deleteCharAt(sb.length()-1);
+        }
+        
+    }
+}
+
