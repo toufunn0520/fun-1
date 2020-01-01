@@ -1,0 +1,29 @@
+/*
+Time O(NlogNS)
+Space O(NS)
+Sort the words by word's length. 
+For each word, loop on all possible previous word with 1 letter missing.
+If we have seen this previous word, update the longest chain for the current word.
+Finally return the longest word chain.
+*/
+
+class Solution {
+    public int longestStrChain(String[] words) {
+        Map<String, Integer> map = new HashMap<>();
+        // sorted by the length, greedy
+        Arrays.sort(words, (a, b)-> a.length() - b.length());
+        int res  = 0;
+        for (String word: words) {
+            int len = word.length();
+            int best = 0;
+            for (int i = 0 ; i < len ; i++) {
+                String pre = word.substring(0, i) + word.substring(i+1, len);
+                best = Math.max(best, map.getOrDefault(pre, 0) + 1) ;
+            }
+            map.put(word, best);
+            res = Math.max(res, best);
+         
+        }
+        return res;
+    }
+}
