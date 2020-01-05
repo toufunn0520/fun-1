@@ -1,0 +1,28 @@
+// Time complexity : O(n*x).  n strings of average length x is parsed.
+// Space complexity : O(n*x). map and res size grows upto n*x.
+
+class Solution {
+    public List<List<String>> findDuplicate(String[] paths) {
+        Map<String, List<String>> map = new HashMap<>();
+        List<List<String>> res = new ArrayList<>();
+        for (String path: paths) {
+            String[] completepath = path.split(" ");
+            String parent = completepath[0];
+            for (int i = 1 ; i < completepath.length; i++) {
+                String filename = completepath[i].split("\\(")[0]; // the special character
+                String text = completepath[i].split("\\(")[1]
+                    .split("\\)")[0];
+                System.out.println("text =" + text + ", path =" + parent+'/'+ filename);
+                List<String> savedfilename = map.getOrDefault(text, new ArrayList<String>());
+                savedfilename.add(parent+'/'+ filename);
+                map.put(text, savedfilename);
+            }
+        }
+        
+        for (String text: map.keySet()) {
+            List<String> tmp = map.get(text);
+            if (tmp.size() > 1) res.add(tmp);// ben
+        }
+        return res;
+    }
+}
