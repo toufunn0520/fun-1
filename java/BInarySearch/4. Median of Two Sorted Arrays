@@ -1,4 +1,5 @@
 // Time O(log(min(n,m)))
+// https://www.youtube.com/watch?v=LPFhl65R7ww&t=1013s
 class Solution {
     public double findMedianSortedArrays(int[] nums1, int[] nums2) { 
         // convert the issue to always have nums1 shorter then nums2 see the time complexity
