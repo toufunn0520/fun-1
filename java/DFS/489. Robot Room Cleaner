@@ -1,0 +1,57 @@
+
+// N is the number of cells M is the number of obstacles
+//Time complexity : O(4^{N - M})
+// Space O(N−M)
+/**
+ * // This is the robot's control interface.
+ * // You should not implement it, or speculate about its implementation
+ * interface Robot {
+ *     // Returns true if the cell in front is open and robot moves into the cell.
+ *     // Returns false if the cell in front is blocked and robot stays in the current cell.
+ *     public boolean move();
+ *
+ *     // Robot will stay in the same cell after calling turnLeft/turnRight.
+ *     // Each turn will be 90 degrees.
+ *     public void turnLeft();
+ *     public void turnRight();
+ *
+ *     // Clean the current cell.
+ *     public void clean();
+ * }
+ */
+class Solution {
+    public void cleanRoom(Robot robot) {
+        Set<String> visited = new HashSet<>();
+        dfs(robot, /*startx*/0, /*starty*/0, /*direction*/0, visited);
+    }
+    // 'right', 'up', 'left' , 'down'
+    int[][] nextstep = {{1,0}, {0,1}, {-1,0}, {0, -1}};
+
+    private void dfs(Robot robot, int x, int y, int dir, Set<String> visited) {
+        String path = String.valueOf(x) + "-" + String.valueOf(y);
+        if (visited.contains(path)) {
+            return;
+        }
+        visited.add(path);
+        robot.clean();
+
+        for (int i = 0 ; i < 4; i++) {
+            if (robot.move()) {
+                //go all the way till cannot move, then back one step
+                int nextx = x + nextstep[dir][0];
+                int nexty = y + nextstep[dir][1];
+                dfs(robot, nextx, nexty, dir, visited);
+                // return to the original location and direction
+                robot.turnLeft();
+                robot.turnLeft();
+                robot.move(); // back to the origin location
+                robot.turnLeft();
+                robot.turnLeft(); // back to the origin direction
+            }
+            
+            //dir record current robot facing direction
+            dir = (dir + 1) % 4;
+            robot.turnRight(); // keep taking right, up, left, down also 
+        }
+    }
+}
