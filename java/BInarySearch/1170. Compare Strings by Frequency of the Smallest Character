@@ -1,0 +1,49 @@
+class Solution {
+    public int[] numSmallerByFrequency(String[] queries, String[] words) {
+        int[] lq = new int[queries.length];
+        int[] wq = new int[words.length];
+        int index = 0;
+        for (String s: queries) {
+            lq[index] = helper(s);
+            index++;
+        }
+        index = 0;
+        for (String s: words) {
+            wq[index] = helper(s);
+            index++;
+        }
+        
+        Arrays.sort(wq);
+        int[] res = new int[queries.length];
+        // use binary search find the number of words bigger than query
+        for (int i = 0; i < queries.length; i++) {
+            int left = 0;
+            int right = wq.length - 1;
+            while(left <= right) {
+                int mid = (left + right) /2;
+                if (wq[mid] <= lq[i]){
+                    left = mid + 1;
+                } else {
+                    right = mid -1;
+                }
+            }
+            res[i] = wq.length - left;
+        }
+        return res;
+    }
+    
+    
+    private int helper(String word) {
+        if (word == null || word.length() == 0) return 0;
+        int[] res = new int[26];
+        int max = 0;
+        for (char c: word.toCharArray()) {
+            res[c - 'a'] ++;
+        }
+        for (int i = 0; i < 26; i++) {
+            if (res[i] != 0)
+                return res[i];
+        }
+        return 0;
+    }
+}
