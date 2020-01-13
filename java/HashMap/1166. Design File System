@@ -1,0 +1,67 @@
+/*Time & Space:
+create(): O(path.length()), get(): O(1).
+
+space:
+file():
+In worst case, e.g., path = "/a/b/c/d/e/f/g/...", all the path family cost 2 + 4 + 6 + ... + 2n = n * (n + 1). So the space cost O(path.length() ^ 2).
+*/
+class FileSystem {
+    Map<String, Integer> paths;
+    public FileSystem() {
+         paths = new HashMap<>();
+    }
+    
+    public boolean createPath(String path, int value) {
+        String[] parent = path.split("\\/");
+        // empty and '/' string
+        if (parent.length < 2) return false;
+        StringBuilder sb = new StringBuilder();
+        // check lowest parent path, and last one is itself
+        for (int i = 1; i < parent.length; i ++) {
+            sb.append("/");
+            sb.append(parent[i]);
+            if (i != parent.length -1) {
+                if (!paths.containsKey(sb.toString())) {
+                  return false;
+                }
+            } else {
+                if (paths.containsKey(sb.toString())) {
+                  return false;
+                } else {
+                    paths.put(path, value);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    public int get(String path) {
+        return paths.getOrDefault(path, -1);
+    }
+}
+
+/**
+ * Your FileSystem object will be instantiated and called as such:
+ * FileSystem obj = new FileSystem();
+ * boolean param_1 = obj.createPath(path,value);
+ * int param_2 = obj.get(path);
+ */
+ 
+ //others
+     Map<String, Integer> file = new HashMap<>(); 
+    
+    public FileSystem() {
+        file.put("", -1);
+    }
+    
+    public boolean create(String path, int value) {
+        int idx = path.lastIndexOf("/");
+        String parent = path.substring(0, idx);
+        if (!file.containsKey(parent)) { return false; }
+        return file.putIfAbsent(path, value) == null;   
+    }
+    
+    public int get(String path) {
+        return file.getOrDefault(path, -1);
+    }
