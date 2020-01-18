@@ -1,0 +1,23 @@
+https://leetcode.com/problems/permutations/solution/
+
+class Solution {
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> res = new ArrayList<>();
+        backtrace(res, new ArrayList<>(), nums);
+        return res;
+    }
+    private void backtrace(List<List<Integer>> res, ArrayList<Integer>current, int[] nums) {
+     // only added to result
+    if (current.size() == nums.length) {
+        res.add(new ArrayList<>(current));
+    }
+    for (int i = 0; i < nums.length; i ++) {
+        if (current.contains(nums[i])) {
+            continue;
+            }
+        current.add(nums[i]);
+        backtrace(res, current, nums);
+        current.remove(current.size() -1);
+        }
+    }       
+}
