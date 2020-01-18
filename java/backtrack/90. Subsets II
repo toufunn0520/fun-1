@@ -1,0 +1,25 @@
+//Time complexity: O(N * 2^N) to generate all subsets and then copy them into output list.
+//Space complexity: O(2^N) to keep all the subsets, since each of n elements could be present or absent.
+
+class Solution {
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        List<List<Integer>> res = new ArrayList<>();
+        // to solve duplication issue
+        Arrays.sort(nums);
+        backtrace(res, new ArrayList<Integer>(), nums, 0);
+        return res;
+    }
+    
+    private void backtrace(List<List<Integer>>res, ArrayList<Integer>current, int[] nums, int start) {
+        res.add(new ArrayList<>(current));
+        for (int i = start; i < nums.length; i++) {
+            // detect dup,
+            if (i > start && nums[i] == nums[i-1]) {
+                continue;
+            }
+            current.add(nums[i]);
+            backtrace(res, current, nums, i+1);
+            current.remove(current.size() - 1);
+        }
+    }
+}
