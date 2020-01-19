@@ -1,0 +1,32 @@
+class Solution {
+    public List<List<String>> partition(String s) {
+        List<List<String>> res = new ArrayList<>();
+        backtrace(res, new ArrayList<String>(), s, 0);
+        return res;
+    }
+    
+    private void backtrace(List<List<String>> res, ArrayList<String> current, String s, int start) {
+        if (start == s.length()){ // partition need to finish till edn
+            if (!current.isEmpty()) {
+                res.add(new ArrayList<String>(current));
+            }
+        }
+        
+        for (int i = start; i < s.length(); i++) {
+            if (isP(s, start, i)) { 
+                current.add(s.substring(start, i + 1));
+                backtrace(res, current, s, i+1);
+                current.remove(current.size() - 1);
+            }
+        }
+    }
+    
+    private boolean isP(String s, int start, int end) {
+        while(start < end) {
+            if (s.charAt(start++) != s.charAt(end--)) {
+                return false;
+            }
+        }
+        return true;
+    } 
+}
