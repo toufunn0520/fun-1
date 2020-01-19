@@ -1,0 +1,23 @@
+class Solution {
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        List<List<Integer>> res = new ArrayList<>();
+        Arrays.sort(candidates);
+        backtrace(res, new ArrayList<>(), candidates, target, 0);
+        return res;
+    }
+    
+    private void backtrace(List<List<Integer>> res, ArrayList<Integer> current, int[] nums, int target, int start) {
+        if (target < 0) return;
+        if (target == 0) {
+            res.add(new ArrayList<>(current));
+            return;
+        }
+        for (int i = start; i < nums.length ; i++ ) {
+            if (i > start && nums[i] == nums[i-1]) continue; // reduce the same answers.
+            current.add(nums[i]);
+            backtrace(res, current, nums, target - nums[i], i + 1);
+            current.remove(current.size() - 1);
+        }
+    
+    }
+}
