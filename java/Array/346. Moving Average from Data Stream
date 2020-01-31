@@ -1,0 +1,29 @@
+// Sliding window 
+// recode poped item
+// Time Complexity: O(1)
+// Space Complexity: O(N), where N is the size of the moving window.
+
+class MovingAverage {
+    int size = 0;
+    int window = 0;
+    int count = 0;
+    Deque queue = new ArrayDeque<Integer>();
+    /** Initialize your data structure here. */
+    public MovingAverage(int size) {
+        this.size = size;
+    }
+    
+    public double next(int val) {
+        count ++;
+        queue.add(val);
+        int tail = count > size ? (int)queue.pop(): 0;
+        window = window - tail + val;
+        return window * 1.0 / Math.min(count, size);
+    }
+}
+
+/**
+ * Your MovingAverage object will be instantiated and called as such:
+ * MovingAverage obj = new MovingAverage(size);
+ * double param_1 = obj.next(val);
+ */
