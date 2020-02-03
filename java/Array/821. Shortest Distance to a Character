@@ -1,0 +1,27 @@
+/*
+When going left to right, we'll remember the index prev of the last character C we've seen. Then the answer is i - prev.
+When going right to left, we'll remember the index prev of the last character C we've seen. Then the answer is prev - i.
+We take the minimum of these two answers to create our final answer.
+*/
+//Time Complexity: O(N), where N is the length of S. We scan through the string twice.
+//Space Complexity: O(N), N is the size of ans.
+class Solution {
+    public int[] shortestToChar(String S, char C) {
+        int N = S.length();
+        int[] ans = new int[N];
+        int prev = Integer.MIN_VALUE / 2;
+
+        for (int i = 0; i < N; ++i) {
+            if (S.charAt(i) == C) prev = i;
+            ans[i] = i - prev;
+        }
+
+        prev = Integer.MAX_VALUE / 2; // 
+        for (int i = N-1; i >= 0; --i) {
+            if (S.charAt(i) == C) prev = i;
+            ans[i] = Math.min(ans[i], prev - i);
+        }
+
+        return ans;
+    }
+}
