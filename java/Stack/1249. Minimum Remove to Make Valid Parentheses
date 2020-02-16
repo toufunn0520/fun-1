@@ -1,0 +1,34 @@
+// use a stack to record indexes of '(' and ')' or push/pop correspondly
+// ')' can't push if stack is empty record its index
+// the stack should be empty at the end, otherwise make all index "(" to be removed
+//Time and Space O(n)
+
+class Solution {
+    public String minRemoveToMakeValid(String s) {
+        Set<Integer> tobeRemoved = new HashSet<>();
+        Stack<Integer> cur = new Stack<>();
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == '(') {
+                cur.push(i);
+            } else if (s.charAt(i) == ')') {
+                if (cur.isEmpty()) {
+                    tobeRemoved.add(i);
+                } else {
+                    cur.pop();
+                }
+            }
+        }
+        
+        // get all remaining "(" index;
+        while(!cur.isEmpty()) {
+            tobeRemoved.add(cur.pop());
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            if (!tobeRemoved.contains(i)) {
+                sb.append(s.charAt(i));
+            }
+        }
+        return sb.toString();
+    }
+}
