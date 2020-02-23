@@ -1,0 +1,51 @@
+class Solution {
+    public String minWindow(String s, String t) {
+        if (s == null || t == null || s.length() < t.length()) return "";
+
+        Map<Character, Integer> target = new HashMap<Character, Integer>();
+        for (char c: t.toCharArray()) {
+            target.put(c, target.getOrDefault(c, 0) + 1);
+        }
+        
+        // need several value to record
+        // (1) anchor left and right 
+        // (2) current Min len, curren Min start
+        // words between left and right is potentially a valid candidate
+        int res = s.length() + 1;
+        int left = 0;
+        int minleft = 0;
+        int matched = 0;
+
+        for (int right = 0; right < s.length(); right++) {
+            char c = s.charAt(right);
+            if (target.containsKey(c)) {
+                target.put(c, target.get(c) - 1);
+                // valid, not over
+                if (target.get(c) >= 0) {
+                    matched ++;
+                }
+                while (matched == t.length()) {
+                    // find smaller combination
+                    if (res > right - left + 1) {
+                        res = right - left + 1;
+                        minleft = left;
+                    }
+                    
+                    // charAt(left)
+                    char l = s.charAt(left);
+                    if (target.containsKey(l)) {
+                         target.put(l, target.get(l) + 1);
+                         if (target.get(l) > 0) {
+                             matched --;
+                         }
+                    }
+                    left ++;
+                }  
+            }
+        }
+        if (res > s.length()) {
+            return "";
+        }
+        return s.substring(minleft, minleft + res);
+    }
+}
