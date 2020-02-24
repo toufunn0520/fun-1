@@ -1,0 +1,128 @@
+/*Main idea is to maintain a list of Bucket's, each Bucket contains all keys with the same count.
+
+head and tail can ensure both getMaxKey() and getMaxKey() be done in O(1).
+keyCountMap maintains the count of keys, countBucketMap provides O(1) access to a specific Bucket with given count. Deleting and adding a Bucket in the Bucket list cost O(1), so both inc() and dec() take strict O(1) time.*/
+
+class Bucket {
+    Set<String> keySet;
+    int count;
+    Bucket next;
+    Bucket prev;
+    Bucket(final int count) {
+        this.count = count;
+        keySet = new HashSet<>();
+    }
+    
+}
+class AllOne {
+
+    /** Initialize your data structure here. */
+    Bucket head;
+    Bucket tail;
+    Map<Integer, Bucket> bucketCountMap;
+    Map<String, Integer> keyValueMap;
+    
+    public AllOne() {
+        head = new Bucket(Integer.MIN_VALUE);
+        tail = new Bucket(Integer.MAX_VALUE);
+        head.next = tail;
+        tail.prev = head;
+        bucketCountMap = new HashMap<Integer, Bucket>();
+        keyValueMap = new HashMap<String, Integer>();
+        
+    }
+    
+    /** Inserts a new key <Key> with value 1. Or increments an existing key by 1. */
+    public void inc(String key) {
+        if (keyValueMap.containsKey(key)) {
+            changeKey(key, 1);
+        } else {
+            keyValueMap.put(key, 1);
+            // special case
+            if (head.next.count != 1) 
+                addBucketAfter(new Bucket(1), head);
+            head.next.keySet.add(key);
+            bucketCountMap.put(1, head.next);
+        }
+        
+    }
+    
+    /** Decrements an existing key by 1. If Key's value is 1, remove it from the data structure. */
+    public void dec(String key) {
+        if (keyValueMap.containsKey(key)) {
+             if (keyValueMap.get(key) == 1) {
+                 keyValueMap.remove(key);
+                 removeKeyFromBucket(bucketCountMap.get(1), key);
+             } else {
+                 changeKey(key, -1);
+             }
+        }
+        
+    }
+    
+    /** Returns one of the keys with maximal value. */
+    public String getMaxKey() {
+        return tail.prev == head ? "" : (String) tail.prev.keySet.iterator().next();
+    }
+    
+    /** Returns one of the keys with Minimal value. */
+    public String getMinKey() {
+        return head.next == tail ? "" : (String) head.next.keySet.iterator().next();
+    }
+    
+        
+    // helper function to make change on given key according to offset
+    private void changeKey(String key, int offset) {
+        int count = keyValueMap.get(key);
+        int newCount = count + offset;
+        keyValueMap.put(key, newCount);
+        Bucket curBucket = bucketCountMap.get(count);
+        Bucket newBucket;
+        // if not existed, need to create bucket and insert it into the chain, update map bucketCountMap
+        if (!bucketCountMap.containsKey(newCount)) {
+            newBucket = new Bucket(newCount);
+            bucketCountMap.put(newCount, newBucket);
+            addBucketAfter(newBucket, offset == 1 ? curBucket : curBucket.prev);
+        }
+
+        newBucket = bucketCountMap.get(newCount);
+        newBucket.keySet.add(key);
+        // if old count is empty remove
+        removeKeyFromBucket(bucketCountMap.get(count), key);
+        
+    }
+    
+
+    // update bucketkeset, update chain update bucketCountMap when curbucket is empty
+    private void removeKeyFromBucket(Bucket bucket, String key) {
+        bucket.keySet.remove(key);
+        if (bucket.keySet.size() == 0) {
+            removeBucketFromList(bucket);
+            bucketCountMap.remove(bucket.count);
+        }
+    }
+    // update the chain
+    private void removeBucketFromList(Bucket bucket) {
+        bucket.prev.next = bucket.next;
+        bucket.next.prev = bucket.prev;
+        bucket.next = null;
+        bucket.prev = null;
+    }
+    
+    // add newBucket after preBucket, update the chain
+    private void addBucketAfter(Bucket newBucket, Bucket preBucket) {
+        newBucket.prev = preBucket;
+        newBucket.next = preBucket.next;
+        preBucket.next.prev = newBucket;
+        preBucket.next = newBucket;
+    }
+}
+
+/**
+ * Your AllOne object will be instantiated and called as such:
+ * AllOne obj = new AllOne();
+ * obj.inc(key);
+ * obj.dec(key);
+ * String param_3 = obj.getMaxKey();
+ * String param_4 = obj.getMinKey();
+ */
