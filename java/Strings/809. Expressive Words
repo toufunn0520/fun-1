@@ -1,0 +1,48 @@
+class Solution {
+    public int expressiveWords(String S, String[] words) {
+        int count = 0;
+        for (String word: words) {
+            if (check(S, word)) {
+                count++;
+            }
+        }
+        return count;
+    }
+    
+    private boolean check(final String S, String word) {
+        int lens = S.length();
+        int lenw = word.length();
+        int i = 0;
+        int j = 0;
+        
+        for (; i < lens && j < lenw;) {
+            if (S.charAt(i) == word.charAt(j)) {
+                int ii = getRepeatedLength(S, i);
+                int jj = getRepeatedLength(word, j);
+                if ((ii < 3 && ii != jj) || (ii >= 3 && ii < jj) ) return false;
+                i += ii ;
+                j += jj ;
+                //System.out.println("i =" + ii + ", j = " + jj);
+
+            } else {
+                return false;
+            }
+        }
+        
+        return (i == lens && j == lenw)? true: false;
+    }
+    
+    // keep finding the end of a repeat characters.
+    private int getRepeatedLength(String s, int start) {
+        char c = s.charAt(start);
+        int j = start;
+        
+        while (j < s.length() && s.charAt(j) == s.charAt(start)) {
+            j++;
+        }
+        
+        //System.out.println("input = " + s + ", character=" + c + ", size = " + (j - start));
+        return j - start;
+    }
+    
+}
