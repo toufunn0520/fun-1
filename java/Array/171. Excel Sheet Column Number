@@ -1,0 +1,26 @@
+class Solution {
+    public int titleToNumber(String s) {
+        int res = 0;
+        char[] inputArray = s.toCharArray();
+        int level = inputArray.length;
+        
+        for (char c : inputArray) {
+            res += levelres(level -1) *convert(c);
+            level --;
+        }
+        return res;
+    }
+    
+    private int convert(char c) {
+        return (int)(c - 'A') + 1;
+    }
+    
+    private int levelres (int l) {
+        if (l == 0) return 1;
+        int res = 1; 
+        for (int i = 0; i < l ; i++) {
+            res = res * 26;
+        }
+        return res;
+    }
+}
