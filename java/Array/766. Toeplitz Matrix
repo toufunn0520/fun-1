@@ -1,0 +1,16 @@
+// line by line scan, keep checking matrix[i][j] == matric[i+1][j+1]
+// Time O(n)
+class Solution {
+    public boolean isToeplitzMatrix(int[][] matrix) {
+        if (matrix == null || matrix.length == 0) return true;
+        int N = matrix.length;
+        int M = matrix[0].length;
+        // find all diagnoal
+        for (int i = 0 ; i < N - 1; i ++) {
+            for (int j = 0 ; j < M - 1; j ++) {
+                if (matrix[i][j] != matrix [i+1][j+1]) return false;
+            }
+        }
+        return true;
+    }
+}
