@@ -1,0 +1,22 @@
+// start from first linel right most item and 
+// go down if binaryMatrix.get(current) != 0
+// go left  if binaryMatrix.get(current) = 0
+// Time: O(n)
+class Solution {
+    public int leftMostColumnWithOne(BinaryMatrix binaryMatrix) {
+        // get the M by N 
+        List<Integer> dimen = binaryMatrix.dimensions();
+        int m = dimen.get(0);
+        int n = dimen.get(1);
+        int ans = -1, r = 0, c = n-1;
+        while(r < m && c >= 0){
+            if (binaryMatrix.get(r, c) == 1) {
+                ans = c;
+                c --;
+            } else{
+                r++;
+            }
+        }
+        return ans;
+    }
+}
