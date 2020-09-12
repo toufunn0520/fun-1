@@ -1,0 +1,28 @@
+class Solution {
+    public String modifyString(String s) {
+        String ans = "";
+        
+        for (int i = 0 ; i < s.length(); i++) {
+            if (s.charAt(i) != '?') {
+                ans += s.charAt(i);
+            } else {
+                char prev = 0;
+                if (i > 0) {
+                    // tricky for double??, no overlap
+                    prev = ans.charAt(i-1);
+                }
+                char next = 0;
+                if (i < s.length() -1) {
+                    next = s.charAt(i+1);
+                }
+                for (char c = 'a'; c <='z'; c ++) {
+                    if (c != prev && c != next) {
+                        ans +=c;
+                        break;
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+}
