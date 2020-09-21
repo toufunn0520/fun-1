@@ -1,0 +1,23 @@
+// build hashmap record character occurances
+// find odd number, allow only one character to have odd number
+class Solution {
+    public boolean canPermutePalindrome(String s) {
+        Map<Character, Integer> fre = new HashMap<>();
+        for (Character c : s.toCharArray()) {
+            int cur = fre.getOrDefault(c, 0);
+            fre.put(c, cur + 1);
+        }
+        // even number is ok. odd number only one
+        boolean odd = false;
+        for (Character c: fre.keySet()) {
+            if (fre.get(c) %2 != 0) {
+                if (!odd) {
+                    odd = true;
+                } else {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+}
