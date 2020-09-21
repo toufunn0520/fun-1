@@ -1,0 +1,28 @@
+// single map is enough
+// count the occurance = 1
+class Solution {
+    public String[] uncommonFromSentences(String A, String B) {
+        Map<String, Integer> map = new HashMap<>();
+        List<String> res = new ArrayList<>();
+        String[] aArray = A.split(" ");
+        String[] bArray = B.split(" ");
+        for (String a : aArray) {
+            Integer currentCount = map.getOrDefault(a, 0);
+            map.put(a, currentCount+1);
+        }
+        for (String b : bArray) {
+            Integer currentCount = map.getOrDefault(b, 0);
+            map.put(b, currentCount+1);
+        }
+        
+        // find unique
+        for (String target : map.keySet()) {
+            if (map.get(target) == 1) {
+                res.add(target);
+            }
+        }
+       
+        
+        return res.stream().toArray(String[]::new);
+    }
+}
