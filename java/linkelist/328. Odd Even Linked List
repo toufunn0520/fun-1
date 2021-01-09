@@ -1,0 +1,22 @@
+//https://leetcode.com/problems/odd-even-linked-list/
+// Two pointers one is odd , the other is even, save the 1st even as evenHead
+//   odd.next = even.next, odd move forward odd = odd.next
+//   even.next = odd.next; even move forward even = even.next
+// before change next two pointers to new odd/even, make sure at least one new element is not null then procced, 
+// otherwise 
+//          at the end odd.next = evenHead
+// Time O(n) Space O(1)
+class Solution {
+    public ListNode oddEvenList(ListNode head) {
+        if (head == null) return null;
+        ListNode odd = head; ListNode even = head.next; ListNode evenHead = even;
+        while(even != null && even.next != null) { // make sure at least one new element is not null
+            odd.next = even.next;
+            odd = odd.next;
+            even.next = odd.next;
+            even = even.next;
+        }
+        odd.next = evenHead;
+        return head;
+    }
+}
