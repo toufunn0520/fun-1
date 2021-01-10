@@ -1,0 +1,48 @@
+/*
+Modifying the input in-place.
+Find the end of the first half.
+Reverse the second half.
+Determine whether or not there is a palindrome.
+Restore the list.
+Return the result.
+*/
+
+//Space O(1) in-place
+// TimeO(N) Similar to the above approaches. 
+// Finding the middle is O(n), reversing a list in place is O(n), and then comparing the 2 resulting Linked Lists is also O(n)
+
+class Solution {
+    public boolean isPalindrome(ListNode head) {
+    ListNode fast = head, slow = head;
+    while (fast != null && fast.next != null) {
+        fast = fast.next.next;
+        slow = slow.next;
+    }
+    if (fast != null) { // odd nodes: make right half smaller
+        slow = slow.next;
+    }
+    slow = reverse(slow);
+    fast = head;
+    
+    while (slow != null) {
+        if (fast.val != slow.val) {
+            return false;
+        }
+        fast = fast.next;
+        slow = slow.next;
+    }
+    return true;
+}
+    public ListNode reverse(ListNode head) {
+        ListNode prev = null;
+        while (head != null) {
+            ListNode next = head.next;
+            head.next = prev;
+            prev = head;
+            head = next;
+        }
+        return prev;
+    }
+}
+
+
