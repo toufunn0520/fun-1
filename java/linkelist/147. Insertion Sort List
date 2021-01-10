@@ -1,0 +1,36 @@
+
+
+//Time O(N^2) In the worst case where the position to insert is the tail of the list, we have to walk through the entire resulting list.
+
+// Space O(1)
+
+class Solution {
+    public ListNode insertionSortList(ListNode head) {
+        
+        if (head == null || head.next == null) {
+            return head;
+        }
+        
+        ListNode dummyHead = new ListNode(0); // trick this is the smaller than any value of current unsorted list
+        ListNode cur = head;
+        ListNode prev = dummyHead;
+        ListNode next = null;
+        while(cur != null) {
+            next = cur.next;
+            
+            while(prev.next != null && prev.next.val < cur.val) {
+                // keep find the positio
+                prev = prev.next;
+            }
+            // insertion 
+            cur.next = prev.next;
+            prev.next = cur;
+            cur = next;
+            // reset to the head
+            prev = dummyHead;
+        }
+        return dummyHead.next;
+    }
+}
+
+
