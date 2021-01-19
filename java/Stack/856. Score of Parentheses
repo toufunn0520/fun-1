@@ -1,0 +1,22 @@
+/*Our goal is to maintain the score at the current depth we are on. When we see an opening bracket, we increase our depth, and our score at the new depth is 0. When we see a closing bracket, we add twice the score of the previous deeper part - except when counting (), which has a score of 1.
+*/
+
+// Time O(n) 
+// Space O(n)
+
+class Solution {
+    public int scoreOfParentheses(String S) {
+        Stack<Integer> stack = new Stack<>();
+        int cur = 0;
+        for (char c : S.toCharArray()) {
+            
+            if (c == '(') {
+                stack.push(cur);
+                cur = 0;
+            } else {
+                cur = stack.pop() + Math.max(cur * 2, 1);
+            }
+        } 
+        return cur;
+    }
+}
