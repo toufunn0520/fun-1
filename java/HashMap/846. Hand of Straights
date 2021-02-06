@@ -1,6 +1,6 @@
 // Orded map
 
-
+same as 1296. Divide Array in Sets of K Consecutive Numbers
 class Solution {
     public boolean isNStraightHand(int[] hand, int W) {
         Map<Integer, Integer> c = new TreeMap<>();
