@@ -1,5 +1,14 @@
 // Orded map
 
+/*
+
+Count number of different cards to a map c
+Loop from the smallest card number.
+Everytime we meet a new card i, we cut off i - i + W - 1 from the counter.
+
+Time O(MlogM + MW), where M is the number of different cards.
+
+*/
 same as 1296. Divide Array in Sets of K Consecutive Numbers
 class Solution {
     public boolean isNStraightHand(int[] hand, int W) {
