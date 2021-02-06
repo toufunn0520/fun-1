@@ -1,7 +1,13 @@
 // use ordeded map
-// O(MlogM + N), where M is the number of different cards.
-// In Cpp and Java it's O(NlogM), which can also be improved.
+/*
 
+Count number of different cards to a map c
+Loop from the smallest card number.
+Everytime we meet a new card i, we cut off i - i + W - 1 from the counter.
+
+Time O(MlogM + MW), where M is the number of different cards.
+
+*/
 class Solution {
     public boolean isPossibleDivide(int[] nums, int k) {
         Map<Integer, Integer> c = new TreeMap<>();
