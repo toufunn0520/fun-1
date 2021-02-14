@@ -1,0 +1,37 @@
+/*
+Time O(logS)
+Space O(S)
+where S is the number of set called.
+
+SnapshotArray(int length) is O(N) time
+set(int index, int val) is O(1) in Python and O(logSnap) in Java
+snap() is O(1)
+get(int index, int snap_id) is O(logSnap)
+
+*/
+class SnapshotArray {
+    TreeMap <Integer, Integer>[] res;
+    int snap_id = 0;
+    public SnapshotArray(int length) {
+        res = new TreeMap[length];
+        for (int i = 0; i < length; i++) {
+            res[i] = new TreeMap<Integer, Integer>();
+            // <snap_id, value>
+            res[i].put(0, 0);
+        }
+    }
+    
+    public void set(int index, int val) {
+        TreeMap<Integer, Integer> cur = res[index];
+        cur.put(snap_id, val);
+    }
+    
+    public int snap() {
+        return snap_id ++;
+    }
+    
+    public int get(int index, int snap_id) {
+        TreeMap<Integer, Integer> cur = res[index];
+        return  cur.floorEntry(snap_id).getValue();
+    }
+}
