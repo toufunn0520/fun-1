@@ -1,0 +1,40 @@
+/*
+
+Time Complexity: O(NQ), where N is the length of S, and we have Q replacement operations. 
+
+Space Complexity: O(N), match array
+*/
+
+
+
+class Solution {
+    public String findReplaceString(String S, int[] indexes, String[] sources, String[] targets) {
+        int N = S.length();
+        int[] match = new int[N];
+        Arrays.fill(match, -1);
+        
+        // mark matched start indexes 
+        for (int i = 0; i < indexes.length; i++) {
+            int index = indexes[i]; 
+            if (S.substring(index, index + sources[i].length()).equals(sources[i])) {
+                match[index] = i;
+            }
+        }
+        
+        StringBuilder ans = new StringBuilder();
+        int index = 0;
+        while(index < N) {
+            if (match[index] >= 0) {
+                ans.append(targets[match[index]]);
+                index += sources[match[index]].length();
+            } else {
+                ans.append(S.charAt(index));
+                index ++;
+            }
+            
+        }
+        return ans.toString();
+    
+    }
+}
+
