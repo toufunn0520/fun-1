@@ -1,0 +1,46 @@
+/*
+
+Sort cars by the start positions pos
+Loop on each car from the end to the beginning
+Calculate its time needed to arrive the target
+cur records the current biggest time (the slowest)
+
+If another car needs less or equal time than cur,
+it can catch up this car fleet.
+
+If another car needs more time,
+it will be the new slowest car,
+and becomes the new lead of a car fleet.
+
+
+Complexity:
+O(NlogN) Quick sort the cars by position. (Other sort can be applied)
+O(N) One pass for all cars from the end to start (another direction also works).
+
+O(N) Space for sorted cars.
+O(1) space is possible if we sort pos inplace.
+
+
+*/
+
+class Solution {
+    public int carFleet(int target, int[] pos, int[] speed) {
+        int N = pos.length; int res = 0;
+        double[][] cars = new double[N][2];
+        for (int i = 0; i < N ; i++) {
+            cars[i] = new double[]{pos[i], (double)(target - pos[i])/speed[i]};
+        }
+        //sort array 1st by target
+        Arrays.sort(cars, (a, b) -> Double.compare(a[0], b[0]));
+        
+        double cur = 0;
+        for (int i = N-1; i >=0; i--) {
+            if (cars[i][1] > cur) {
+                cur = cars[i][1];
+                res ++;
+            }
+        }
+        
+        return res;
+    }
+}
