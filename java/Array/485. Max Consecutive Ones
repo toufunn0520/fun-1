@@ -1,0 +1,23 @@
+/*
+
+
+Time Complexity: O(N)O(N), where NN is the number of elements in the array.
+
+Space Complexity: O(1)O(1). We do not use any extra space
+
+*/
+class Solution {
+    public int findMaxConsecutiveOnes(int[] nums) {
+        int count = 0;
+        int maxCount = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] == 1) {
+                count +=1;
+            } else{
+                maxCount= Math.max(maxCount, count);
+                count = 0;
+            }
+        }
+        return Math.max(maxCount, count);
+    }
+}
