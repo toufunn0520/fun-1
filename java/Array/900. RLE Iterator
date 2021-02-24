@@ -1,0 +1,25 @@
+// Space O(1). Time O(n)
+
+class RLEIterator {
+    int[] A;
+    int index; // the even ones
+    public RLEIterator(int[] A) {
+        this.A = A;
+        index = 0;
+    }
+    
+    public int next(int n) {
+        while(index < A.length && n > A[index]) {
+            n = n - A[index];
+            index +=2;
+        }
+        
+        //if n reached the end of possible values
+        if (index >= A.length) {
+            return -1;
+        }
+        // if n is within boundary;
+        A[index] = A[index] - n; // move remainings
+        return A[index + 1];
+    }
+}
