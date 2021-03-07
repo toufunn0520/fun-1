@@ -1,0 +1,38 @@
+class Solution {
+    //Time complexity : O(numRows^2)O(numRows 2)
+    //Space O(numRows^2)O(numRows 2)
+    
+    public List<List<Integer>> generate(int numRows) {
+        
+        List<List<Integer>> ans = new ArrayList<List<Integer>>();
+        
+        //base case 1 when numRows = 0
+        if (numRows == 0) return ans;
+        
+        //base case 1 when numRows = 1
+        List<Integer> first = new ArrayList<>();
+        first.add(1);
+        ans.add(first);
+        if (numRows == 1) return ans;
+        
+        for (int i = 1; i < numRows; i++) {
+            List<Integer> cur = new ArrayList<>();
+            List<Integer> prev = ans.get(i-1);
+            
+            // last one
+            cur.add(1);
+            
+            // start from 2nd position and end at 2nd last postion. 
+            for(int j = 1 ; j < i ; j++) {
+                cur.add(prev.get(j - 1) + prev.get(j));
+            }
+            
+            // last one
+            cur.add(1);
+            // add cur to ans
+            ans.add(cur);
+        }
+        
+        return ans;
+    }
+}118. Pascal's Triangle
