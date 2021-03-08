@@ -1,0 +1,41 @@
+// similar to 1631. Path With Minimum Effort
+// not BFS because 最小路径 不对
+// not Greedy 因为当前最大值的下一步不是全局最大值
+// 要用priority queue 从大到小排列 把下一步， 和之前cashe 的下一步 都拿来比较哪个大 然后从那个点开始继续走。
+// Time O(n * m)
+// Space O(n * m)
+
+
+class Solution {
+    int [][] direction = {{0, 1}, {1, 0}, {0, -1}, {-1 , 0}};
+    public int maximumMinimumPath(int[][] A) {
+        Queue<int[]> queue = new PriorityQueue<>((a, b) -> Integer.compare(b[0], a[0]));
+        queue.offer(new int[] {A[0][0], 0, 0});
+        int maxScore = A[0][0];
+        // trick in-place mark visited
+        A[0][0] = -1;
+        int n = A.length, m = A[0].length;
+        while(!queue.isEmpty()) {
+            int[] top = queue.poll();
+            int i = top[1], j = top[2];
+            maxScore = Math.min(maxScore, top[0]);
+            // reach the end
+            if (i == n -1  && j == m -1 ) {
+                break;
+            }
+            // next step
+            for (int[] d : direction) {
+                int newi = d[0] + i;
+                int newj = d[1] + j;
+                // valid and not visited
+                if (newi >= 0 && newi < n && newj >=0 && newj < m && A[newi][newj] >=0) {
+                    queue.offer(new int[] {A[newi][newj], newi, newj});
+                    // mark visited
+                    A[newi][newj] = -1;
+                }
+            }
+        }
+        
+        return maxScore;
+    }
+}
