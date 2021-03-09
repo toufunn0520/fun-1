@@ -1,0 +1,55 @@
+/*
+Time
+O(1) for addScore.
+O(1)O(1) for reset.
+O(K) + O(N \text{log}K)O(K)+O(NlogK) = O(N \text{log}K)O(NlogK).
+
+
+Space
+O(N+K) where O(N)O(N) is used by the scores dictionary and O(K)O(K) is used by the heap.
+*/
+
+class Leaderboard {
+   HashMap<Integer, Integer> scores;
+
+    public Leaderboard() {
+        this.scores = new HashMap<Integer, Integer>();
+    }
+    
+    public void addScore(int playerId, int score) {
+      
+        scores.put(playerId, scores.getOrDefault(playerId, 0) + score);
+    }
+    
+    public int top(int K) {
+        // create min heap using priority Queue
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>((a, b) -> a - b);
+        
+        for (int player: scores.keySet()) {
+            minHeap.offer(scores.get(player));
+            if (minHeap.size() > K) {
+                minHeap.poll();
+            }
+        }
+        // sum it up
+        int sum  = 0;
+        Iterator value = minHeap.iterator();
+        while(value.hasNext()) {
+            sum += (int)value.next();
+        }
+        
+        return sum;
+    }
+    
+    public void reset(int playerId) {
+         scores.put(playerId, 0);
+    }
+}
+
+/**
+ * Your Leaderboard object will be instantiated and called as such:
+ * Leaderboard obj = new Leaderboard();
+ * obj.addScore(playerId,score);
+ * int param_2 = obj.top(K);
+ * obj.reset(playerId);
+ */
