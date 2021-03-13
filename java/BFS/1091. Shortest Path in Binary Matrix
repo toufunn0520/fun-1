@@ -1,0 +1,55 @@
+// Time O(T)= O(N)
+// Space O(S) = O(N)
+class Solution {
+    private static int dir[][] = new int[][] {{0, 1}, 
+                                              {0, -1}, 
+                                              {1, 0}, 
+                                              {-1, 0},
+                                              {1, -1},
+                                              {-1, 1},
+                                              {-1, -1},
+                                              {1, 1}};
+    public int shortestPathBinaryMatrix(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        
+        // invalid start/end case
+        if(grid[0][0] == 1 || grid[m-1][n-1] == 1) {
+            return -1;
+        }
+        // construct a visited array same size
+        boolean[][] visited = new boolean[m][n];
+        visited[0][0] = true;
+        //BFS, adding start poin index; 
+        Queue<int[]> queue = new LinkedList<>();
+        queue.add(new int[]{0, 0});
+        int ans = 0;
+        
+        while(!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                int[] cur = queue.poll();
+                // reached the end
+                if (cur[0] == m -1 && cur[1] == n-1) {
+                    return ans + 1;
+                }
+                
+                // get 8 direction and push to the queue
+                for (int d = 0; d < 8; d++) {
+                    int nextR = cur[0] + dir[d][0];
+                    int nextC = cur[1] + dir[d][1];
+                    
+                    if((nextR >= 0 && nextR < m) && (nextC >= 0 && nextC < n)
+                       && !visited[nextR][nextC] && (grid[nextR][nextC] == 0)) {
+                        queue.add(new int[]{nextR, nextC});
+                        visited[nextR][nextC] = true;
+                    }
+                }
+            }
+            // level + 1;
+            ans ++;
+        }
+        return -1;
+    }
+}
+
