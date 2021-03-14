@@ -1,0 +1,22 @@
+// Time O(N)
+// Space O(1)
+
+// keep a cur value indicate the current depth, and only increase when it get "(" or decrease when it get ")"
+// keep a res only when cur reached "(" and see if we need to update it
+
+class Solution {
+    public int maxDepth(String s) {
+        if (s == null || s.length() == 0) return 0;
+        int res = 0;
+        int cur = 0; 
+        for (char c: s.toCharArray()) {
+            if(c =='(') {
+                cur ++;
+                res = Math.max(res, cur);
+            } else if (c == ')') {
+                cur --;
+            }
+        }
+        return res;
+    }
+}
