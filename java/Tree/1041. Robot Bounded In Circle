@@ -1,0 +1,32 @@
+//Time O(N), bottom up
+
+// Space O(H), hight of the tree
+class Solution {
+    int count = 0;
+
+    public int countUnivalSubtrees(TreeNode root) {
+        if (root == null) return 0;
+        internal(root);
+        return count;
+    }
+    
+    private boolean internal(TreeNode node) {
+        if (node.left == null && node.right == null) {
+            // found a uni value
+            count ++;
+            return true;
+        }
+        boolean res = true;
+        // check if child node are all univalue subtress
+        if(node.left != null) {
+            res = internal(node.left) && res && node.left.val == node.val;
+        }
+        if(node.right != null) {
+            res = internal(node.right) && res && node.right.val == node.val;
+        }
+        
+        if(!res) return false;
+        count++;
+        return true;
+    }
+}
