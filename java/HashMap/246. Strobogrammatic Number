@@ -1,0 +1,21 @@
+// Time O(n)
+// Space O(1)
+
+// Use two pointers 
+// Hashmap 
+class Solution {
+    public boolean isStrobogrammatic(String num) {
+        Map<Character, Character> map = new HashMap<>(
+            Map.of('0', '0', '1', '1', '6', '9', '8', '8', '9', '6'));
+        // use two pointer
+        for (int left = 0, right = num.length() -1; left <= right; left ++, right --) {
+            char leftC = num.charAt(left);
+            char rightC = num.charAt(right);
+            if (!map.containsKey(leftC) || (map.get(leftC)) != rightC) {
+                return false;
+            }
+
+        }
+        return true;
+    }
+}
