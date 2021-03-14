@@ -1,0 +1,66 @@
+// only two island!!!!
+// BFS to first get the location of the one island
+// Then try to reach the other island
+
+// Time O(MN)
+class Solution {
+    int[][]dirs = new int[][]{{1,0}, {-1, 0}, {0, 1}, {0, -1}};
+
+    public int shortestBridge(int[][] A) {
+        int m = A.length;
+        int n = A[0].length;
+        boolean[][] visited = new boolean[m][n];
+        Queue<int[]> q = new LinkedList<>();
+        boolean found = false;
+        
+        // 1 dfs find an island, mark all connected 1 it as visited
+        for (int i = 0; i < m; i++) {
+            if(found) {
+                break;
+            }
+            for (int j = 0; j < n ; j++) {
+                if(A[i][j] == 1) {
+                    dfs(A, visited, q, i, j);
+                    found = true;
+                    break;
+                }
+            }
+        }
+        
+        // bfs find next island
+        int res = 0;
+        while (!q.isEmpty()) {
+            int size = q.size();
+            for (int i = 0; i < size; i++) {
+                int[] cur = q.poll();
+                for (int[] dir : dirs) {
+                    int nextR = cur[0] + dir[0];
+                    int nextC = cur[1] + dir[1];
+                        if ((nextR >= 0  && nextR < m) && (nextC >= 0 && nextC < n) && !visited[nextR][nextC]) {
+                            // find the next island, return result;
+                            if (A[nextR][nextC] == 1) {
+                                return res;
+                            }
+                            visited[nextR][nextC] = true;
+                            q.add(new int[]{nextR, nextC});
+                        }
+                }
+            }
+            res ++;
+        }
+        // not able to find 2nd island
+        return -1;
+    }
+    
+    // go through entire sheet mark conected 1 as visited
+    private void dfs(int[][]A, boolean[][] visited, Queue<int[]> q, int row, int col) {
+        if ((row < 0  || row >= A.length ) || (col < 0 || col >= A[0].length) || visited[row][col] || A[row][col] == 0) {
+            return;
+        }
+        visited[row][col] = true;
+        q.offer(new int[]{row, col});
+        for (int[] dir : dirs) {
+            dfs(A, visited, q, dir[0]+row, dir[1] + col);
+        }
+    }
+}
