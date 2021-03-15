@@ -1,0 +1,19 @@
+// two pointer
+// Space O(1) Time O(T)
+class Solution {
+    public boolean isSubsequence(String s, String t) {
+        int left = s.length();
+        int right = t.length();
+        int pLeft = 0;
+        int pRight = 0;
+        
+        while (pLeft < left && pRight < right) {
+            if (s.charAt(pLeft) == t.charAt(pRight)) {
+                pLeft += 1;
+            }
+            pRight ++;
+            
+        }
+        return pLeft == left;
+    }
+}
