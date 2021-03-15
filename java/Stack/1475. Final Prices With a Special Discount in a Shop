@@ -1,0 +1,14 @@
+// Time O(N) monotonic stack, keep index to a stack till reach a item smaller than top of the elemeent keep pop if item is still smaller than the top element
+// Space O(1) in place
+class Solution {
+    public int[] finalPrices(int[] prices) {
+        Stack<Integer> stack = new Stack<>();
+        for (int i = 0; i < prices.length; i++) {
+            while(!stack.isEmpty() && prices[stack.peek()] >= prices[i]) {
+                prices[stack.pop()] -= prices[i];
+            }
+            stack.push(i);
+        }
+        return prices;
+    }
+}
