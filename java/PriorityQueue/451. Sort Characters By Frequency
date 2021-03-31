@@ -1,0 +1,57 @@
+
+//according to user "orxanb", 
+// O(nlogm), m is the distinguish character, can be O(1) since only 26 letters. 
+//So the overall time complexity should be O(n), the same as the buck sort with less memory use.
+
+
+class Solution {
+    public String frequencySort(String s) {
+        // build c and its frequency map
+        Map<Character, Integer> map = new HashMap<>();
+        for (char c : s.toCharArray())
+            map.put(c, map.getOrDefault(c, 0) + 1);
+        
+        // build priority queue sorted by its value, the frequency
+         PriorityQueue<Map.Entry<Character, Integer>> pq = new PriorityQueue<>((a, b) -> b.getValue() - a.getValue());
+         pq.addAll(map.entrySet());
+        
+        StringBuilder sb = new StringBuilder();
+        while (!pq.isEmpty()) {
+            Map.Entry e = pq.poll();
+            for(int i = 0; i < (int)e.getValue(); i++) {
+                sb.append(e.getKey());
+            }
+        }
+        return sb.toString();
+    }
+}
+
+
+// follow -up 
+
+There is a follow up if you are interested, when same frequency we need to maintain the same sequence as the character show in the original string, the solution is add a index as a secondary sort if the frequency is same, code as below:
+
+    public static String frequencySort(String s) {
+        Map<Character, int[]> map = new HashMap<>();
+        for (int i = 0; i <s.length(); i++) {
+            char c = s.charAt(i);
+            if (!map.containsKey(c)) map.put(c, new int[]{1, i});
+            else {
+                int[] freqAndSeq = map.get(c);
+                freqAndSeq[0]++;
+                map.put(c, freqAndSeq);
+            }
+        }
+
+        PriorityQueue<Map.Entry<Character, int[]>> pq = new PriorityQueue<>((a, b) ->
+                a.getValue()[0] == b.getValue()[0] ? a.getValue()[1] - b.getValue()[1] : b.getValue()[0] - a.getValue()[0]);
+
+        pq.addAll(map.entrySet());
+        StringBuilder sb = new StringBuilder();
+        while (!pq.isEmpty()) {
+            Map.Entry<Character, int[]> e = pq.poll();
+            for (int i = 0; i < e.getValue()[0]; i++)
+                sb.append(e.getKey());
+        }
+        return sb.toString();
+    }
