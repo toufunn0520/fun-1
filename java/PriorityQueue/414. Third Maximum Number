@@ -1,0 +1,25 @@
+class Solution {
+    public int thirdMax(int[] nums) {
+        // by default pq is sorted
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+        Set<Integer> set = new HashSet<>();
+        for (int i : nums) {
+            if(!set.contains(i)) {
+                pq.offer(i);
+                set.add(i);
+                if (pq.size() > 3) {
+                    // evict the smallest
+                    set.remove(pq.poll());
+                }
+            }
+        }
+        
+        if (pq.size() < 3) {
+            while (pq.size() > 1) {
+                // if less than 3 numbers find the biggest
+                pq.poll();
+            }
+        }
+        return pq.peek();
+    }
+}
