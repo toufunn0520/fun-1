@@ -1,0 +1,15 @@
+// very smart sharp solutuin
+// Time O(n), Space O(n) n is the length of sequence
+
+class Solution {
+    public int maxRepeating(String sequence, String word) {
+        int ans = 0;
+        int count = 1;
+        while(sequence.contains(word.repeat(count))) {
+            ans = count;
+            count ++;
+        }
+        
+        return ans;
+    }
+}
