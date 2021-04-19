@@ -1,0 +1,34 @@
+// 1.adding to an hashset
+// 2.sorted original words desc by its lenght and asc by its lexicographical order
+// 3. iterate the sorted array, find the ans
+// 4. not found and words can be cantenated by other words
+
+
+class Solution {
+    public String longestWord(String[] words) {
+        // 1.adding to an hashset
+        Set<String> wordsSet = new HashSet<>();
+        for (String s: words) {
+            wordsSet.add(s);
+        }
+        // 2.sorted original words desc by its lenght and asc by its lexicographical order
+        Arrays.sort(words, (a, b) -> a.length() == b.length() ? a.compareTo(b) : b.length () - a.length());
+        
+        // 3. iterate the sorted array, find the ans
+        for (String s: words) {
+            boolean isAns = true;
+            for (int i = 1; i < s.length(); i++) {
+                if (!wordsSet.contains(s.substring(0, i))) {
+                    isAns = false;
+                    break;
+                }
+            }
+            if (isAns) {
+                return s;
+            }
+        }
+        
+        // 4. not found and words can be cantenated by other words
+        return "";
+    }
+}
