@@ -1,0 +1,52 @@
+/*
+// Definition for a Node.
+class Node {
+    public int val;
+    public Node left;
+    public Node right;
+    public Node parent;
+};
+*/
+
+class Solution {
+    public Node lowestCommonAncestor(Node p, Node q) {
+        List<Node> parents = find_parent(p);
+        Node match;
+        while (q.parent != null) {
+            for (Node n: parents) {
+                if (q == n) return q;
+                
+            }
+            q = q.parent;
+        }
+        // at worst it will the root
+        return q;
+        
+    }
+    
+    private List<Node> find_parent(Node node) {
+        
+        List<Node> parents = new ArrayList<>();
+        while(node.parent != null) {
+            parents.add(node);
+            node = node.parent;
+        }
+        return parents;
+    }
+}
+
+
+
+/// or another methods
+
+// second methods overlap common ancestor
+    public Node lowestCommonAncestor(Node p, Node q) {
+        Node a = p;
+        Node b = q;
+        while (a != b) {
+            a = a == null? q : a.parent;
+            b = b == null? p : b.parent;
+        }
+        return a;
+    }
+
