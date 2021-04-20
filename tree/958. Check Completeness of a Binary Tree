@@ -1,0 +1,29 @@
+/*
+Use BFS to do a level order traversal,
+add childrens to the bfs queue,
+until we met the first empty node.
+
+For a complete binary tree,
+there should not be any node after we met an empty one.
+
+Time O(n) Space O(n)
+
+*/
+class Solution {
+    public boolean isCompleteTree(TreeNode root) {
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        // not a child of a leave node
+        while (queue.peek() != null) {
+            TreeNode cur = queue.poll();
+            queue.offer(cur.left);
+            queue.offer(cur.right);
+        }
+        
+        // found a leave node null
+        while(!queue.isEmpty() && queue.peek() == null) {
+            queue.poll();
+        }
+        return queue.isEmpty();
+    }
+}
