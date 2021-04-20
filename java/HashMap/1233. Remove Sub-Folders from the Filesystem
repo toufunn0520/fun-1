@@ -1,0 +1,29 @@
+/*
+Check if the floder's parent fold in HashSet before adding it into the HashSet.
+Note: the part before any / is a parent.
+
+Sort cost n * logn;
+Outer for loop run n times; inner for loop cost i in each iteration due to substring(0, i), that is, 2 + ... + m, which is O(m ^ 2);
+Therefore,
+
+Time: O(n * (logn + m ^ 2)), space: (n * m), where n = folder.length, m = average size of the strings in folder.
+*/
+
+class Solution {
+    public List<String> removeSubfolders(String[] folder) {
+        Arrays.sort(folder, Comparator.comparing(s -> s.length()));
+        Set<String> seen = new HashSet<>();
+        out:
+        for (String f: folder) {
+            for (int i = 2; i < f.length(); i++) {
+                if (f.charAt(i) == '/' && seen.contains(f.substring(0, i))) {
+                    // skip to next
+                    continue out;
+                }
+            }
+            seen.add(f);
+        }
+        return new ArrayList<>(seen);
+    }
+    
+}
