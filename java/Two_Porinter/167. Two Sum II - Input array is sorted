@@ -1,0 +1,24 @@
+// two pointer
+
+class Solution {
+    public int[] twoSum(int[] numbers, int target) {
+        int[] ans =  new int[2];
+        int slow = 0;
+        int fast = numbers.length - 1;
+        while (slow < fast) {
+            int cur = numbers[slow] + numbers[fast];
+            if (cur == target) {
+                // index start from 1
+                ans[0] = slow + 1;
+                ans[1] = fast + 1;
+                break;
+            } else if (cur < target) {
+                slow ++;
+            } else {
+                // cur > target
+                fast --;
+            }
+        }
+        return ans;
+    }
+}
