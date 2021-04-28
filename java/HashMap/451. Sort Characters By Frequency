@@ -32,7 +32,8 @@ class Solution {
     }
 }
 
-// method 2 priority queue
+// method 2 priority queue, There is a follow up if you are interested, when same frequency we need to maintain the same sequence as the character show in the original string, the solution is add a index as a secondary sort if the frequency is same, code as below:
+
 
  public static String frequencySort(String s) {
         Map<Character, int[]> map = new HashMap<>();
