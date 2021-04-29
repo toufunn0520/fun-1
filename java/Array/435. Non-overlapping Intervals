@@ -1,0 +1,28 @@
+// greedy 
+// like meeting room 56, 252, 253,452
+// 1 sorted array by its end time in asc order
+// taken non overlapped one if start time and current end time no overlap
+// greedy is basically we take smaller chunks which ever endtime is eailer we take that slot
+
+class Solution {
+    public int eraseOverlapIntervals(int[][] intervals) {
+       if (intervals.length == 0)  return 0;
+        // sorted array
+        Arrays.sort(intervals, (a, b) -> (a[1] - b[1]));
+        int end = intervals[0][1];
+        int count = 1;        
+
+        for (int i = 1; i < intervals.length; i++) {
+            if (intervals[i][0] >= end) {
+                end = intervals[i][1];
+                count++;
+            }
+        }
+        // finally get the evicted ones
+        return intervals.length - count;
+    }
+
+}
+
+
+//Tiem 
