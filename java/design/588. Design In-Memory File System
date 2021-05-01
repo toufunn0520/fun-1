@@ -1,0 +1,213 @@
+//constrains makes it easuer
+
+/*
+1 <= path.length, filePath.length <= 100
+path and filePath are absolute paths which begin with '/' and do not end with '/' except that the path is just "/".
+You can assume that all directory names and file names only contain lowercase letters, and the same names will not exist in the same directory.
+You can assume that all operations will be passed valid parameters, and users will not attempt to retrieve file content or list a directory or file that does not exist.
+1 <= content.length <= 50
+At most 300 calls will be made to ls, mkdir, addContentToFile, and readContentFromFile.
+
+
+Also ls a file ls /a/b/c we need to return c.
+We need iSFile flag to diff that .
+
+*/
+
+class FileSystem {
+    Tree root;
+    
+    public FileSystem() {
+        root = new Tree();
+    }
+    
+    public List<String> ls(String paths) {
+        String[] path = paths.split("/");
+        // root
+        if (path.length == 0) {
+            List<String> res = new ArrayList<>(root.children.keySet());
+            Collections.sort(res);
+            return res;
+        } 
+        // none-root
+        Tree curNode = root;
+        for (int i = 1; i < path.length; i ++) {
+            String cur = path[i];
+            curNode = curNode.children.get(cur);
+            if(curNode.isFile) {
+                List<String> list = Collections.singletonList(cur);
+                return list;
+            }
+        }    
+        List<String> res = new ArrayList<>(curNode.children.keySet());
+        Collections.sort(res);
+        return res;
+    }
+    
+    public void mkdir(String paths) {
+        String[] path = paths.split("/");
+        
+        Tree curNode = root;
+        if (path.length < 1) return;
+
+        for (int i = 1; i < path.length; i ++) {
+            String cur = path[i];
+            if (!curNode.children.containsKey(cur)) {
+                Tree newTree = new Tree();
+                curNode.children.put(cur, newTree);
+            }
+            curNode = curNode.children.get(cur);
+        }
+    }
+    
+    public void addContentToFile(String filePath, String content) {
+        String[] path = filePath.split("/");
+        Tree curNode = root;
+        if (path.length < 1) return;
+         for (int i = 1; i < path.length; i ++) {
+             String cur = path[i];
+             if (!curNode.children.containsKey(cur)) {
+                Tree newTree = new Tree();
+                curNode.children.put(cur, newTree);
+            }
+            curNode = curNode.children.get(cur);
+        }
+        curNode.appendFile(content);
+        curNode.isFile = true;
+    }
+    
+    public String readContentFromFile(String filePath) {
+        String[] path = filePath.split("/");
+        Tree curNode = root;
+        if (path.length < 1) return ""; //  1st is root, e.g "/a/b/c" -> "", "a", "b", "c"
+          for (int i = 1; i < path.length; i ++) {
+             String cur = path[i];
+             curNode = curNode.children.get(cur);
+        }
+        return curNode.content;
+    }
+    
+    
+    private class Tree {
+        
+        public final Map<String, Tree> children;
+        String content = "";
+        boolean isFile = false;
+        
+        
+        public Tree () {
+            children = new HashMap<>();
+        }
+        
+        public void createChild(final String childName, final Tree tree) {
+            children.put(childName, tree);
+        }
+        
+        public boolean isExisted (final String childName) {
+            return children.containsKey(childName);   
+        }
+        
+        public void appendFile(final String newContent) {
+            content += newContent;
+        }
+        
+    }
+}
+
+
+
+another
+public class FileSystem {
+    class File {
+        boolean isFile = false;
+        Map<String, File> children = new HashMap<>();
+        String content = "";
+    }
+    
+    File root = null;
+    
+    public FileSystem() {
+        root = new File();
+    }
+    
+    public List<String> ls(String path) {
+        String[] dirs = path.split("/");
+        File node = root;
+        List<String> result = new ArrayList<>();
+        String name = "";
+        for (String dir : dirs) {
+            if (dir.length() == 0) continue;
+            if (!node.children.containsKey(dir)) {
+                return result;
+            }
+            node = node.children.get(dir);
+            name = dir;
+        }
+        
+        if (node.isFile) {
+            result.add(name);
+        }
+        else {
+            for (String key : node.children.keySet()) {
+                result.add(key);
+            }
+        }
+        
+        Collections.sort(result);
+        
+        return result;
+    }
+    
+    public void mkdir(String path) {
+        String[] dirs = path.split("/");
+        File node = root;
+        for (String dir : dirs) {
+            if (dir.length() == 0) continue;
+            if (!node.children.containsKey(dir)) {
+                File file = new File();
+                node.children.put(dir, file);
+            }
+            node = node.children.get(dir);
+        }
+    }
+    
+    public void addContentToFile(String filePath, String content) {
+        String[] dirs = filePath.split("/");
+        File node = root;
+        for (String dir : dirs) {
+            if (dir.length() == 0) continue;
+            if (!node.children.containsKey(dir)) {
+                File file = new File();
+                node.children.put(dir, file);
+            }
+            node = node.children.get(dir);
+        }
+        node.isFile = true;
+        node.content += content;
+    }
+    
+    public String readContentFromFile(String filePath) {
+        String[] dirs = filePath.split("/");
+        File node = root;
+        for (String dir : dirs) {
+            if (dir.length() == 0) continue;
+            if (!node.children.containsKey(dir)) {
+                File file = new File();
+                node.children.put(dir, file);
+            }
+            node = node.children.get(dir);
+        }
+
+        return node.content;
+    }
+}
+
+
+/**
+ * Your FileSystem object will be instantiated and called as such:
+ * FileSystem obj = new FileSystem();
+ * List<String> param_1 = obj.ls(path);
+ * obj.mkdir(path);
+ * obj.addContentToFile(filePath,content);
+ * String param_4 = obj.readContentFromFile(filePath);
+ */
