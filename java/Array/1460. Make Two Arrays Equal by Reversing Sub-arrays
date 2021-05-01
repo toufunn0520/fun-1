@@ -1,0 +1,18 @@
+class Solution {
+    public boolean canBeEqual(int[] target, int[] arr) {
+        Map<Integer, Integer> targetmap = new HashMap<>();
+        // length equals
+        for (int i = 0; i < target.length; i++) {
+            targetmap.put(target[i], targetmap.getOrDefault(target[i], 0) + 1);
+            targetmap.put(arr[i], targetmap.getOrDefault(arr[i], 0) - 1);
+        }
+        
+        
+        for (int i : targetmap.keySet()) {
+            if (targetmap.get(i) != 0) return false;
+        }
+        
+        return true;
+    }
+}
+
