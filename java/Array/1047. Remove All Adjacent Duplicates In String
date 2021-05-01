@@ -1,0 +1,23 @@
+// remove two adjacent not all similar
+// 类似 stack 
+// stringbuilder， if c matched with last item at the stringbuilder remvoe the item also skip c.
+// e.g "abbaaca" -> aca , "abbaca" -> ca
+
+//Time O(n)
+// Space O(n)
+
+class Solution {
+    public String removeDuplicates(String S) {
+        // res
+        StringBuilder sb = new StringBuilder();
+        for (char c: S.toCharArray()) {
+            if (sb.length() > 0 && (c == sb.charAt(sb.length() -1))) {
+                sb.deleteCharAt(sb.length() -1);
+                continue;
+            } else {
+                sb.append(c);
+            }
+        }
+        return sb.toString();
+    }
+}
