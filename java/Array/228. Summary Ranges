@@ -1,0 +1,26 @@
+// Two pointer
+// Time O(n)
+// Space O(n)
+
+
+class Solution {
+    public List<String> summaryRanges(int[] nums) {
+        List<String> res = new ArrayList<>();
+        // two pointers
+        // i is the starting point for each res element  j goes to the end of the nums, 
+        for (int i = 0, j = 0; j < nums.length; j++) {
+            // check if j+1 exceeded range
+            if (j+1 < nums.length && nums[j] + 1 == nums[j+1]) {
+                continue;
+            } 
+            // due to nums[j] != nums[j+1] +1 
+            if( i == j) {
+                res.add(nums[i] + "");
+            } else {
+                res.add(nums[i] + "->" + nums[j]);
+            }
+            i = j + 1;
+        }
+        return res;
+    }
+}
