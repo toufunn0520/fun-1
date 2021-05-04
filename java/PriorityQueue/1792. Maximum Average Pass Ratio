@@ -1,0 +1,40 @@
+
+/*
+
+
+How much profit we can get if we add one extraStudents to a particular class (pass, total)? This profit can be defined as: (pass+1)/(total+1) - pass/total.
+For each student from extraStudents, we try to add to a class which will increase its profit maximum.
+We can use maxHeap structure which can give us the class which has maximum profit after adding.
+Complexity:
+
+Time:
+Java: O(M*logN + N*logN)
+Space: O(N)
+
+*/
+class Solution {
+    public double maxAverageRatio(int[][] classes, int extraStudents) {
+        PriorityQueue<double[]> queue = new PriorityQueue<>(Comparator.comparingDouble(o -> -o[0]));
+        for (int[] c: classes) {
+            queue.offer(new double[]{profit(c[0], c[1]), c[0], c[1]});
+        }
+        
+        while(extraStudents -- > 0) {
+            double[] top = queue.poll();
+            queue.offer(new double[]{profit(top[1] + 1, top[2] + 1), top[1] + 1, top[2] + 1});
+        
+        }
+        
+        double ans = 0.0;
+        while (!queue.isEmpty()) {
+            double[] top = queue.poll();
+            ans += top[1]/top[2];
+        }
+        return ans / classes.length;
+    }
+       
+    // 按照 gain 来排序
+    double profit(double a, double b) {
+        return (a + 1) / (b + 1) - a / b;
+    }
+}
