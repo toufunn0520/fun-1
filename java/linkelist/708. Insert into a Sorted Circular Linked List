@@ -1,0 +1,41 @@
+// three cases
+// 1. there is a valid position for insertVal, one element bigger than or equal to inserVal, one element smaller than or equal to insertVal
+// 2. inserVal is even bigger than biggest value. or smaller than smallest value. insert into the between those two value.
+// 3. if all elements are equal but not = to insertVal, we basically is back to the head. We can insert any place.
+
+class Solution {
+  public Node insert(Node head, int insertVal) {
+    // corner case
+    if (head == null) {
+      Node newNode = new Node(insertVal, null);
+      newNode.next = newNode;
+      return newNode;
+    }
+
+    Node prev = head;
+    Node curr = head.next;
+    boolean toInsert = false;
+
+    do {
+      if (prev.val <= insertVal && insertVal <= curr.val) {
+        // Case 1).  1(pre) 3(next) 2(insertval) find the correct prev and cur
+        toInsert = true;
+      } else if (prev.val > curr.val) {
+        // Case 2). back to the tail. find the correct prev and cur
+        if (insertVal >= prev.val || insertVal <= curr.val)
+          toInsert = true;
+      }
+      if (toInsert) {
+        prev.next = new Node(insertVal, curr);
+        return head;
+      }
+
+      prev = curr;
+      curr = curr.next;
+    } while (prev != head);
+
+    // Case 3). entrie list are the same and different than insertVal, insert can happen at any place 
+    prev.next = new Node(insertVal, curr);
+    return head;
+  }
+}
