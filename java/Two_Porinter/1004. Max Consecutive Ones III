@@ -1,0 +1,40 @@
+// Time O(n)where NN is the number of elements in the array. In worst case we might end up visiting every element of array twice, once by left pointer and once by right pointer.
+// Space O(1)We do not use any extra space.
+
+class Solution {
+    public int longestOnes(int[] nums, int k) {
+        if (nums == null || nums.length == 0) return 0;
+        
+        int start = 0;
+        int end = 0;
+        for (; end < nums.length; end++) {
+            if(nums[end] == 0) k--;
+            if(k < 0) {
+                if (nums[start] == 0)  {
+                    k++; 
+                }
+                // we never make the window size smaller
+                // invalid window just means we expand +1 and contract by one.
+                start ++;
+            }
+         
+        }
+    
+        return end - start;
+    }
+}
+
+// easy to understand version
+/*public int longestOnes(int[] A, int K) {
+        int zeroCount=0,start=0,res=0;
+        for(int end=0;end<A.length;end++){
+            if(A[end] == 0) zeroCount++;
+            while(zeroCount > K){
+                if(A[start] == 0) zeroCount--;
+                start++;
+            }
+            res=Math.max(res,end-start+1);
+        }
+        return res;
+    }
+}*/
