@@ -1,0 +1,23 @@
+// dp[i][j] = dp[i+1][j-1] if s[i] = s[j]
+// if s[i] != s[j], dp[i][j] = min(dp[i+1][j], dp[i][j-1]) + 1
+// initialize dp to all zeros. we start at dp[len -2][len-1]
+
+
+class Solution {
+    public boolean isValidPalindrome(String s, int k) {
+        if (s == null || s.length() == 0) return false;
+        int len = s.length();
+        int[][] map = new int[len][len];
+        // initialize it to 0
+        for (int i = s.length() - 2; i >= 0; i--) {
+            for (int j = i + 1; j < s.length(); j++) {
+                if (s.charAt(i) == s.charAt(j)) {
+                    map[i][j] = map[i+1][j-1];
+                } else {
+                    map[i][j] = Math.min(map[i+1][j], map[i][j-1]) + 1;
+            }
+        }
+        
+        return map[0][len-1] <= k;
+    }
+}
