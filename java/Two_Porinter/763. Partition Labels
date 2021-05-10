@@ -1,0 +1,40 @@
+//Time Complexity: O(N)O(N), where NN is the length of SS.
+
+//Space Complexity: O(1)O(1) to keep data structure last of not more than 26 characters.
+
+
+// two pointer + greedy to keep track of parts
+class Solution {
+    public List<Integer> partitionLabels(String S) {
+        // corner case
+        List<Integer> res = new ArrayList<>();
+        if (S == null || S.length() == 0) {
+            return null;
+        }
+        // record the last index of each character from S
+        int[] map = new int[26];
+        for(int i = 0; i < S.length(); i++) {
+            Character c =S.charAt(i);
+            map[c - 'a'] = i;
+        }
+        
+        // for each parts, slow is the start location, only moves if parts is done.
+        // fast represent the end location of the part, will keep moving till the end o f the string
+        int slow = 0;
+        int fast = 0;
+        for (int i = 0; i < S.length(); i++) {
+            //this making sure the expected fast must be at least map[S.charAt(i) - 'a']
+            fast = Math.max(fast, map[S.charAt(i) - 'a']);
+            
+            // the condition that we can created the part
+            if (i == fast) {
+                res.add(i - slow +1);
+                slow = i + 1;
+            }
+        }
+    
+        
+        return res;
+    }
+    
+}
