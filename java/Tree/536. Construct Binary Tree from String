@@ -1,0 +1,35 @@
+// this is a serialization, deserialization problem
+// () is a tree. 
+// so ) when we hit ) means we reach the completion of a subtree, we need to pop the top of the stack
+// get number needs to consider sign and entrie number
+// once number is done, the top of the stack is its parent.
+// assign the number to either left or right [题目说了 left first] basically 2()(3) will never happened
+// Time & Space o(n)
+class Solution {
+    public TreeNode str2tree(String s) {
+        Stack<TreeNode> stack = new Stack<>();
+        for (int i = 0, j = 0; i < s.length(); i++, j = i) {
+            char c = s.charAt(i);
+            // end of a treeNode
+            if (c == ')') stack.pop();
+            // get the number
+            else if (c >= '0' && c <= '9' || c == '-') {
+                while(i + 1 < s.length() && s.charAt(i + 1) >= '0' && s.charAt(i + 1) <= '9') i++;
+                // construct curNode, exclusive
+                TreeNode cur = new TreeNode(Integer.valueOf(s.substring(j, i+1)));
+                // its direct parent if existed must be at the top of the stack
+                if (!stack.isEmpty()) {
+                    TreeNode parent = stack.peek();
+                    if (parent.left != null) {
+                        parent.right = cur;
+                    } else {
+                        parent.left = cur;
+                    }
+                }
+                stack.push(cur);
+            }
+        }
+        
+        return stack.isEmpty()? null : stack.peek();
+    }
+}
