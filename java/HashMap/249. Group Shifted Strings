@@ -1,0 +1,35 @@
+// String 
+// normalize it to common key from a string, which use a as the 1st element, of course is any char is smaller than a we need to wrap it back to characters.  
+
+//use those normalized key as hashmap and value is the list of original str, whose normalized key are the same
+// Time O(n)
+// Space O(mn)
+
+class Solution {
+    public List<List<String>> groupStrings(String[] strings) {
+        List<List<String>> res = new ArrayList<List<String>>();
+        Map<String, List<String>> map = new HashMap<String, List<String>>();
+        for (String str: strings) {
+            int offset = str.charAt(0) - 'a';
+            String key = "";
+            for (int i = 0; i < str.length(); i++) {
+                char c = (char)(str.charAt(i) - offset);
+                // tricky reverse
+                if (c < 'a')  c += 26;
+                key += c;
+            }
+        
+            if (!map.containsKey(key)) {
+                List<String> list = new ArrayList<String>();
+                map.put(key, list);  
+            }
+            List<String> target = map.get(key);
+            target.add(str);
+       }
+        for (String key : map.keySet()) {
+            List<String> list = map.get(key);
+            res.add(list);
+        } 
+        return res;
+    }
+}
