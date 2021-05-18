@@ -1,0 +1,35 @@
+//A constant-space solution would be that we use only two variables which keep track of the current top two largest elements respectively.
+//While we iterate through all the heights, we update the two variables accordingly.
+// DFS
+// Time O(n)
+// We employed only constant-sized variables in the algorithm.
+// On the other hand, we used recursion which will incur additional memory consumption in the function call stack. In the worst case where all the nodes are chained up in a single path, the recursion will pile up NN times.
+
+As a result, the overall space complexity of the algorithm is \mathcal{O}(N)O(N).
+class Solution {
+    int res = 0;
+    public int diameter(Node root) {
+        getHeight(root);
+        return res;
+    }
+    // get the longest hight from node including the node itself
+    // 
+    private int getHeight(Node node) {
+        if (node == null) return 0;
+        int max1 = 0;
+        int max2 = 0;
+        
+        for (Node child: node.children) {
+            int height = getHeight(child);
+            if (height > max1) {
+                max2 = max1;
+                max1 = height;
+            } else if (height > max2){
+                max2 = height;
+            }
+        }
+        
+        res = Math.max(res, max1 + max2);
+        return max1 + 1;
+    }
+}
