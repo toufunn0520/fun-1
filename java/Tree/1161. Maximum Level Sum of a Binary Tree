@@ -1,0 +1,30 @@
+// BFS
+
+class Solution {
+    public int maxLevelSum(TreeNode root) {
+        Queue<TreeNode> level = new LinkedList<>();
+        int res = root.val-1;
+        level.add(root);
+        int curlevel = 0;
+        int levelres = curlevel;
+        
+        while (!level.isEmpty()) {
+            int size = level.size();
+            int sum = 0;
+            curlevel ++;
+            for (int i = 0; i < size; i++) {
+                TreeNode node = level.poll();
+                sum += node.val;
+                if (node.left != null) level.add(node.left);
+                if (node.right != null) level.add(node.right);
+            }
+            // curlevel is done
+            if (res < sum) {
+                levelres = curlevel;
+                res = sum;
+            }
+            
+        }
+        return levelres;
+    }
+}
