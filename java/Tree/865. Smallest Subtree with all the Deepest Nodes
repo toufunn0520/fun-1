@@ -1,0 +1,29 @@
+//1123: https://leetcode.com/problems/lowest-common-ancestor-of-deepest-leaves/
+
+
+
+class Solution {
+    int deep = 0;
+    TreeNode res;
+    public TreeNode subtreeWithAllDeepest(TreeNode root) {
+        helper(root, 0);
+        return res;
+    }
+    
+    
+    private int helper(TreeNode node, int d) {
+        deep = Math.max(d, deep);
+        if (node == null) {
+            return d;
+        }
+        
+        int left = helper(node.left, d + 1);
+        int right = helper(node.right, d + 1);
+
+        if (left == deep && right == deep) {
+            res = node;
+        }
+        
+        return Math.max(left, right);
+    }
+}
