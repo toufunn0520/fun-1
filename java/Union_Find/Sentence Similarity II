@@ -1,0 +1,29 @@
+
+
+class Solution {
+    public boolean areSentencesSimilarTwo(String[] words1, String[] words2, List<List<String>> pairs) {
+        if (words1.length != words2.length) return false;
+        // map just keep direct relations
+        Map<String, String> m = new HashMap<>();
+        
+        // find its ultimate parent, and 1st time make its parent as itself
+        for (List<String> p : pairs) {
+            String parent1 = find(m, p.get(0)), parent2 = find(m, p.get(1));
+            // not connected , link them, must link their ultimate parents
+            if (!parent1.equals(parent2)) m.put(parent1, parent2);
+        }
+
+        // check if words 1 and words 2 have the same ultimate parent
+        for (int i = 0; i < words2.length; i++)
+            if (!words1[i].equals(words2[i]) && !find(m, words1[i]).equals(find(m, words2[i]))) return false;
+
+        return true;
+    }
+    
+    // find its ultimate parent, and 1st time make its parent as itself
+    private String find(Map<String, String> m, String s) {
+        if (!m.containsKey(s)) m.put(s, s);
+        return s.equals(m.get(s)) ? s : find(m, m.get(s));
+    }
+
+}
