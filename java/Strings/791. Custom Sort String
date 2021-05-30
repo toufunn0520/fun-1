@@ -1,0 +1,29 @@
+class Solution {
+    public String customSortString(String order, String str) {
+        // record all occurance from str
+        int[] count = new int[26];
+        for (char c: str.toCharArray()) {
+            count[c -'a']++;
+        }
+    
+        StringBuilder sb = new StringBuilder();        
+        // rebuild string by iterate based on order and generate correct number of occurance 
+        for (char c: order.toCharArray()) {
+            while(count[c - 'a'] > 0) {
+                sb.append(c);
+                count[c - 'a'] --;
+            }
+        }
+         
+        // keep rebuild string by unused ones
+         for (char c = 'a'; c <= 'z'; c++) {
+            while(count[c - 'a'] > 0) {
+                sb.append(c);
+                count[c - 'a'] --;
+            }
+        }
+        
+        return sb.toString();
+        
+    }
+}
