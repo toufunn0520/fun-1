@@ -1,0 +1,55 @@
+// Because xi < xj,
+//yi + yj + |xi - xj| = (yi - xi) + (yj + xj)
+// iterage j
+// key is  yi - xi
+// value is xi
+
+//So for each pair of (xj, yj),
+//we have xj + yj, and we only need to find out the maximum yi - xi.
+//To find out the maximum element in a sliding window,
+//we can use priority queue or stack.
+
+//Time O(NlogN)
+//Space O(N)
+class Solution {
+    public int findMaxValueOfEquation(int[][] points, int k) {
+        PriorityQueue<Pair<Integer, Integer>> q = new PriorityQueue<>((a, b) -> (a.getKey() == b.getKey() ? a.getValue() - b.getValue() : b.getKey() - a.getKey()));
+        
+        int res = Integer.MIN_VALUE;
+        for (int[] point: points) {
+            // find candidate.
+            while(!q.isEmpty() && point[0] - q.peek().getValue() > k) {
+                q.poll();
+            }
+            //get biggest value per Xj
+            if (!q.isEmpty()) {
+                res = Math.max(res, q.peek().getKey() + point[1] + point[0]);
+            }
+            // insert Xj Yj making it as Xi Yi
+            q.offer(new Pair<>(point[1] - point[0], point[0]));
+        }
+        return res;
+    }
+}
+
+
+// 单调盏
+    public int findMaxValueOfEquation(int[][] points, int k) {
+        Deque<Pair<Integer, Integer>> ms = new ArrayDeque<>();
+        int res = Integer.MIN_VALUE;
+        for (int[] point : points) {
+            while (!ms.isEmpty() && point[0] - ms.peekFirst().getValue() > k) {
+                ms.pollFirst();
+            }
+            if (!ms.isEmpty()) {
+                res = Math.max(res, ms.peekFirst().getKey() + point[0] + point[1]);
+            }
+            while (!ms.isEmpty() && point[1] - point[0] > ms.peekLast().getKey()) {
+                ms.pollLast();
+            }
+            ms.offerLast(new Pair<>(point[1] - point[0], point[0]));
+        }
+        return res;
+    }
+
+
