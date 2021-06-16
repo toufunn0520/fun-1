@@ -1,0 +1,27 @@
+class Solution {
+    public int[] prevPermOpt1(int[] arr) {
+        // find the biggest index idx A[i] > A[i+1]
+        int idx = -1;
+        for (int i =  arr.length - 2; i >= 0; i--) {
+            if (arr[i] > arr[i+1]) {
+                idx = i;
+                break;
+            }
+        }
+        // if the arra is the smallest 
+        if(idx == -1) return arr;
+        // find the larget index j when A[j]< A[idx]. 
+        // Also making sure if A[j] and A[j-1] are the same, use A[j-1] 
+        // 题目里说 biggest 
+        for (int j = arr.length - 1; j > idx; j --) {
+            if (arr[j] < arr[idx] && arr[j] != arr[j-1]) {
+                // swap
+                int tmp = arr[j];
+                arr[j] = arr[idx];
+                arr[idx] = tmp;
+                break;
+            } 
+        }
+        return arr;
+    }
+}
