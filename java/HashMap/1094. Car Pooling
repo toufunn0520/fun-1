@@ -1,0 +1,43 @@
+//go through from the start to end, and check if the actual capacity exceeds capacity. Use treeMap
+// Time O(nlogn)
+// Space O(N)
+class Solution {
+    public boolean carPooling(int[][] trips, int capacity) {
+        Map<Integer, Integer> timestamp = new TreeMap<>();
+        for (int[] trip: trips) {
+            // start time
+            int startPassenger = timestamp.getOrDefault(trip[1], 0) + trip[0];
+            timestamp.put(trip[1], startPassenger);
+            
+            // endtime
+            int end = timestamp.getOrDefault(trip[2], 0) - trip[0];
+            timestamp.put(trip[2], end);
+        }
+        
+        int useCapacity = 0;
+        for (int passenger: timestamp.values()) {
+            useCapacity += passenger;
+            if (useCapacity > capacity) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+// bucket sort
+// constraint 0 <= trips[i][1] < trips[i][2] <= 1000
+ public boolean carPooling(int[][] trips, int capacity) {
+        int[] timestamp = new int[1001];
+        for (int[] trip : trips) {
+            timestamp[trip[1]] += trip[0];
+            timestamp[trip[2]] -= trip[0];
+        }
+        int usedCapacity = 0;
+        for (int number : timestamp) {
+            usedCapacity += number;
+            if (usedCapacity > capacity) {
+                return false;
+            }
+        }
+        return true;
+    }
