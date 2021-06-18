@@ -1,0 +1,29 @@
+// Intialize <value, fre> hashamp
+// Sort it in the ArrayList which element is an instance of Map.Entry<Integer, Integer>
+// store the result
+// Time O(nlogn)
+// Space (O(n))
+class Solution {
+    public int[] frequencySort(int[] nums) {
+        // frequency map
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int num: nums) {
+           map.put(num, map.getOrDefault(num, 0) + 1);
+        }
+        
+        List<Map.Entry<Integer, Integer>> list = new ArrayList(map.entrySet());
+        // sort the list increasing order by freq, decreasing order by value
+        Collections.sort(list, (a, b) -> a.getValue() == b.getValue()? b.getKey() - a.getKey(): a.getValue() - b.getValue());
+        
+        int[] res = new int[nums.length];
+        int index = 0;
+        for (Map.Entry<Integer,Integer> cur: list) {
+            int count = cur.getValue();
+            int val = cur.getKey();
+            for (int  i = 0; i < count; i++) {
+                res[index++] = val;
+            }
+        }
+        return res;
+    }
+}
