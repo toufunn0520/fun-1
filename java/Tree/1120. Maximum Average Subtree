@@ -1,0 +1,37 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+
+// post order traverse
+// Time O(n)
+// Space O(depth)
+class Solution {
+    public double maximumAverageSubtree(TreeNode root) {
+        return helper(root)[2];
+    }
+    
+    
+    private double[] helper(TreeNode node) {
+        // first is all its subnode sum , 2nd is count, 3rd is its own maxAvg
+        if (node == null) return new double[]{0,0,0}; //sum, count  & average of nodes
+        double[] l = helper(node.left);
+        double[] r = helper(node.right);
+        double child = Math.max(l[2], r[2]);
+        double sum = node.val + l[0] + r[0];
+        double count = l[1] + r[1] + 1;
+        double max = Math.max(child, sum/count);
+        return new double[]{sum, count, max};
+    }
+}
