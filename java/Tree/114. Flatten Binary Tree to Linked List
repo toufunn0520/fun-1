@@ -1,0 +1,71 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+
+/*
+
+Algorithm
+
+We'll have a separate function for flattening out the tree since the main function provided in the problem isn't supposed to return anything and our algorithm will return the tail node of the flattened out tree.
+
+For a given node, we will recursively flatten out the left and the right subtrees and store their corresponding tail nodes in leftTail and rightTail respectively.
+
+Next, we will make the following connections (only if there is a left child for the current node, else the leftTail would be null)
+
+ leftTail.right = node.right
+ node.right = node.left
+ node.left = None
+ 
+Next we have to return the tail of the final, flattened out tree rooted at node. So, if the node has a right child, then we will return the rightTail, else, we'll return the leftTail.
+*/
+class Solution {
+   private TreeNode flattenTree(TreeNode node) {
+        
+        // Handle the null scenario
+        if (node == null) {
+            return null;
+        }
+            
+        // For a leaf node, we simply return the
+        // node as is.
+        if (node.left == null && node.right == null) {
+            return node;
+        }
+        
+        //Recursively flatten the left subtree
+        TreeNode leftTail = this.flattenTree(node.left);
+        
+        // Recursively flatten the right subtree
+        TreeNode rightTail = this.flattenTree(node.right);
+        
+        // If there was a left subtree, we shuffle the connections
+        // around so that there is nothing on the left side
+        // anymore.
+        if (leftTail != null) {
+            leftTail.right = node.right;
+            node.right = node.left;
+            node.left = null;
+        }
+        
+        // We need to return the "rightmost" node after we are
+        // done wiring the new connections. 
+        return rightTail == null ? leftTail : rightTail;
+    }
+    
+    public void flatten(TreeNode root) {
+        
+        this.flattenTree(root);
+    }
+}
