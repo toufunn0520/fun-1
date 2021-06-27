@@ -1,0 +1,27 @@
+class Solution {
+    public int findMaxLength(int[] nums) {
+        // convert 0 to -1
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] == 0) nums[i] = -1;
+        }
+        
+        Map<Integer, Integer> sumToIndex = new HashMap<>();
+        // initalize that value 0 with index from -1.
+        sumToIndex.put(0, -1);
+        int sum = 0, max = 0;
+        
+        for (int i = 0; i < nums.length; i++) {
+            sum += nums[i];
+            // means 1 and 0 are in pair, 
+            if (sumToIndex.containsKey(sum)) {
+                // the range exclude sumToIndex.get(sum)
+                max = Math.max(max, i - sumToIndex.get(sum));
+            }
+            else {
+                sumToIndex.put(sum, i);
+            }
+        }
+        
+        return max;
+    }
+}
