@@ -1,0 +1,32 @@
+// prefix sum 
+class Solution {
+    public boolean splitArray(int[] nums) {
+        // further limit the condition
+        // k < n-1, j < n- 3 , 0 < i < n - 5 so n must be bigger than or euqal to 7
+        if (nums.length < 7) return false;
+        // keep sum array 
+        int[] sum = new int[nums.length];
+        sum[0] = nums[0] ;
+        for (int i = 1; i < nums.length; i++) {
+            sum[i] = sum[i -1] + nums[i];
+        }
+        
+        // using j which is the middle cut
+        for (int j = 3; j < nums.length - 3; j++) {
+            HashSet<Integer> set = new HashSet<>();
+            // for a given j 
+            // if i and j are equal , try k
+            for (int i = 1; i < j - 1; i++) {
+                if (sum[i-1] == sum[j-1] - sum[i]) {
+                    set.add(sum[i-1]);
+                } 
+            }
+            for (int k = j + 2; k < nums.length - 1 ; k ++) {
+                if (sum[nums.length -1] - sum[k] == sum[k -1] - sum[j] && set.contains(sum[k -1] - sum[j])) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+}
