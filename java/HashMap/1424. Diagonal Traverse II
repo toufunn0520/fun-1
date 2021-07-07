@@ -1,0 +1,35 @@
+class Solution {
+    public int[] findDiagonalOrder(List<List<Integer>> nums) {
+        int resLength = 0; int maxKey  = 0; // maxKey is the biggest available diagnoal
+        //every diaag the sum of vertical and horizontal adds up to a same number
+        // https://leetcode.com/problems/diagonal-traverse-ii/discuss/597698/JavaC%2B%2B-HashMap-with-Picture-Clean-code-O(N)
+        
+        Map<Integer, List<Integer>> map = new HashMap<>();
+        // iterate row and colomn
+        for (int r = nums.size()-1; r >= 0; r--) {
+            // each colomn
+            for (int c = 0; c <= nums.get(r).size() -1 ; c++) {
+                if (nums.get(r).get(c) == null) continue;
+                List<Integer> cur = map.getOrDefault(r + c, new ArrayList<>());
+                cur.add(nums.get(r).get(c));
+                map.put(r + c, cur);
+                maxKey = Math.max(maxKey, r + c);
+                resLength ++;
+            }
+        }
+        
+        // convert List to array
+        int [] res = new int[resLength];
+        int i = 0;
+        for (int key = 0; key <= maxKey; ++key) {
+            List<Integer> value = map.get(key);
+            if (value == null) continue;
+            for (int v : value) res[i++] = v;
+        }
+        return res;
+        
+    }
+}
+
+
+
